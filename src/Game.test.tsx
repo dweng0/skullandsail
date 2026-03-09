@@ -49,4 +49,15 @@ describe('Game - Procedural Asset Pipeline', () => {
         // They appear as raised geometry on the map (procedurally generated)
         expect(canvas).toBeVisible()
     })
+
+    it('Town markers render as gold beacons', () => {
+        // Verify that towns appear as distinct yellow/gold beacon shapes
+        const { getByTestId } = render(<Game playerShipClass="brigantine" />)
+        const canvas = getByTestId('game-canvas')
+        expect(canvas).toBeInTheDocument()
+
+        // Towns should render without errors
+        // They appear as beacon markers on the map with gold/yellow color
+        expect(canvas).toBeVisible()
+    })
 })

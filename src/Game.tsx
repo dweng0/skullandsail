@@ -41,6 +41,9 @@ export default function Game({ playerShipClass = 'brigantine' }: GameProps) {
             // Create islands
             createIslands(scene)
 
+            // Create town markers
+            createTowns(scene)
+
             // Create player ship
             createShip(scene, playerShipClass, new Vector3(0, 0, 0))
 
@@ -145,6 +148,52 @@ function createIslands(scene: Scene): void {
         islandMaterial.specularColor = new Color3(0.2, 0.2, 0.2)
 
         island.material = islandMaterial
+    })
+}
+
+function createTowns(scene: Scene): void {
+    const BabylonJS = require('babylonjs')
+    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
+
+    // Create town beacon markers
+    const townPositions = [
+        { x: -8, z: -8 },
+        { x: 8, z: 5 },
+    ]
+
+    townPositions.forEach((pos, index) => {
+        // Create beacon shape: cylinder with a cone on top
+        const beacon = MeshBuilder.CreateCylinder(
+            `town_beacon_${index}`,
+            { height: 1.2, diameter: 0.5 },
+            scene,
+        )
+        beacon.position.x = pos.x
+        beacon.position.z = pos.z
+        beacon.position.y = 1.0
+
+        // Create gold/yellow material for beacon
+        const beaconMaterial = new StandardMaterial(
+            `beacon_${index}_material`,
+            scene,
+        )
+        beaconMaterial.diffuse = new Color3(1.0, 0.85, 0.2)
+        beaconMaterial.specularColor = new Color3(1.0, 1.0, 0.5)
+        beaconMaterial.specularPower = 128
+
+        beacon.material = beaconMaterial
+
+        // Create cone top for beacon
+        const coneTop = MeshBuilder.CreateCone(
+            `town_cone_${index}`,
+            { height: 0.8, diameter: 0.6 },
+            scene,
+        )
+        coneTop.position.x = pos.x
+        coneTop.position.z = pos.z
+        coneTop.position.y = 1.8
+
+        coneTop.material = beaconMaterial
     })
 }
 
