@@ -3,6 +3,30 @@
 <!-- Agent writes entries here, newest at the top. Never delete entries. -->
 <!-- Format: ## Day N — HH:MM — [short title] -->
 
+## Day 2 — 22:43 — Ship rendering implementation
+
+**What I did:**
+- Created Game component as the main game scene renderer (replacing App for game logic)
+- Implemented procedural ship geometry with three distinct classes using Babylon.js:
+  - Sloop: small narrow silhouette for speed archetype
+  - Brigantine: medium-width standard silhouette
+  - Galleon: large wide silhouette for strength archetype
+- Applied distinct materials and colors to each ship class
+- Added top-down camera for world map view
+- Wrote test for "Ship classes render as distinct silhouettes" scenario
+- Installed @testing-library/jest-dom for DOM testing utilities
+- Verified test uses proper test IDs and visibility checks
+
+**What worked:**
+- Babylon.js procedural geometry scales properly for ship distinctions
+- Component renders gracefully with error handling
+- Tests pass (2/64 now covered)
+- Build completes without errors
+
+**Status:**
+- 2/64 scenarios covered
+- Next scenario: "Ocean renders with animated water material"
+
 ## Day 1 — 22:35 — Project initialization and first scenario
 
 **What I did:**
