@@ -4,7 +4,12 @@ import LLMSetup from './LLMSetup'
 import CharacterSetup from './CharacterSetup'
 import type { ShipClass } from './Game'
 
-type GameState = 'menu' | 'llm-setup' | 'character-setup' | 'loading' | 'playing'
+type GameState =
+    | 'menu'
+    | 'llm-setup'
+    | 'character-setup'
+    | 'loading'
+    | 'playing'
 
 interface GameConfig {
     llmProvider?: string
@@ -17,9 +22,7 @@ export default function GameManager() {
     const [gameState, setGameState] = useState<GameState>('menu')
     const [config, setConfig] = useState<GameConfig>({})
 
-    const handleLLMConnect = (
-        llmConfig: any,
-    ) => {
+    const handleLLMConnect = (llmConfig: any) => {
         setConfig({
             ...config,
             llmProvider: llmConfig.provider,
@@ -50,9 +53,7 @@ export default function GameManager() {
 
     return (
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-            {gameState === 'menu' && (
-                <MainMenu onStart={handleStartNewGame} />
-            )}
+            {gameState === 'menu' && <MainMenu onStart={handleStartNewGame} />}
 
             {gameState === 'llm-setup' && (
                 <LLMSetup onConnect={handleLLMConnect} />
@@ -68,9 +69,7 @@ export default function GameManager() {
             {gameState === 'loading' && <LoadingScreen />}
 
             {gameState === 'playing' && (
-                <Game
-                    playerShipClass={config.shipClass || 'brigantine'}
-                />
+                <Game playerShipClass={config.shipClass || 'brigantine'} />
             )}
         </div>
     )
@@ -86,8 +85,7 @@ function MainMenu({ onStart }: { onStart: () => void }) {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                background:
-                    'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
+                background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
                 color: '#e8dcc8',
                 textAlign: 'center',
             }}
@@ -116,9 +114,9 @@ function MainMenu({ onStart }: { onStart: () => void }) {
 
             <div style={{ marginBottom: '24px', maxWidth: '600px' }}>
                 <p style={{ fontSize: '14px', lineHeight: '1.6' }}>
-                    Command your ship across a procedurally generated sea.
-                    Trade at ports, engage in turn-based battles, and follow
-                    an LLM-crafted storyline. Every voyage is unique.
+                    Command your ship across a procedurally generated sea. Trade
+                    at ports, engage in turn-based battles, and follow an
+                    LLM-crafted storyline. Every voyage is unique.
                 </p>
             </div>
 
@@ -162,9 +160,7 @@ function MainMenu({ onStart }: { onStart: () => void }) {
                 }}
             >
                 <p>⚠️ WebGL and modern browser required</p>
-                <p>
-                    🤖 Requires OpenAI-compatible, Claude, or Gemini API key
-                </p>
+                <p>🤖 Requires OpenAI-compatible, Claude, or Gemini API key</p>
             </div>
         </div>
     )
@@ -180,8 +176,7 @@ function LoadingScreen() {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                background:
-                    'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
+                background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%)',
                 color: '#e8dcc8',
             }}
         >
