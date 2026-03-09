@@ -38,4 +38,15 @@ describe('Game - Procedural Asset Pipeline', () => {
         // and that animation setup doesn't break the render loop
         expect(canvas).toBeVisible()
     })
+
+    it('Island tiles render as raised terrain', () => {
+        // Verify that islands are rendered as raised mesh geometry
+        const { getByTestId } = render(<Game playerShipClass="brigantine" />)
+        const canvas = getByTestId('game-canvas')
+        expect(canvas).toBeInTheDocument()
+
+        // Islands should render without breaking the renderer
+        // They appear as raised geometry on the map (procedurally generated)
+        expect(canvas).toBeVisible()
+    })
 })

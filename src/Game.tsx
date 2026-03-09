@@ -38,6 +38,9 @@ export default function Game({ playerShipClass = 'brigantine' }: GameProps) {
             // Create ocean water
             createOcean(scene)
 
+            // Create islands
+            createIslands(scene)
+
             // Create player ship
             createShip(scene, playerShipClass, new Vector3(0, 0, 0))
 
@@ -99,6 +102,50 @@ function createOcean(scene: Scene): Mesh {
     })
 
     return ocean
+}
+
+function createIslands(scene: Scene): void {
+    const BabylonJS = require('babylonjs')
+    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
+
+    // Create a few procedural islands on the map
+    const islandPositions = [
+        { x: -8, z: -8 },
+        { x: 8, z: 5 },
+        { x: -5, z: 8 },
+        { x: 10, z: -10 },
+    ]
+
+    islandPositions.forEach((pos, index) => {
+        // Create raised island mesh
+        const island = MeshBuilder.CreateSphere(
+            `island_${index}`,
+            { segments: 16 },
+            scene,
+        )
+        island.position.x = pos.x
+        island.position.z = pos.z
+        island.position.y = 0.4
+
+        // Scale to look like a raised landmass
+        island.scaling = new Vector3(1.5, 0.8, 1.5)
+
+        // Create island material (sandy/green color scheme)
+        const islandMaterial = new StandardMaterial(
+            `island_${index}_material`,
+            scene,
+        )
+        if (index % 2 === 0) {
+            // Sandy color
+            islandMaterial.diffuse = new Color3(0.9, 0.85, 0.6)
+        } else {
+            // Green color
+            islandMaterial.diffuse = new Color3(0.4, 0.6, 0.3)
+        }
+        islandMaterial.specularColor = new Color3(0.2, 0.2, 0.2)
+
+        island.material = islandMaterial
+    })
 }
 
 function createShip(

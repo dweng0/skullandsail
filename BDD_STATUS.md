@@ -7,7 +7,7 @@ Checked 64 scenario(s) across 2 test file(s).
 
 - [x] Game initialises without missing asset errors
 - [x] Ship classes render as distinct silhouettes
-- [ ] UNCOVERED: Ocean renders with animated water material
+- [x] Ocean renders with animated water material
 - [ ] UNCOVERED: Island tiles render as raised terrain
 - [ ] UNCOVERED: Town markers render as gold beacons
 - [ ] UNCOVERED: Anomaly markers render as purple/red swirls
@@ -101,10 +101,9 @@ Checked 64 scenario(s) across 2 test file(s).
 - [ ] UNCOVERED: Each spoken line uses configurable voice and rate
 
 ---
-**2/64 scenarios covered.**
+**3/64 scenarios covered.**
 
-62 scenario(s) need tests:
-- Ocean renders with animated water material
+61 scenario(s) need tests:
 - Island tiles render as raised terrain
 - Town markers render as gold beacons
 - Anomaly markers render as purple/red swirls
