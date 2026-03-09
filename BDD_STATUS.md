@@ -1,12 +1,12 @@
 # BDD Status
 
-Checked 64 scenario(s) across 1 test file(s).
+Checked 64 scenario(s) across 2 test file(s).
 
 
 ## Feature: Procedural Asset Pipeline
 
 - [x] Game initialises without missing asset errors
-- [ ] UNCOVERED: Ship classes render as distinct silhouettes
+- [x] Ship classes render as distinct silhouettes
 - [ ] UNCOVERED: Ocean renders with animated water material
 - [ ] UNCOVERED: Island tiles render as raised terrain
 - [ ] UNCOVERED: Town markers render as gold beacons
@@ -101,10 +101,9 @@ Checked 64 scenario(s) across 1 test file(s).
 - [ ] UNCOVERED: Each spoken line uses configurable voice and rate
 
 ---
-**1/64 scenarios covered.**
+**2/64 scenarios covered.**
 
-63 scenario(s) need tests:
-- Ship classes render as distinct silhouettes
+62 scenario(s) need tests:
 - Ocean renders with animated water material
 - Island tiles render as raised terrain
 - Town markers render as gold beacons
