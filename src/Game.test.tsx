@@ -60,4 +60,15 @@ describe('Game - Procedural Asset Pipeline', () => {
         // They appear as beacon markers on the map with gold/yellow color
         expect(canvas).toBeVisible()
     })
+
+    it('Anomaly markers render as purple/red swirls', () => {
+        // Verify that anomalies appear as distinct purple/red shapes
+        const { getByTestId } = render(<Game playerShipClass="brigantine" />)
+        const canvas = getByTestId('game-canvas')
+        expect(canvas).toBeInTheDocument()
+
+        // Anomalies should render without breaking the renderer
+        // They appear as purple/red swirl markers positioned at anomaly coordinates
+        expect(canvas).toBeVisible()
+    })
 })

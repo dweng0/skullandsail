@@ -44,6 +44,9 @@ export default function Game({ playerShipClass = 'brigantine' }: GameProps) {
             // Create town markers
             createTowns(scene)
 
+            // Create anomaly markers
+            createAnomalies(scene)
+
             // Create player ship
             createShip(scene, playerShipClass, new Vector3(0, 0, 0))
 
@@ -194,6 +197,52 @@ function createTowns(scene: Scene): void {
         coneTop.position.y = 1.8
 
         coneTop.material = beaconMaterial
+    })
+}
+
+function createAnomalies(scene: Scene): void {
+    const BabylonJS = require('babylonjs')
+    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
+
+    // Create anomaly swirl markers
+    const anomalyPositions = [
+        { x: 5, z: -5 },
+        { x: -10, z: 5 },
+        { x: 12, z: 8 },
+    ]
+
+    anomalyPositions.forEach((pos, index) => {
+        // Create spinning torus for swirl effect
+        const anomaly = MeshBuilder.CreateTorus(
+            `anomaly_${index}`,
+            { diameter: 1.2, thickness: 0.3 },
+            scene,
+        )
+        anomaly.position.x = pos.x
+        anomaly.position.z = pos.z
+        anomaly.position.y = 0.6
+
+        // Create purple/red material for anomaly
+        const anomalyMaterial = new StandardMaterial(
+            `anomaly_${index}_material`,
+            scene,
+        )
+        // Mix of purple and red
+        const isPurple = index % 2 === 0
+        if (isPurple) {
+            anomalyMaterial.diffuse = new Color3(0.7, 0.2, 0.8)
+        } else {
+            anomalyMaterial.diffuse = new Color3(0.9, 0.1, 0.3)
+        }
+        anomalyMaterial.specularColor = new Color3(0.9, 0.5, 0.8)
+
+        anomaly.material = anomalyMaterial
+
+        // Add rotation animation to create swirl effect
+        scene.registerBeforeRender(() => {
+            anomaly.rotation.z += 0.02
+            anomaly.rotation.x += 0.01
+        })
     })
 }
 
