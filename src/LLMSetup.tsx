@@ -6,6 +6,7 @@ interface LLMSetupProps {
 
 export interface LLMConfig {
     provider: 'openai' | 'claude' | 'gemini'
+    model: string
     endpoint?: string
     apiKey: string
 }
@@ -14,6 +15,7 @@ export default function LLMSetup({ onConnect }: LLMSetupProps) {
     const [provider, setProvider] = useState<'openai' | 'claude' | 'gemini'>(
         'openai',
     )
+    const [model, setModel] = useState('gpt-4-turbo')
     const [endpoint, setEndpoint] = useState('')
     const [apiKey, setApiKey] = useState('')
     const [error, setError] = useState('')
@@ -40,6 +42,7 @@ export default function LLMSetup({ onConnect }: LLMSetupProps) {
 
             onConnect({
                 provider,
+                model,
                 endpoint: endpoint || undefined,
                 apiKey,
             })
@@ -61,14 +64,31 @@ export default function LLMSetup({ onConnect }: LLMSetupProps) {
                 <select
                     value={provider}
                     onChange={(e) =>
-                        setProvider(e.target.value as LLMConfig['provider'])
+                        setProvider(
+                            e.target.value as 'openai' | 'claude' | 'gemini',
+                        )
                     }
-                    style={{ marginLeft: '8px' }}
+                    style={{
+                        marginLeft: '8px',
+                        width: '100%',
+                        marginTop: '4px',
+                    }}
                 >
                     <option value="openai">OpenAI-compatible</option>
                     <option value="claude">Claude (Anthropic)</option>
                     <option value="gemini">Gemini (Google)</option>
                 </select>
+            </div>
+
+            <div style={{ marginBottom: '12px' }}>
+                <label className="ui-highlight">Model:</label>
+                <input
+                    type="text"
+                    placeholder="e.g., gpt-4-turbo, claude-3-opus, qwen3.5-plus"
+                    value={model}
+                    onChange={(e) => setModel(e.target.value)}
+                    style={{ width: '100%', marginTop: '4px' }}
+                />
             </div>
 
             {provider === 'openai' && (
