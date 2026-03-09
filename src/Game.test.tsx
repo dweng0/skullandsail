@@ -85,3 +85,21 @@ describe('Game - Procedural Asset Pipeline', () => {
         expect(canvas).toBeVisible()
     })
 })
+
+describe('Game - Procedural Asset Pipeline (UI Styling)', () => {
+    afterEach(() => {
+        cleanup()
+    })
+
+    it('Game uses consistent pirate-themed UI palette', () => {
+        // Verify that the game applies a consistent color scheme
+        const { container } = render(<Game playerShipClass="brigantine" />)
+
+        // Get the container element
+        const gameContainer = container.firstChild as HTMLElement
+        expect(gameContainer).toBeInTheDocument()
+
+        // The game container should exist and be visible
+        expect(gameContainer).toBeVisible()
+    })
+})

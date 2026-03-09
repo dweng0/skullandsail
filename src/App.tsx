@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { Engine } from 'babylonjs'
+import './styles.css'
 
 export default function App() {
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -43,7 +44,7 @@ export default function App() {
     }, [])
 
     return (
-        <div style={{ width: '100vw', height: '100vh' }}>
+        <div className="game-container">
             <canvas ref={canvasRef} style={{ display: 'block' }} />
         </div>
     )
