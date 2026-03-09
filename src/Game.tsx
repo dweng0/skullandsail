@@ -5,9 +5,13 @@ export type ShipClass = 'sloop' | 'brigantine' | 'galleon'
 
 interface GameProps {
     playerShipClass?: ShipClass
+    showBattle?: boolean
 }
 
-export default function Game({ playerShipClass = 'brigantine' }: GameProps) {
+export default function Game({
+    playerShipClass = 'brigantine',
+    showBattle = false,
+}: GameProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const engineRef = useRef<Engine | null>(null)
 
@@ -35,20 +39,26 @@ export default function Game({ playerShipClass = 'brigantine' }: GameProps) {
             )
             light.intensity = 0.8
 
-            // Create ocean water
-            createOcean(scene)
+            if (showBattle) {
+                // Battle scene layout
+                createBattleScene(scene, playerShipClass)
+            } else {
+                // World map layout
+                // Create ocean water
+                createOcean(scene)
 
-            // Create islands
-            createIslands(scene)
+                // Create islands
+                createIslands(scene)
 
-            // Create town markers
-            createTowns(scene)
+                // Create town markers
+                createTowns(scene)
 
-            // Create anomaly markers
-            createAnomalies(scene)
+                // Create anomaly markers
+                createAnomalies(scene)
 
-            // Create player ship
-            createShip(scene, playerShipClass, new Vector3(0, 0, 0))
+                // Create player ship
+                createShip(scene, playerShipClass, new Vector3(0, 0, 0))
+            }
 
             engineRef.current = engine
 
@@ -68,7 +78,7 @@ export default function Game({ playerShipClass = 'brigantine' }: GameProps) {
         } catch (error) {
             // Silently handle initialization errors in test environments
         }
-    }, [playerShipClass])
+    }, [playerShipClass, showBattle])
 
     return (
         <canvas
@@ -244,6 +254,30 @@ function createAnomalies(scene: Scene): void {
             anomaly.rotation.x += 0.01
         })
     })
+}
+
+function createBattleScene(scene: Scene, playerShipClass: ShipClass): void {
+    const BabylonJS = require('babylonjs')
+    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
+
+    // Create battle background
+    const background = MeshBuilder.CreatePlane('battle_bg', { size: 30 }, scene)
+    background.position.z = -5
+    const bgMaterial = new StandardMaterial('bg_material', scene)
+    bgMaterial.diffuse = new Color3(0.2, 0.3, 0.4)
+    background.material = bgMaterial
+
+    // Place player ship on left side
+    createShip(scene, playerShipClass, new Vector3(-6, 1, 0))
+
+    // Place enemy ship on right side
+    const enemyShipClass = (
+        playerShipClass === 'sloop' ? 'galleon' : 'sloop'
+    ) as ShipClass
+    const enemyShip = createShip(scene, enemyShipClass, new Vector3(6, 1, 0))
+
+    // Rotate enemy ship to face opposite direction
+    enemyShip.rotation.y = Math.PI
 }
 
 function createShip(
