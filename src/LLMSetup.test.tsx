@@ -9,6 +9,7 @@ describe('LLM Setup', () => {
 
     it('User can enter OpenAI-compatible API endpoint and key', () => {
         // Verify that the setup form collects an API endpoint URL and API key
+        // user can enter openaicompatible api endpoint and key
         const { container } = render(<LLMSetup onConnect={() => {}} />)
 
         // Should have input fields for endpoint and key

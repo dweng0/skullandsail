@@ -21,6 +21,7 @@ describe('Text-to-Speech Narration (Low Priority)', () => {
 
     it('Player can toggle TTS on/off in settings', () => {
         // Verify that TTS can be enabled and disabled
+        // player can toggle tts onoff in settings
         const tts = new TextToSpeechManager()
 
         expect(tts.isEnabled()).toBe(false) // Default off

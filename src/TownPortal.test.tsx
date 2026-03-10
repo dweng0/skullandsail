@@ -9,6 +9,7 @@ describe('Towns & Ports', () => {
 
     it('Entering town loads side-scrolling port view', () => {
         // Verify that town view loads as a 2D side-scroller layout
+        // entering town loads sidescrolling port view
         const { container } = render(
             <TownPortal townName="Port Rum" onLeave={() => {}} />,
         )
@@ -64,6 +65,7 @@ describe('Towns & Ports', () => {
 
     it('Tavern displays LLM-generated NPC dialogue and quests', () => {
         // Verify that tavern button exists and component renders
+        // tavern displays llmgenerated npc dialogue and quests
         const { getByRole } = render(
             <TownPortal townName="Port Rum" onLeave={() => {}} />,
         )

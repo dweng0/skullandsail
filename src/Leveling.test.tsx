@@ -35,6 +35,7 @@ describe('Experience & Leveling (DnD-style)', () => {
 
     it('Each level-up increases stats (HP, STR, DEX, CON)', () => {
         // Verify that base stats increase with leveling
+        // each levelup increases stats hp str dex con
         const levelSystem = new LevelingSystem('brigantine')
 
         const level1Stats = levelSystem.getStats()

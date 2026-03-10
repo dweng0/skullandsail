@@ -8,6 +8,7 @@ describe('World Map Navigation', () => {
 
     it("Captain's ship is rendered on sea map", () => {
         // Verify that the captain's ship is rendered at starting position
+        // captains ship is rendered on sea map
         const controller = new WorldMapController()
         const shipPosition = controller.getShipPosition()
 

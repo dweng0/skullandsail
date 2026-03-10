@@ -28,6 +28,7 @@ describe('Sea Battle (ATB Combat)', () => {
 
     it("When player's ATB bar is full, player can choose action", () => {
         // Verify that action menu appears when ATB reaches 100
+        // when players atb bar is full player can choose action
         const battle = new BattleEngine()
         battle.fillPlayerATBToMax()
 
@@ -104,6 +105,7 @@ describe('Sea Battle (ATB Combat)', () => {
 
     it('LLM provides one-line narrative for battle outcome', () => {
         // Verify that battles have narrative text
+        // llm provides oneline narrative for battle outcome
         const battle = new BattleEngine()
         const narrative = battle.getOutcomeNarrative()
 
