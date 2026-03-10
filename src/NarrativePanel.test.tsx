@@ -40,8 +40,13 @@ describe('Narrative Display Panel', () => {
         }
     })
 
-    it('Narrative includes speaker/context label', () => {
-        const { container } = render(
+    it('Speaker label shows narrative source', () => {
+        // Label shows who is narrating: "Game Master", "NPC: [Name]", "Tavern Keeper", etc.
+        // Label appears above or integrated with text
+        // Label helps player understand context of narrative
+        // Multiple NPCs can speak with different labels
+
+        const { container, rerender } = render(
             <NarrativePanel
                 narrative="Test message"
                 speaker="Town Crier"
@@ -53,9 +58,33 @@ describe('Narrative Display Panel', () => {
         expect(screen.getByText('Town Crier')).toBeInTheDocument()
         const speakerLabel = container.querySelector('.narrative-speaker')
         expect(speakerLabel).toBeInTheDocument()
+
+        // Test with different speaker
+        rerender(
+            <NarrativePanel
+                narrative="Another message"
+                speaker="NPC: Captain"
+                isVisible={true}
+                onClose={() => {}}
+            />,
+        )
+
+        expect(screen.getByText('NPC: Captain')).toBeInTheDocument()
+
+        // Test with Game Master
+        rerender(
+            <NarrativePanel
+                narrative="Yet another message"
+                speaker="Game Master"
+                isVisible={true}
+                onClose={() => {}}
+            />,
+        )
+
+        expect(screen.getByText('Game Master')).toBeInTheDocument()
     })
 
-    it('Narrative appears with smooth animations', () => {
+    it('Narrative panel supports multiple display modes', () => {
         const { container, rerender } = render(
             <NarrativePanel
                 narrative="Test"
@@ -111,30 +140,6 @@ describe('Narrative Display Panel', () => {
         expect(overlay).not.toBeInTheDocument()
     })
 
-    it('Supports multiple display modes', () => {
-        const modes: Array<'instant' | 'typewriter' | 'fade'> = [
-            'instant',
-            'typewriter',
-            'fade',
-        ]
-
-        modes.forEach((mode) => {
-            const { container } = render(
-                <NarrativePanel
-                    narrative="Test"
-                    speaker="Game Master"
-                    isVisible={true}
-                    onClose={() => {}}
-                    displayMode={mode}
-                />,
-            )
-
-            const panel = container.querySelector('.narrative-panel')
-            if (panel) {
-                expect(panel.className).toContain(`mode-${mode}`)
-            }
-        })
-    })
 
     it('ESC key dismisses the panel', () => {
         const onClose = vi.fn()

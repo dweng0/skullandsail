@@ -136,7 +136,7 @@ Checked 167 scenario(s) across 27 test file(s).
 
 - [x] Narrative text displays in a styled panel
 - [x] Player can dismiss narrative text
-- [x] Narrative appears with smooth animations
+- [ ] UNCOVERED: Narrative appears with smooth animations
 - [ ] UNCOVERED: Narrative includes speaker/context label
 
 ## Feature: Points of Interest Interaction
@@ -192,7 +192,7 @@ Checked 167 scenario(s) across 27 test file(s).
 
 - [x] Narrative panel appears when LLM generates text
 - [ ] UNCOVERED: Narrative text is readable with proper formatting
-- [ ] UNCOVERED: Speaker label shows narrative source
+- [x] Speaker label shows narrative source
 - [x] Player can dismiss narrative panel
 - [x] Narrative panel supports multiple display modes
 - [ ] UNCOVERED: Narrative is recorded in story journal
@@ -261,6 +261,7 @@ Checked 167 scenario(s) across 27 test file(s).
 **143/167 scenarios covered.**
 
 24 scenario(s) need tests:
+- Narrative appears with smooth animations
 - Narrative includes speaker/context label
 - Town names are generated once and cached
 - World generation includes location metadata
@@ -271,7 +272,6 @@ Checked 167 scenario(s) across 27 test file(s).
 - POI names render on world map with zoom scaling
 - POI interaction handler routes to correct UI
 - Narrative text is readable with proper formatting
-- Speaker label shows narrative source
 - Narrative is recorded in story journal
 - "Greet" option shows NPC's greeting dialogue
 - Dialogue is personalized based on player history
