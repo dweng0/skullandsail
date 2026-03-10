@@ -481,3 +481,64 @@ Scenario: Each spoken line uses configurable voice and rate
 - Settings menu provides dropdowns for voice selection (browser-provided voices)
 - A slider controls speech rate (0.5x to 2.0x)
 - Preferences are saved in localStorage
+
+Feature: Game Save/Load System
+
+Players can save their progress and resume later.
+
+Scenario: Game state is saved to localStorage automatically
+- After character creation and at regular intervals during play
+- Save includes: captain name, ship class, position, heading, velocity
+- Also saves: level, XP, gold, inventory, quests, stats
+- Save data is JSON format with timestamp
+- Multiple saves can be stored (or overwrite latest)
+
+Scenario: Player can load a saved game
+- Main menu shows "Continue" button if save file exists
+- Clicking "Continue" loads ship state, position, and all progress
+- Game resumes at exact position with all stats intact
+- Player can choose "New Game" to start fresh instead
+
+Scenario: Save file includes captain name and ship details
+- Saved data shows captain name for player reference
+- Ship class is restored (Sloop, Brigantine, or Galleon)
+- Visual representation matches original ship class
+
+Feature: Main Menu Redesign
+
+Improved menu flow with game progression options.
+
+Scenario: Main menu shows game flow options
+- "New Game" button - Start fresh game
+- "Continue" button - Load saved game (hidden if no save)
+- "Settings" button - Open settings panel
+- "Quit" button - Exit game
+
+Scenario: New Game prompts LLM setup if needed
+- Clicking "New Game" checks for cached LLM config
+- If no config, goes to LLM setup form
+- If config exists, proceeds directly to character selection
+- No redundant setup forms
+
+Scenario: Continue button only appears if save exists
+- Check localStorage for game save file on menu load
+- Show "Continue" button only if valid save found
+- Clicking loads that save and resumes gameplay
+- Save file shows creation timestamp or captain name
+
+Feature: Ship Modularity System
+
+Easy framework for adding new ship types.
+
+Scenario: Ships are defined in a configurable system
+- Ship definitions stored in single config object/file
+- Each ship has: name, stats, mesh generator, physics config
+- Stats include: speed, trade, combat modifiers
+- Physics config: maxSpeed, acceleration, turnRate, friction
+- New ships can be added by extending config, no code changes needed
+
+Scenario: Each ship class has distinct visual and gameplay feel
+- Ship mesh creation is modular (easy to add new visual styles)
+- Physics values can be tuned per ship for unique handling
+- Stat modifiers create distinct gameplay niches
+- Adding ship = 1 config entry, no scattered hardcoded values
