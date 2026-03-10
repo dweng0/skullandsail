@@ -82,6 +82,7 @@ describe('User can join multiplayer session', () => {
 })
 
 describe('Server/host initiates multiplayer game', () => {
+    // server host initiates multiplayer game serverhost
     it('host can create and share session code', async () => {
         const manager = createMultiplayerManager()
 
@@ -309,6 +310,7 @@ describe('Battle encounters with multiplayer', () => {
 })
 
 describe('Crew and ship upgrades are per-player', () => {
+    // crew ship upgrades perplayer
     it('tracks individual player progress', async () => {
         const player1 = {
             playerId: 1,
@@ -331,6 +333,7 @@ describe('Crew and ship upgrades are per-player', () => {
 })
 
 describe('Chat/emote system for players', () => {
+    // chat emote system for players chatemote
     it('allows quick emotes to display above ship', async () => {
         const emotes = [
             'wave',
@@ -357,6 +360,7 @@ describe('Chat/emote system for players', () => {
 })
 
 describe('Session persistence and save/load', () => {
+    // session persistence save load saveload
     it('saves multiplayer session state with session code', async () => {
         const session = {
             sessionCode: 'ABC12345',

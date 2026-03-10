@@ -1,6 +1,6 @@
 # BDD Status
 
-Checked 88 scenario(s) across 15 test file(s).
+Checked 100 scenario(s) across 19 test file(s).
 
 
 ## Feature: Procedural Asset Pipeline
@@ -120,34 +120,45 @@ Checked 88 scenario(s) across 15 test file(s).
 ## Feature: Main Menu Redesign
 
 - [x] Main menu shows game flow options
-- [ ] UNCOVERED: New Game prompts LLM setup if needed
-- [ ] UNCOVERED: Continue button only appears if save exists
+- [x] New Game prompts LLM setup if needed
+- [x] Continue button only appears if save exists
 
 ## Feature: Ship Modularity System
 
-- [ ] UNCOVERED: Ships are defined in a configurable system
+- [x] Ships are defined in a configurable system
 - [x] Each ship class has distinct visual and gameplay feel
 
 ## Feature: Points of Interest Interaction
 
-- [ ] UNCOVERED: Player can interact with points of interest
-- [ ] UNCOVERED: Island visitation shows location description
+- [x] Player can interact with points of interest
+- [x] Island visitation shows location description
 
 ## Feature: Enhanced Camera Controls
 
-- [ ] UNCOVERED: Player can scroll to zoom camera in and out
-- [ ] UNCOVERED: Player can right-click to pan camera
-- [ ] UNCOVERED: Camera slowly returns to follow mode after manual adjustment
+- [x] Player can scroll to zoom camera in and out
+- [x] Player can right-click to pan camera
+- [x] Camera slowly returns to follow mode after manual adjustment
+
+## Feature: WebRTC Multiplayer (Star Topology)
+
+- [x] User can join multiplayer session
+- [ ] UNCOVERED: Server/host initiates multiplayer game
+- [x] Peer connection uses WebRTC with STUN/TURN
+- [x] Player sees other players' ships on world map
+- [x] Player can see player list and connection status
+- [x] Disconnect and reconnect logic
+- [x] Ship positions sync across peers
+- [x] World state remains consistent across peers
+- [x] Battle encounters with multiplayer
+- [ ] UNCOVERED: Crew and ship upgrades are per-player
+- [ ] UNCOVERED: Chat/emote system for players
+- [ ] UNCOVERED: Session persistence and save/load
 
 ---
-**80/88 scenarios covered.**
+**96/100 scenarios covered.**
 
-8 scenario(s) need tests:
-- New Game prompts LLM setup if needed
-- Continue button only appears if save exists
-- Ships are defined in a configurable system
-- Player can interact with points of interest
-- Island visitation shows location description
-- Player can scroll to zoom camera in and out
-- Player can right-click to pan camera
-- Camera slowly returns to follow mode after manual adjustment
+4 scenario(s) need tests:
+- Server/host initiates multiplayer game
+- Crew and ship upgrades are per-player
+- Chat/emote system for players
+- Session persistence and save/load
