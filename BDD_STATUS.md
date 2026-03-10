@@ -41,7 +41,7 @@ Checked 167 scenario(s) across 27 test file(s).
 
 - [x] Game loads with fixed deterministic seed
 - [x] Map manifest includes world metadata
-- [ ] UNCOVERED: Biome generation assigns terrain types to regions
+- [x] Biome generation assigns terrain types to regions
 - [ ] UNCOVERED: Biome affects encounter difficulty and theme
 - [x] Sea map contains islands, towns, and anomalies
 - [x] Towns and anomalies are stable per seed
@@ -258,10 +258,9 @@ Checked 167 scenario(s) across 27 test file(s).
 - [x] Narrative journal logs major story beats
 
 ---
-**139/167 scenarios covered.**
+**140/167 scenarios covered.**
 
-28 scenario(s) need tests:
-- Biome generation assigns terrain types to regions
+27 scenario(s) need tests:
 - Biome affects encounter difficulty and theme
 - World manifest is loaded on game start
 - Narrative includes speaker/context label

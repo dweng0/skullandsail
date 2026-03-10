@@ -99,4 +99,39 @@ describe('World Generation', () => {
         expect(world1.height).toBe(32)
         expect(world1.islands.length).toBeGreaterThan(0)
     })
+
+    it('Biome generation assigns terrain types to regions', () => {
+        // World is divided into biome zones: tropical, temperate, volcanic, tundra, swamp
+        // Each biome has distinct visual style and encounter types
+        // Islands inherit biome characteristics (jungle island vs. ice island)
+        // Towns and anomalies fit their biome (tropical port vs. ice fortress)
+
+        const generator = new WorldGenerator(12345)
+        const map = generator.generateMap(32, 32)
+
+        // Verify biome map exists and has biome data
+        expect(map.biomeMap).toBeDefined()
+        expect(map.biomeMap.length).toBeGreaterThan(0)
+
+        // Verify multiple biome types are present
+        const biomeTypes = new Set(map.biomeMap.map((b) => b.type))
+        expect(biomeTypes.size).toBeGreaterThan(1)
+
+        // Verify islands have biome assignments
+        map.islands.forEach((island) => {
+            expect(island.biome).toBeDefined()
+            expect(typeof island.biome).toBe('string')
+        })
+
+        // Verify towns have biome assignments and appropriate names
+        map.towns.forEach((town) => {
+            expect(town.biome).toBeDefined()
+            expect(town.name).toBeDefined()
+        })
+
+        // Verify anomalies have biome assignments
+        map.anomalies.forEach((anomaly) => {
+            expect(anomaly.biome).toBeDefined()
+        })
+    })
 })
