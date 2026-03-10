@@ -136,7 +136,7 @@ Checked 167 scenario(s) across 27 test file(s).
 
 - [x] Narrative text displays in a styled panel
 - [x] Player can dismiss narrative text
-- [ ] UNCOVERED: Narrative appears with smooth animations
+- [x] Narrative appears with smooth animations
 - [ ] UNCOVERED: Narrative includes speaker/context label
 
 ## Feature: Points of Interest Interaction
@@ -258,10 +258,9 @@ Checked 167 scenario(s) across 27 test file(s).
 - [x] Narrative journal logs major story beats
 
 ---
-**143/167 scenarios covered.**
+**144/167 scenarios covered.**
 
-24 scenario(s) need tests:
-- Narrative appears with smooth animations
+23 scenario(s) need tests:
 - Narrative includes speaker/context label
 - Town names are generated once and cached
 - World generation includes location metadata

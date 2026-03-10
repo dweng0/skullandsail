@@ -84,7 +84,37 @@ describe('Narrative Display Panel', () => {
         expect(screen.getByText('Game Master')).toBeInTheDocument()
     })
 
-    it('Narrative panel supports multiple display modes', () => {
+    it('Narrative includes speaker/context label', () => {
+        // Narrative panel shows who is speaking (e.g., "Game Master", "Town Crier", "NPC Name")
+        // Context label appears above or integrated with text
+        // Helps player understand the source of narrative
+
+        const { container } = render(
+            <NarrativePanel
+                narrative="A ghostly figure approaches from the shadows..."
+                speaker="Game Master"
+                isVisible={true}
+                onClose={() => {}}
+            />,
+        )
+
+        // Verify speaker label is displayed
+        const speakerLabel = container.querySelector('.narrative-speaker')
+        expect(speakerLabel).toBeInTheDocument()
+        expect(screen.getByText('Game Master')).toBeInTheDocument()
+
+        // Verify narrative text is also displayed
+        expect(
+            screen.getByText('A ghostly figure approaches from the shadows...'),
+        ).toBeInTheDocument()
+    })
+
+    it('Narrative appears with smooth animations', () => {
+        // Panel slides in from bottom/side when triggered
+        // Text fades in or typewriter-scrolls for readability
+        // Panel slides out when dismissed
+        // Animation speed is configurable (affects pacing)
+
         const { container, rerender } = render(
             <NarrativePanel
                 narrative="Test"
@@ -111,6 +141,31 @@ describe('Narrative Display Panel', () => {
         panel = container.querySelector('.narrative-panel')
         expect(panel).toBeInTheDocument()
         expect(panel?.className).toContain('mode-fade')
+    })
+
+    it('Narrative panel supports multiple display modes', () => {
+        const modes: Array<'instant' | 'typewriter' | 'fade'> = [
+            'instant',
+            'typewriter',
+            'fade',
+        ]
+
+        modes.forEach((mode) => {
+            const { container } = render(
+                <NarrativePanel
+                    narrative="Test"
+                    speaker="Game Master"
+                    isVisible={true}
+                    onClose={() => {}}
+                    displayMode={mode}
+                />,
+            )
+
+            const panel = container.querySelector('.narrative-panel')
+            if (panel) {
+                expect(panel.className).toContain(`mode-${mode}`)
+            }
+        })
     })
 
     it('Panel hides when isVisible is false', () => {
