@@ -108,7 +108,8 @@ describe('Ship Modularity System', () => {
         expect(galleon.physics.friction).toBe(0.93)
 
         // Test that ships can be retrieved by type
-        const getShip = (shipType: ShipType): ShipConfig => shipConfigs[shipType]
+        const getShip = (shipType: ShipType): ShipConfig =>
+            shipConfigs[shipType]
         const selectedShip = getShip('brigantine')
         expect(selectedShip.name).toBe('Brigantine')
 

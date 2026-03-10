@@ -14,7 +14,13 @@ describe('Points of Interest Interaction', () => {
         const poiSystem = {
             poi: [
                 { id: 1, x: 10, y: 5, type: 'town', name: 'Port Royal' },
-                { id: 2, x: -8, y: 12, type: 'island', name: 'Treasure Island' },
+                {
+                    id: 2,
+                    x: -8,
+                    y: 12,
+                    type: 'island',
+                    name: 'Treasure Island',
+                },
                 {
                     id: 3,
                     x: 15,
@@ -115,10 +121,7 @@ describe('Points of Interest Interaction', () => {
         // Simulate island visitation
         const islandDesc =
             'A lush tropical island with ancient ruins hidden in the jungle. Strange symbols cover crumbling stone structures, hinting at a forgotten civilization.'
-        const visit = islandVisitation.visitIsland(
-            'Jungle Ruins',
-            islandDesc,
-        )
+        const visit = islandVisitation.visitIsland('Jungle Ruins', islandDesc)
 
         expect(visit.name).toBe('Jungle Ruins')
         expect(visit.description).toContain('tropical island')

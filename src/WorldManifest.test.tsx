@@ -28,9 +28,7 @@ describe('World Manifest & POI Metadata', () => {
     })
 
     it('Biome affects NPC types and quests', () => {
-        const towns = manifest.poiList.filter(
-            (p) => p.type === 'town',
-        )
+        const towns = manifest.poiList.filter((p) => p.type === 'town')
 
         // Any town should have NPCs
         if (towns.length > 0) {

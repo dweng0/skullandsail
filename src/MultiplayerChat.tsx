@@ -26,7 +26,11 @@ const EMOTES = [
     { type: 'angry', symbol: '😡', label: 'Angry' },
 ]
 
-export default function MultiplayerChat({ manager, isOpen, onToggle }: ChatProps) {
+export default function MultiplayerChat({
+    manager,
+    isOpen,
+    onToggle,
+}: ChatProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([])
     const [chatInput, setChatInput] = useState('')
     const [showEmotes, setShowEmotes] = useState(false)
@@ -103,9 +107,13 @@ export default function MultiplayerChat({ manager, isOpen, onToggle }: ChatProps
                                 className={`chat-message ${msg.isLocal ? 'local' : 'remote'}`}
                             >
                                 <span className="timestamp">
-                                    {new Date(msg.timestamp).toLocaleTimeString()}
+                                    {new Date(
+                                        msg.timestamp,
+                                    ).toLocaleTimeString()}
                                 </span>
-                                <span className="player-id">Player {msg.playerId}:</span>
+                                <span className="player-id">
+                                    Player {msg.playerId}:
+                                </span>
                                 <span className="message-text">{msg.text}</span>
                             </div>
                         ))}
@@ -127,7 +135,9 @@ export default function MultiplayerChat({ manager, isOpen, onToggle }: ChatProps
                                         <button
                                             key={emote.type}
                                             className="emote-btn"
-                                            onClick={() => handleEmote(emote.type)}
+                                            onClick={() =>
+                                                handleEmote(emote.type)
+                                            }
                                             title={emote.label}
                                         >
                                             {emote.symbol}

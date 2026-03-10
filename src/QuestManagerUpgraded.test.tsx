@@ -70,7 +70,11 @@ describe('LLM-Driven Quest Generation', () => {
                 'beginning',
             )
 
-            const completion = await questManager.completeQuest(quest.id, 'town_3', patron.id)
+            const completion = await questManager.completeQuest(
+                quest.id,
+                'town_3',
+                patron.id,
+            )
 
             expect(completion.xp).toBeGreaterThan(0)
             expect(completion.gold).toBeGreaterThan(0)
@@ -102,9 +106,7 @@ describe('LLM-Driven Quest Generation', () => {
             )
 
             // Higher level should give better rewards
-            expect(quest2.reward.xp).toBeGreaterThanOrEqual(
-                quest1.reward.xp,
-            )
+            expect(quest2.reward.xp).toBeGreaterThanOrEqual(quest1.reward.xp)
             expect(quest2.reward.gold).toBeGreaterThanOrEqual(
                 quest1.reward.gold,
             )
@@ -146,7 +148,11 @@ describe('LLM-Driven Quest Generation', () => {
                 'beginning',
             )
 
-            const failure = await questManager.failQuest(quest.id, 'town_6', patron.id)
+            const failure = await questManager.failQuest(
+                quest.id,
+                'town_6',
+                patron.id,
+            )
 
             expect(failure.narrative).toBeDefined()
             expect(failure.narrative.length).toBeGreaterThan(0)

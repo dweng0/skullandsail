@@ -78,19 +78,14 @@ export default function NarrativePanel({
     return (
         <>
             {isVisible && (
-                <div
-                    className="narrative-overlay"
-                    onClick={handleOverlayClick}
-                >
+                <div className="narrative-overlay" onClick={handleOverlayClick}>
                     <div
                         className={`narrative-panel mode-${displayMode} ${
                             isVisible && !isAnimating ? 'fade-in' : ''
                         } ${!isVisible ? 'hidden' : ''}`}
                     >
                         <div className="narrative-header">
-                            <div className="narrative-speaker">
-                                {speaker}
-                            </div>
+                            <div className="narrative-speaker">{speaker}</div>
                             <button
                                 className="narrative-close-btn"
                                 onClick={onClose}

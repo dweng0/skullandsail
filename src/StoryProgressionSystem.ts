@@ -102,12 +102,10 @@ export default class StoryProgressionSystem {
     generateArcNarrative(): string {
         const arcNarratives = {
             beginning:
-                "Your journey begins on humble seas. The world is vast and full of possibility.",
-            middle:
-                'Your reputation grows with each victory. The stakes have risen, and greater challenges await.',
+                'Your journey begins on humble seas. The world is vast and full of possibility.',
+            middle: 'Your reputation grows with each victory. The stakes have risen, and greater challenges await.',
             late: 'You stand at the threshold of destiny. The final battle approaches.',
-            ending:
-                'This is the culmination of your voyage. Your choices have led you here.',
+            ending: 'This is the culmination of your voyage. Your choices have led you here.',
         }
 
         let narrative = arcNarratives[this.currentArc]
@@ -115,9 +113,7 @@ export default class StoryProgressionSystem {
         // Add references to completed quests
         if (this.majorQuestsCompleted.length > 0) {
             const latestQuest =
-                this.majorQuestsCompleted[
-                    this.majorQuestsCompleted.length - 1
-                ]
+                this.majorQuestsCompleted[this.majorQuestsCompleted.length - 1]
             narrative += ` You remember ${latestQuest.title}.`
         }
 
@@ -136,21 +132,14 @@ export default class StoryProgressionSystem {
         }
 
         let dialogue =
-            baseDialogues[
-                npcType as keyof typeof baseDialogues
-            ] || 'Well met, traveler.'
+            baseDialogues[npcType as keyof typeof baseDialogues] ||
+            'Well met, traveler.'
 
         // Personalize based on choices
-        if (
-            this.playerChoices.some((c) =>
-                c.eventId.includes('rescue'),
-            )
-        ) {
-            dialogue = "They say you have a good heart. I respect that.";
+        if (this.playerChoices.some((c) => c.eventId.includes('rescue'))) {
+            dialogue = 'They say you have a good heart. I respect that.'
         } else if (
-            this.playerChoices.some((c) =>
-                c.eventId.includes('attack'),
-            )
+            this.playerChoices.some((c) => c.eventId.includes('attack'))
         ) {
             dialogue = "I hear you're ruthless. That could be useful."
         }
@@ -165,11 +154,9 @@ export default class StoryProgressionSystem {
         const milestones = {
             beginning:
                 'Your reputation spreads across the seas. You are no longer unknown.',
-            middle:
-                'Word of your deeds reaches distant lands. Heroes are born, not made.',
+            middle: 'Word of your deeds reaches distant lands. Heroes are born, not made.',
             late: 'You are spoken of in legends. Your final chapter awaits.',
-            ending:
-                'This is your moment. Everything has led to this point.',
+            ending: 'This is your moment. Everything has led to this point.',
         }
 
         return milestones[this.currentArc] || 'Your journey continues...'
@@ -221,8 +208,7 @@ export default class StoryProgressionSystem {
      */
     getStoryJournal(): string[] {
         return this.journalBeats.map(
-            (beat) =>
-                `[${beat.id}] ${beat.narrative.substring(0, 100)}...`,
+            (beat) => `[${beat.id}] ${beat.narrative.substring(0, 100)}...`,
         )
     }
 

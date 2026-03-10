@@ -24,7 +24,7 @@ export default function MultiplayerSetup({
             await manager.createMultiplayerSession()
             localStorage.setItem(
                 'multiplayerSession',
-                JSON.stringify(manager.saveSessionState())
+                JSON.stringify(manager.saveSessionState()),
             )
             onSessionCreated(manager)
         } catch (err) {
@@ -47,7 +47,7 @@ export default function MultiplayerSetup({
             if (success) {
                 localStorage.setItem(
                     'multiplayerSession',
-                    JSON.stringify(manager.saveSessionState())
+                    JSON.stringify(manager.saveSessionState()),
                 )
                 onSessionJoined(manager, sessionCode)
             } else {
@@ -100,7 +100,10 @@ export default function MultiplayerSetup({
                 {mode === 'host' && (
                     <div className="multiplayer-host">
                         <h2>Create Multiplayer Game</h2>
-                        <p>You will be the host. Other players can join using the session code.</p>
+                        <p>
+                            You will be the host. Other players can join using
+                            the session code.
+                        </p>
                         {error && <div className="error-message">{error}</div>}
                         <button
                             className="btn btn-primary"
@@ -130,7 +133,9 @@ export default function MultiplayerSetup({
                             type="text"
                             placeholder="Enter session code (e.g., ABC12345)"
                             value={sessionCode}
-                            onChange={(e) => setSessionCode(e.target.value.toUpperCase())}
+                            onChange={(e) =>
+                                setSessionCode(e.target.value.toUpperCase())
+                            }
                             disabled={connecting}
                             maxLength={8}
                             className="session-code-input"

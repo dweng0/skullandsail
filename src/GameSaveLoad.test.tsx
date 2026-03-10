@@ -35,9 +35,7 @@ describe('Game Save/Load System', () => {
         // and load it on initialization
         expect(localStorage.getItem('gameSave')).toBeDefined()
 
-        const savedData = JSON.parse(
-            localStorage.getItem('gameSave') || '{}',
-        )
+        const savedData = JSON.parse(localStorage.getItem('gameSave') || '{}')
         expect(savedData.captainName).toBe('Captain Ahab')
         expect(savedData.shipClass).toBe('brigantine')
         expect(savedData.shipPosition.x).toBe(10)

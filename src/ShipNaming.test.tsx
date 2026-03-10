@@ -42,12 +42,7 @@ describe('Ship Naming - LLM Suggestions', () => {
     it('Ship name is displayed on HUD during gameplay', () => {
         // Verify that name is stored and accessible
         const onSetName = () => {}
-        render(
-            <ShipNaming
-                shipClass="brigantine"
-                onSetName={onSetName}
-            />,
-        )
+        render(<ShipNaming shipClass="brigantine" onSetName={onSetName} />)
 
         // Component should be able to receive and store a ship name
         const input = screen.getByPlaceholderText(/ship's name/i)

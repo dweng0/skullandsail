@@ -113,7 +113,11 @@ textarea:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-sea-blue) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--color-navy) 0%,
+        var(--color-sea-blue) 100%
+    );
 }
 
 .multiplayer-container {
@@ -517,7 +521,11 @@ textarea:focus {
 }
 
 .battle-vote-container {
-    background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-sea-blue) 100%);
+    background: linear-gradient(
+        135deg,
+        var(--color-navy) 0%,
+        var(--color-sea-blue) 100%
+    );
     border: 3px solid #ef4444;
     border-radius: 12px;
     padding: 40px;
@@ -557,7 +565,8 @@ textarea:focus {
 }
 
 @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
         opacity: 1;
     }
     50% {

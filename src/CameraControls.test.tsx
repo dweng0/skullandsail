@@ -76,8 +76,10 @@ describe('Enhanced Camera Controls', () => {
         // Lerp values: lerp from current to default
         const startDistance = 5
         const startPanAngle = 45
-        cameraDistance = startDistance + (defaultDistance - startDistance) * progress
-        cameraPanAngle = startPanAngle + (defaultPanAngle - startPanAngle) * progress
+        cameraDistance =
+            startDistance + (defaultDistance - startDistance) * progress
+        cameraPanAngle =
+            startPanAngle + (defaultPanAngle - startPanAngle) * progress
 
         expect(progress).toBe(1 / 3)
         expect(cameraDistance).toBeCloseTo(6, 1) // 5 + (8-5) * 1/3 = 5 + 1 = 6
@@ -85,9 +87,14 @@ describe('Enhanced Camera Controls', () => {
 
         // After 3 seconds, should be at default
         currentTime = startTime + returnDuration
-        const finalProgress = Math.min((currentTime - startTime) / returnDuration, 1)
-        const finalDistance = startDistance + (defaultDistance - startDistance) * finalProgress
-        const finalAngle = startPanAngle + (defaultPanAngle - startPanAngle) * finalProgress
+        const finalProgress = Math.min(
+            (currentTime - startTime) / returnDuration,
+            1,
+        )
+        const finalDistance =
+            startDistance + (defaultDistance - startDistance) * finalProgress
+        const finalAngle =
+            startPanAngle + (defaultPanAngle - startPanAngle) * finalProgress
 
         expect(finalProgress).toBe(1)
         expect(finalDistance).toBeCloseTo(defaultDistance, 1)

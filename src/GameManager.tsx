@@ -105,7 +105,10 @@ export default function GameManager() {
         setGameState('character-setup')
     }
 
-    const handleMultiplayerSessionJoined = (manager: MultiplayerManager, _sessionCode: string) => {
+    const handleMultiplayerSessionJoined = (
+        manager: MultiplayerManager,
+        _sessionCode: string,
+    ) => {
         setConfig({
             ...config,
             multiplayerManager: manager,

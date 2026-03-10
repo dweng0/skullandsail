@@ -11,7 +11,6 @@ export interface NPC {
     interactionCount: number
 }
 
-
 export default class NPCManager {
     private npcsByTown: Map<string, NPC[]> = new Map()
     private npcById: Map<string, NPC> = new Map()
@@ -66,10 +65,7 @@ export default class NPCManager {
     /**
      * Generate thematic NPC name based on role and biome
      */
-    private generateNPCName(
-        role: NPC['role'],
-        _biome: string,
-    ): string {
+    private generateNPCName(role: NPC['role'], _biome: string): string {
         const piratePrefixes = [
             'Captain',
             'Sailor',
@@ -94,23 +90,25 @@ export default class NPCManager {
             'Elizabeth',
             'Sarah',
         ]
-        const innkeeperNames = [
-            'The Crimson Mare',
-            'The Anchor',
-            "O'Malley's",
-        ]
+        const innkeeperNames = ['The Crimson Mare', 'The Anchor', "O'Malley's"]
 
         if (role === 'quest-giver') {
             return `${piratePrefixes[Math.floor(Math.random() * piratePrefixes.length)]} ${pirateNames[Math.floor(Math.random() * pirateNames.length)]}`
         } else if (role === 'innkeeper') {
-            return innkeeperNames[Math.floor(Math.random() * innkeeperNames.length)]
+            return innkeeperNames[
+                Math.floor(Math.random() * innkeeperNames.length)
+            ]
         } else if (role === 'merchant') {
             return `${femaleNames[Math.floor(Math.random() * femaleNames.length)]} the ${['Shrewd', 'Fair', 'Bold'][Math.floor(Math.random() * 3)]}`
         } else {
             const firstName =
                 Math.random() > 0.5
-                    ? femaleNames[Math.floor(Math.random() * femaleNames.length)]
-                    : piratePrefixes[Math.floor(Math.random() * piratePrefixes.length)]
+                    ? femaleNames[
+                          Math.floor(Math.random() * femaleNames.length)
+                      ]
+                    : piratePrefixes[
+                          Math.floor(Math.random() * piratePrefixes.length)
+                      ]
             const lastName =
                 pirateNames[Math.floor(Math.random() * pirateNames.length)]
             return `${firstName} ${lastName}`
@@ -160,7 +158,9 @@ export default class NPCManager {
             other: `${name} is a mysterious figure whose true motives remain unclear.`,
         }
 
-        return backstories[role as keyof typeof backstories] || backstories.other
+        return (
+            backstories[role as keyof typeof backstories] || backstories.other
+        )
     }
 
     /**
@@ -193,7 +193,11 @@ export default class NPCManager {
             ],
         }
 
-        return dialogueByPersonality[personality as keyof typeof dialogueByPersonality] || dialogueByPersonality.cheerful
+        return (
+            dialogueByPersonality[
+                personality as keyof typeof dialogueByPersonality
+            ] || dialogueByPersonality.cheerful
+        )
     }
 
     /**
@@ -217,7 +221,10 @@ export default class NPCManager {
     updateNPCReputation(townId: string, npcId: string, delta: number): void {
         const npc = this.getNPCById(townId, npcId)
         if (npc) {
-            npc.reputation = Math.max(-100, Math.min(100, npc.reputation + delta))
+            npc.reputation = Math.max(
+                -100,
+                Math.min(100, npc.reputation + delta),
+            )
             npc.interactionCount++
         }
     }

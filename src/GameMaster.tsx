@@ -34,9 +34,7 @@ export default function GameMaster({
     multiplayerManager,
 }: GameMasterProps) {
     // Core systems
-    const [worldManifest] = useState<WorldManifest>(() =>
-        createWorldManifest(),
-    )
+    const [worldManifest] = useState<WorldManifest>(() => createWorldManifest())
     const [npcManager] = useState(() => new NPCManager())
     const [llmManager] = useState(() => new LLMCallManager(llmConfig))
     // Quest manager for future integration (useRef to prevent dependency issues)
@@ -78,7 +76,6 @@ export default function GameMaster({
                 const interaction = poiSystem.handleEKey()
 
                 if (interaction) {
-
                     if (interaction.type === 'town') {
                         // Open NPC dialogue for town
                         const npcs = npcManager.getNPCsForTown(
@@ -136,9 +133,7 @@ export default function GameMaster({
         if (selectedNPC && selectedTownId) {
             setDialogueOpen(false)
             const narrative = await storySystem.generateArcNarrative()
-            setNarrativeText(
-                `You accept: "${quest.title}". ${narrative}`,
-            )
+            setNarrativeText(`You accept: "${quest.title}". ${narrative}`)
             setNarrativeSpeaker('Game Master')
             setNarrativeMode('fade')
             setNarrativeVisible(true)

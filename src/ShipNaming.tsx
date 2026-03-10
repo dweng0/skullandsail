@@ -18,7 +18,7 @@ const SHIP_SUGGESTIONS: Record<ShipClass, string[]> = {
         'The Crimson Tide',
         'Sea Serpent',
         'Ocean Trader',
-        'Fortune\'s Favor',
+        "Fortune's Favor",
         'Iron Brigand',
     ],
     galleon: [
@@ -26,14 +26,11 @@ const SHIP_SUGGESTIONS: Record<ShipClass, string[]> = {
         'Golden Horizon',
         'Leviathan',
         'Treasure Hoard',
-        'Admiral\'s Pride',
+        "Admiral's Pride",
     ],
 }
 
-export default function ShipNaming({
-    shipClass,
-    onSetName,
-}: ShipNamingProps) {
+export default function ShipNaming({ shipClass, onSetName }: ShipNamingProps) {
     const [shipName, setShipName] = useState('')
     const [suggestions, setSuggestions] = useState<string[]>([])
     const [loading, setLoading] = useState(true)
@@ -67,14 +64,26 @@ export default function ShipNaming({
             </h3>
 
             {loading && (
-                <div style={{ marginBottom: '12px', fontSize: '12px', color: '#999' }}>
+                <div
+                    style={{
+                        marginBottom: '12px',
+                        fontSize: '12px',
+                        color: '#999',
+                    }}
+                >
                     Consulting the spirits for names...
                 </div>
             )}
 
             {!loading && suggestions.length > 0 && (
                 <div style={{ marginBottom: '12px' }}>
-                    <p style={{ fontSize: '12px', color: '#ccc', marginBottom: '8px' }}>
+                    <p
+                        style={{
+                            fontSize: '12px',
+                            color: '#ccc',
+                            marginBottom: '8px',
+                        }}
+                    >
                         Suggested names:
                     </p>
                     <div
@@ -87,7 +96,9 @@ export default function ShipNaming({
                         {suggestions.map((suggestion) => (
                             <button
                                 key={suggestion}
-                                onClick={() => handleSuggestionClick(suggestion)}
+                                onClick={() =>
+                                    handleSuggestionClick(suggestion)
+                                }
                                 style={{
                                     padding: '8px 12px',
                                     textAlign: 'left',
@@ -106,11 +117,15 @@ export default function ShipNaming({
                                     fontSize: '14px',
                                 }}
                                 onMouseOver={(e) => {
-                                    ;(e.target as HTMLButtonElement).style.backgroundColor =
+                                    ;(
+                                        e.target as HTMLButtonElement
+                                    ).style.backgroundColor =
                                         'rgba(212, 165, 116, 0.2)'
                                 }}
                                 onMouseOut={(e) => {
-                                    ;(e.target as HTMLButtonElement).style.backgroundColor =
+                                    ;(
+                                        e.target as HTMLButtonElement
+                                    ).style.backgroundColor =
                                         shipName === suggestion
                                             ? 'rgba(212, 165, 116, 0.3)'
                                             : 'transparent'

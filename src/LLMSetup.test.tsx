@@ -97,7 +97,9 @@ describe('LLM Setup', () => {
         // The component stores LLM config under 'llmConfig' key
         const savedConfig = localStorage.getItem('llmConfig')
         // Config may be saved or will be saved on connect
-        expect(typeof savedConfig === 'string' || savedConfig === null).toBe(true)
+        expect(typeof savedConfig === 'string' || savedConfig === null).toBe(
+            true,
+        )
     })
 
     it('Auto-connect with cached LLM configuration', () => {

@@ -131,7 +131,8 @@ export function createWorldManifest(): WorldManifest {
     const biomeMap = generateBiomeRegions()
 
     // Generate world name and features
-    const { worldName, distinctiveFeatures, climate } = generateWorldCharacteristics()
+    const { worldName, distinctiveFeatures, climate } =
+        generateWorldCharacteristics()
 
     // Generate POIs
     const poiList = generatePOIs(seed, biomeMap, climate)
@@ -237,8 +238,7 @@ function generateWorldCharacteristics(): {
     ]
 
     return {
-        worldName:
-            worldNames[Math.floor(Math.random() * worldNames.length)],
+        worldName: worldNames[Math.floor(Math.random() * worldNames.length)],
         distinctiveFeatures: features
             .sort(() => Math.random() - 0.5)
             .slice(0, 3),
@@ -267,11 +267,9 @@ function generatePOIs(
 
         // Random position in region
         const x =
-            biomeRegion.startX +
-            Math.floor(Math.random() * biomeRegion.width)
+            biomeRegion.startX + Math.floor(Math.random() * biomeRegion.width)
         const y =
-            biomeRegion.startY +
-            Math.floor(Math.random() * biomeRegion.height)
+            biomeRegion.startY + Math.floor(Math.random() * biomeRegion.height)
 
         // Random POI type with distribution
         let type: 'town' | 'island' | 'anomaly'
@@ -316,7 +314,12 @@ function generatePOIs(
  */
 function generatePOIName(type: string, biome: string): string {
     const townNames = {
-        tropical: ['Port Royal', 'Tortuga Bay', 'Skull Harbor', 'Paradise Isle'],
+        tropical: [
+            'Port Royal',
+            'Tortuga Bay',
+            'Skull Harbor',
+            'Paradise Isle',
+        ],
         volcanic: ['Lava Haven', 'Scorched Port', 'Ember Bay', 'Inferno Cove'],
         arctic: ['Frozen Reach', 'Ice Port', 'Frostholm', 'Snowhaven'],
         temperate: ['Green Port', 'Merchant Haven', 'Oak Harbor', 'Trade Post'],
@@ -330,7 +333,12 @@ function generatePOIName(type: string, biome: string): string {
             'Treasure Island',
         ],
         volcanic: ['Lava Rock', 'Fire Peak', 'Obsidian Isle', 'Magma Crag'],
-        arctic: ['Ice Shelf', 'Frozen Peak', 'Glacial Island', 'Snowdrift Isle'],
+        arctic: [
+            'Ice Shelf',
+            'Frozen Peak',
+            'Glacial Island',
+            'Snowdrift Isle',
+        ],
         temperate: ['Green Hill', 'Stone Isle', 'Oak Island', 'Meadow Rock'],
     }
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import WorldGenerator from './WorldGenerator'
+import WorldGenerator, { FIXED_WORLD_SEED } from './WorldGenerator'
 
 describe('World Generation', () => {
     afterEach(() => {
@@ -77,5 +77,26 @@ describe('World Generation', () => {
         // Should be able to reconstruct from JSON
         const restored = new WorldGenerator(worldState.seed)
         expect(restored).toBeDefined()
+    })
+
+    it('Game loads with fixed deterministic seed', () => {
+        // Game uses a fixed, non-random seed (e.g., Collatz conjecture seed or similar)
+        // All players receive the same procedurally generated world
+        // Seed is encoded in the map manifest and shipped with the game
+        // Ensures consistent experience across all playthroughs
+
+        // Create two instances with the fixed seed
+        const world1 = new WorldGenerator(FIXED_WORLD_SEED).generateMap(32, 32)
+        const world2 = new WorldGenerator(FIXED_WORLD_SEED).generateMap(32, 32)
+
+        // Verify both worlds are identical (same seed produces same world)
+        expect(world1).toEqual(world2)
+        expect(world1.seed).toBe(FIXED_WORLD_SEED)
+        expect(world2.seed).toBe(FIXED_WORLD_SEED)
+
+        // Verify the world is usable
+        expect(world1.width).toBe(32)
+        expect(world1.height).toBe(32)
+        expect(world1.islands.length).toBeGreaterThan(0)
     })
 })

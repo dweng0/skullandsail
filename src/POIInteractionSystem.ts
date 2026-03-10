@@ -178,9 +178,11 @@ export default class POIInteractionSystem {
     /**
      * Get color for POI type
      */
-    private getColorForPOIType(
-        type: 'town' | 'island' | 'anomaly',
-    ): { r: number; g: number; b: number } {
+    private getColorForPOIType(type: 'town' | 'island' | 'anomaly'): {
+        r: number
+        g: number
+        b: number
+    } {
         switch (type) {
             case 'town':
                 return { r: 255, g: 215, b: 0 } // Gold
@@ -282,9 +284,7 @@ export default class POIInteractionSystem {
         x2: number,
         y2: number,
     ): number {
-        return Math.sqrt(
-            Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2),
-        )
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
     }
 
     /**

@@ -1,3 +1,7 @@
+// Fixed world seed - ensures all players get the same world
+// Based on Collatz conjecture seed-like approach: fixed value for consistent experience
+export const FIXED_WORLD_SEED = 42
+
 export interface Position {
     x: number
     y: number

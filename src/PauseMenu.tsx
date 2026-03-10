@@ -38,7 +38,10 @@ export default function PauseMenu({ onResume, onQuit }: PauseMenuProps) {
             >
                 {!showSettings ? (
                     <>
-                        <h2 className="ui-title" style={{ marginBottom: '24px' }}>
+                        <h2
+                            className="ui-title"
+                            style={{ marginBottom: '24px' }}
+                        >
                             ⏸ PAUSED
                         </h2>
 
@@ -78,7 +81,10 @@ export default function PauseMenu({ onResume, onQuit }: PauseMenuProps) {
                     </>
                 ) : !confirmClearCache ? (
                     <>
-                        <h3 className="ui-title" style={{ marginBottom: '24px' }}>
+                        <h3
+                            className="ui-title"
+                            style={{ marginBottom: '24px' }}
+                        >
                             ⚙️ Settings
                         </h3>
 

@@ -62,8 +62,8 @@ describe('NPC Dialogue Trees', () => {
         )
 
         const buttons = container.querySelectorAll('.dialogue-btn')
-        const greetButton = Array.from(buttons).find(
-            (b) => b.textContent?.toLowerCase().includes('greet'),
+        const greetButton = Array.from(buttons).find((b) =>
+            b.textContent?.toLowerCase().includes('greet'),
         ) as HTMLButtonElement
 
         if (greetButton) {
@@ -140,8 +140,8 @@ describe('NPC Dialogue Trees', () => {
         )
 
         const buttons = container.querySelectorAll('.dialogue-btn')
-        const greetButton = Array.from(buttons).find(
-            (b) => b.textContent?.toLowerCase().includes('greet'),
+        const greetButton = Array.from(buttons).find((b) =>
+            b.textContent?.toLowerCase().includes('greet'),
         ) as HTMLButtonElement
 
         if (greetButton) {

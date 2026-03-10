@@ -186,10 +186,7 @@ export default class QuestManagerUpgraded {
     /**
      * Calculate difficulty based on player level and story arc
      */
-    private calculateDifficulty(
-        playerLevel: number,
-        storyArc: string,
-    ): number {
+    private calculateDifficulty(playerLevel: number, storyArc: string): number {
         let baseDifficulty = 1
 
         if (storyArc === 'beginning') {
@@ -203,7 +200,10 @@ export default class QuestManagerUpgraded {
         }
 
         // Scale with player level
-        const scaledDifficulty = Math.max(1, baseDifficulty + Math.floor((playerLevel - 1) / 3))
+        const scaledDifficulty = Math.max(
+            1,
+            baseDifficulty + Math.floor((playerLevel - 1) / 3),
+        )
 
         return Math.min(5, scaledDifficulty)
     }
@@ -212,9 +212,7 @@ export default class QuestManagerUpgraded {
      * Get list of completed quest IDs
      */
     private getCompletedQuestIds(): string[] {
-        return this.quests
-            .filter((q) => q.completed)
-            .map((q) => q.id)
+        return this.quests.filter((q) => q.completed).map((q) => q.id)
     }
 
     /**
@@ -231,9 +229,7 @@ export default class QuestManagerUpgraded {
         this.quests = data
         // Update nextId to avoid conflicts
         const maxId = Math.max(
-            ...this.quests.map((q) =>
-                parseInt(q.id.replace('quest_', ''), 10),
-            ),
+            ...this.quests.map((q) => parseInt(q.id.replace('quest_', ''), 10)),
             0,
         )
         this.nextId = maxId + 1

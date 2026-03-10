@@ -184,10 +184,7 @@ export default class LLMCallManager {
     /**
      * Build cache key from context
      */
-    private buildCacheKey(
-        type: string,
-        context: unknown,
-    ): string {
+    private buildCacheKey(type: string, context: unknown): string {
         const contextStr = JSON.stringify(context)
         return `${type}_${Buffer.from(contextStr).toString('base64').substring(0, 20)}`
     }
@@ -216,28 +213,27 @@ export default class LLMCallManager {
     /**
      * Get fallback NPC dialogue
      */
-    private getFallbackNPCDialogue(
-        personality: string,
-        _role: string,
-    ): string {
+    private getFallbackNPCDialogue(personality: string, _role: string): string {
         const fallbacks = {
-            gruff: "Aye, what brings ye to these waters?",
-            cheerful: "Welcome, friend! Great to see a new face around here!",
-            mysterious:
-                "Interesting... I sense you have tales to tell.",
+            gruff: 'Aye, what brings ye to these waters?',
+            cheerful: 'Welcome, friend! Great to see a new face around here!',
+            mysterious: 'Interesting... I sense you have tales to tell.',
             cautious:
                 "Hmm. I don't know you yet, but perhaps you can prove yourself.",
         }
         return (
             fallbacks[personality as keyof typeof fallbacks] ||
-            "Greetings, traveler."
+            'Greetings, traveler.'
         )
     }
 
     /**
      * Get fallback quest
      */
-    private getFallbackQuest(npcName: string, playerLevel: number): GeneratedQuest {
+    private getFallbackQuest(
+        npcName: string,
+        playerLevel: number,
+    ): GeneratedQuest {
         const xp = playerLevel * 50
         const gold = playerLevel * 25
 
@@ -259,8 +255,7 @@ export default class LLMCallManager {
             battle_victory: 'Your cannon fire was true. Victory is yours.',
             battle_defeat: 'Your ship was battered in the battle. Retreat!',
             discover_location: 'You have found a new location on your map.',
-            story_milestone:
-                'An important chapter of your story has unfolded.',
+            story_milestone: 'An important chapter of your story has unfolded.',
         }
         return (
             fallbacks[eventType as keyof typeof fallbacks] ||

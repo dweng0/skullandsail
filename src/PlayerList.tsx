@@ -26,7 +26,11 @@ const getPlayerColor = (playerId: number): string => {
     return colors[playerId - 1] || '#999'
 }
 
-export default function PlayerList({ players, localPlayerId, isHost }: PlayerListProps) {
+export default function PlayerList({
+    players,
+    localPlayerId,
+    isHost,
+}: PlayerListProps) {
     const [displayPlayers, setDisplayPlayers] = useState<RemotePlayer[]>([])
 
     useEffect(() => {
@@ -37,14 +41,18 @@ export default function PlayerList({ players, localPlayerId, isHost }: PlayerLis
         <div className="player-list">
             <div className="player-list-header">
                 <h3>Players</h3>
-                <span className="player-count">{displayPlayers.length + 1}/4</span>
+                <span className="player-count">
+                    {displayPlayers.length + 1}/4
+                </span>
             </div>
             <div className="player-list-container">
                 {/* Local player */}
                 <div className="player-item local-player">
                     <div
                         className="player-color"
-                        style={{ backgroundColor: getPlayerColor(localPlayerId || 1) }}
+                        style={{
+                            backgroundColor: getPlayerColor(localPlayerId || 1),
+                        }}
                     />
                     <div className="player-info">
                         <div className="player-name">You</div>
@@ -60,19 +68,33 @@ export default function PlayerList({ players, localPlayerId, isHost }: PlayerLis
                     <div key={player.playerId} className="player-item">
                         <div
                             className="player-color"
-                            style={{ backgroundColor: getPlayerColor(player.playerId) }}
+                            style={{
+                                backgroundColor: getPlayerColor(
+                                    player.playerId,
+                                ),
+                            }}
                         />
                         <div className="player-info">
-                            <div className="player-name">{player.captainName}</div>
+                            <div className="player-name">
+                                {player.captainName}
+                            </div>
                             <div className="player-meta">
-                                <span className="ship-class">{player.shipClass}</span>
-                                <span className="level">Lvl {player.level}</span>
+                                <span className="ship-class">
+                                    {player.shipClass}
+                                </span>
+                                <span className="level">
+                                    Lvl {player.level}
+                                </span>
                             </div>
                         </div>
                         <div className="player-status">
                             <span
                                 className={`status-indicator ${player.status.toLowerCase()}`}
-                                style={{ backgroundColor: getStatusColor(player.status) }}
+                                style={{
+                                    backgroundColor: getStatusColor(
+                                        player.status,
+                                    ),
+                                }}
                             />
                             <span className="status-text">{player.status}</span>
                             {player.ping !== undefined && (

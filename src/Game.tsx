@@ -214,9 +214,24 @@ export default function Game({
 
             // Ship physics configuration
             const shipConfig = {
-                sloop: { maxSpeed: 0.3, acceleration: 0.015, turnRate: 0.06, friction: 0.95 },
-                brigantine: { maxSpeed: 0.2, acceleration: 0.01, turnRate: 0.04, friction: 0.94 },
-                galleon: { maxSpeed: 0.15, acceleration: 0.008, turnRate: 0.03, friction: 0.93 },
+                sloop: {
+                    maxSpeed: 0.3,
+                    acceleration: 0.015,
+                    turnRate: 0.06,
+                    friction: 0.95,
+                },
+                brigantine: {
+                    maxSpeed: 0.2,
+                    acceleration: 0.01,
+                    turnRate: 0.04,
+                    friction: 0.94,
+                },
+                galleon: {
+                    maxSpeed: 0.15,
+                    acceleration: 0.008,
+                    turnRate: 0.03,
+                    friction: 0.93,
+                },
             }
             const config = shipConfig[playerShipClass]
 
@@ -337,7 +352,10 @@ export default function Game({
                 window.removeEventListener('keydown', handleKeyDown)
                 window.removeEventListener('keyup', handleKeyUp)
                 if (canvasRef.current) {
-                    canvasRef.current.removeEventListener('wheel', handleMouseWheel)
+                    canvasRef.current.removeEventListener(
+                        'wheel',
+                        handleMouseWheel,
+                    )
                 }
                 window.removeEventListener('mousedown', handleMouseDown)
                 window.removeEventListener('mousemove', handleMouseMove)
@@ -368,7 +386,10 @@ export default function Game({
                     <PlayerList
                         players={remotePlayersState}
                         localPlayerId={multiplayerManager.getPlayerId()}
-                        isHost={multiplayerManager.getSessionConfig()?.isHost || false}
+                        isHost={
+                            multiplayerManager.getSessionConfig()?.isHost ||
+                            false
+                        }
                     />
                     <MultiplayerChat
                         manager={multiplayerManager}
@@ -412,9 +433,12 @@ export default function Game({
                         }}
                     >
                         <div>
-                            Pos: ({shipPosition.x.toFixed(1)}, {shipPosition.z.toFixed(1)})
+                            Pos: ({shipPosition.x.toFixed(1)},{' '}
+                            {shipPosition.z.toFixed(1)})
                         </div>
-                        <div>Dir: {(direction * (180 / Math.PI)).toFixed(0)}°</div>
+                        <div>
+                            Dir: {(direction * (180 / Math.PI)).toFixed(0)}°
+                        </div>
                         <div>Speed: {(speed * 10).toFixed(1)}</div>
                     </div>
                 </div>

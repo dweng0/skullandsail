@@ -92,7 +92,8 @@ describe('Game - Procedural Asset Pipeline', () => {
         const { container } = render(<Game playerShipClass="brigantine" />)
 
         // HUD should display movement controls
-        const hudElement = container.querySelector('.hud') || container.textContent
+        const hudElement =
+            container.querySelector('.hud') || container.textContent
         expect(hudElement).toBeTruthy()
 
         // Canvas should be visible with HUD

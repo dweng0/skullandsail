@@ -75,7 +75,7 @@ export default function MultiplayerBattle({
 
     const resolveBattleVote = () => {
         const votes = Array.from(voteState.playerVotes.values()).filter(
-            (v) => v !== null
+            (v) => v !== null,
         )
         const yesVotes = votes.filter((v) => v === true).length
         const totalVotes = votes.length
@@ -109,10 +109,10 @@ export default function MultiplayerBattle({
     }
 
     const yesVotes = Array.from(voteState.playerVotes.values()).filter(
-        (v) => v === true
+        (v) => v === true,
     ).length
     const totalVotes = Array.from(voteState.playerVotes.values()).filter(
-        (v) => v !== null
+        (v) => v !== null,
     ).length
 
     return (
@@ -154,7 +154,10 @@ export default function MultiplayerBattle({
                             />
                         </div>
                         <p className="progress-label">
-                            Majority {yesVotes > voteState.playerVotes.size / 2 ? '✓' : '✗'}
+                            Majority{' '}
+                            {yesVotes > voteState.playerVotes.size / 2
+                                ? '✓'
+                                : '✗'}
                         </p>
                     </div>
                 </div>

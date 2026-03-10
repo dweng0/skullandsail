@@ -28,7 +28,8 @@ export class MultiplayerManager {
     private remotePlayersState = new Map<number, RemotePlayer>()
     private iceCandidatesQueue = new Map<number, RTCIceCandidate[]>()
     private disconnectTimers = new Map<number, NodeJS.Timeout>()
-    private positionUpdateCallbacks: Array<(players: RemotePlayer[]) => void> = []
+    private positionUpdateCallbacks: Array<(players: RemotePlayer[]) => void> =
+        []
 
     private static readonly STUN_SERVERS = [
         { urls: 'stun:stun.l.google.com:19302' },
@@ -70,7 +71,7 @@ export class MultiplayerManager {
 
     async connectPeer(remotePeerId: number): Promise<RTCPeerConnection> {
         const peerConnection = new RTCPeerConnection(
-            MultiplayerManager.ICE_CONFIG
+            MultiplayerManager.ICE_CONFIG,
         )
 
         // Ice candidate handling
@@ -93,7 +94,7 @@ export class MultiplayerManager {
 
     async createDataChannel(
         remotePeerId: number,
-        peerConnection: RTCPeerConnection
+        peerConnection: RTCPeerConnection,
     ): Promise<RTCDataChannel> {
         const dataChannel = peerConnection.createDataChannel('gameState', {
             ordered: true,
@@ -106,10 +107,7 @@ export class MultiplayerManager {
         return dataChannel
     }
 
-    onDataChannel(
-        remotePeerId: number,
-        event: RTCDataChannelEvent
-    ): void {
+    onDataChannel(remotePeerId: number, event: RTCDataChannelEvent): void {
         const dataChannel = event.channel
         this.setupDataChannelListeners(remotePeerId, dataChannel)
         this.dataChannels.set(remotePeerId, dataChannel)
@@ -117,7 +115,7 @@ export class MultiplayerManager {
 
     private setupDataChannelListeners(
         remotePeerId: number,
-        dataChannel: RTCDataChannel
+        dataChannel: RTCDataChannel,
     ): void {
         dataChannel.addEventListener('open', () => {
             this.updateRemotePlayerStatus(remotePeerId, 'Connected')
@@ -138,12 +136,20 @@ export class MultiplayerManager {
         })
 
         dataChannel.addEventListener('error', (error) => {
-            console.error(`Data channel error with peer ${remotePeerId}:`, error)
+            console.error(
+                `Data channel error with peer ${remotePeerId}:`,
+                error,
+            )
             this.handleRemoteDisconnect(remotePeerId)
         })
     }
 
-    sendPositionUpdate(x: number, z: number, heading: number, velocity: number): void {
+    sendPositionUpdate(
+        x: number,
+        z: number,
+        heading: number,
+        velocity: number,
+    ): void {
         const update = {
             type: 'position',
             x,
@@ -216,21 +222,19 @@ export class MultiplayerManager {
 
     private handleRemoteChat(_remotePeerId: number, message: any): void {
         // Chat messages would be displayed in game UI
-        console.log(
-            `[${message.playerId}]: ${message.text}`
-        )
+        console.log(`[${message.playerId}]: ${message.text}`)
     }
 
     private handleRemoteEmote(_remotePeerId: number, message: any): void {
         // Emotes would be displayed above ship
         console.log(
-            `Player ${message.playerId} used emote: ${message.emoteType}`
+            `Player ${message.playerId} used emote: ${message.emoteType}`,
         )
     }
 
     private handlePeerConnectionStateChange(
         remotePeerId: number,
-        peerConnection: RTCPeerConnection
+        peerConnection: RTCPeerConnection,
     ): void {
         switch (peerConnection.connectionState) {
             case 'connected':
@@ -293,7 +297,7 @@ export class MultiplayerManager {
 
     private updateRemotePlayerStatus(
         remotePeerId: number,
-        status: 'Connected' | 'Connecting' | 'Disconnected'
+        status: 'Connected' | 'Connecting' | 'Disconnected',
     ): void {
         const player = this.remotePlayersState.get(remotePeerId)
         if (player) {
@@ -301,18 +305,27 @@ export class MultiplayerManager {
         }
     }
 
-    private sendIceCandidate(_remotePeerId: number, _candidate: RTCIceCandidate): void {
+    private sendIceCandidate(
+        _remotePeerId: number,
+        _candidate: RTCIceCandidate,
+    ): void {
         // In real implementation, this would send via signaling server
         // console.log(`ICE candidate for peer ${_remotePeerId}:`, _candidate)
     }
 
-    async addIceCandidate(remotePeerId: number, candidate: RTCIceCandidate): Promise<void> {
+    async addIceCandidate(
+        remotePeerId: number,
+        candidate: RTCIceCandidate,
+    ): Promise<void> {
         const peer = this.peers.get(remotePeerId)
         if (peer) {
             try {
                 await peer.addIceCandidate(candidate)
             } catch (error) {
-                console.error(`Failed to add ICE candidate for peer ${remotePeerId}:`, error)
+                console.error(
+                    `Failed to add ICE candidate for peer ${remotePeerId}:`,
+                    error,
+                )
             }
         }
     }

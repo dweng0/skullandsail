@@ -7,7 +7,9 @@ global.RTCPeerConnection = vi.fn(() => ({
         onmessage: null,
         send: vi.fn(),
     })),
-    createOffer: vi.fn(() => Promise.resolve({ type: 'offer', sdp: 'mock-sdp' })),
+    createOffer: vi.fn(() =>
+        Promise.resolve({ type: 'offer', sdp: 'mock-sdp' }),
+    ),
     setLocalDescription: vi.fn(() => Promise.resolve()),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),

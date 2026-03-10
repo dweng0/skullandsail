@@ -47,7 +47,8 @@ describe('NPC System', () => {
 
     it('NPCs remember player reputation', () => {
         const townId = 'town_4'
-        const npcId = npcManager.generateNPCsForTown(townId, 'tropical') > 0 ? 0 : -1
+        const npcId =
+            npcManager.generateNPCsForTown(townId, 'tropical') > 0 ? 0 : -1
 
         if (npcId >= 0) {
             const npcs = npcManager.getNPCsForTown(townId)
