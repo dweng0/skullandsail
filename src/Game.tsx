@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
     Engine,
     Scene,
@@ -25,6 +25,8 @@ export default function Game({
 }: GameProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const engineRef = useRef<Engine | null>(null)
+    const [shipPosition, setShipPosition] = useState({ x: 0, z: 0 })
+    const [direction, setDirection] = useState(0)
 
     useEffect(() => {
         if (!canvasRef.current) return
@@ -75,12 +77,78 @@ export default function Game({
                 scene.render()
             })
 
+            // Handle keyboard input for ship movement
+            const keysPressed: Record<string, boolean> = {}
+
+            const handleKeyDown = (e: KeyboardEvent) => {
+                keysPressed[e.key.toLowerCase()] = true
+                keysPressed[e.code.toLowerCase()] = true
+            }
+
+            const handleKeyUp = (e: KeyboardEvent) => {
+                keysPressed[e.key.toLowerCase()] = false
+                keysPressed[e.code.toLowerCase()] = false
+            }
+
+            window.addEventListener('keydown', handleKeyDown)
+            window.addEventListener('keyup', handleKeyUp)
+
+            // Movement loop
+            let dirX = 0,
+                dirZ = 0
+            scene.registerBeforeRender(() => {
+                dirX = 0
+                dirZ = 0
+
+                // WASD controls
+                if (
+                    keysPressed['w'] ||
+                    keysPressed['arrowup'] ||
+                    keysPressed['W']
+                ) {
+                    dirZ += 0.1
+                }
+                if (
+                    keysPressed['s'] ||
+                    keysPressed['arrowdown'] ||
+                    keysPressed['S']
+                ) {
+                    dirZ -= 0.1
+                }
+                if (
+                    keysPressed['a'] ||
+                    keysPressed['arrowleft'] ||
+                    keysPressed['A']
+                ) {
+                    dirX -= 0.1
+                }
+                if (
+                    keysPressed['d'] ||
+                    keysPressed['arrowright'] ||
+                    keysPressed['D']
+                ) {
+                    dirX += 0.1
+                }
+
+                if (dirX !== 0 || dirZ !== 0) {
+                    setShipPosition((prev) => ({
+                        x: prev.x + dirX,
+                        z: prev.z + dirZ,
+                    }))
+                    if (dirX !== 0 || dirZ !== 0) {
+                        setDirection(Math.atan2(dirX, dirZ))
+                    }
+                }
+            })
+
             // Handle resize
             const handleResize = () => engine.resize()
             window.addEventListener('resize', handleResize)
 
             return () => {
                 window.removeEventListener('resize', handleResize)
+                window.removeEventListener('keydown', handleKeyDown)
+                window.removeEventListener('keyup', handleKeyUp)
                 engine.dispose()
             }
         } catch (error) {
@@ -90,7 +158,7 @@ export default function Game({
     }, [playerShipClass, showBattle])
 
     return (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <canvas
                 ref={canvasRef}
                 style={{
@@ -102,6 +170,44 @@ export default function Game({
                 }}
                 data-testid="game-canvas"
             />
+            {!showBattle && (
+                <div
+                    className="hud"
+                    style={{
+                        position: 'absolute',
+                        top: '16px',
+                        left: '16px',
+                        backgroundColor: 'rgba(10, 14, 39, 0.9)',
+                        border: '2px solid #d4a574',
+                        borderRadius: '4px',
+                        padding: '12px 16px',
+                        color: '#e8dcc8',
+                        fontSize: '12px',
+                        maxWidth: '250px',
+                    }}
+                >
+                    <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>
+                        ⚓ Ship Controls
+                    </div>
+                    <div style={{ fontSize: '11px', lineHeight: '1.6' }}>
+                        <div>↑ W - Forward</div>
+                        <div>↓ S - Back</div>
+                        <div>← A - Left</div>
+                        <div>→ D - Right</div>
+                    </div>
+                    <div
+                        style={{
+                            marginTop: '8px',
+                            paddingTop: '8px',
+                            borderTop: '1px solid #444',
+                            fontSize: '11px',
+                        }}
+                    >
+                        <div>Pos: ({shipPosition.x.toFixed(1)}, {shipPosition.z.toFixed(1)})</div>
+                        <div>Dir: {(direction * (180 / Math.PI)).toFixed(0)}°</div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
@@ -242,13 +348,15 @@ function createAnomalies(scene: Scene): void {
             `anomaly_${index}_material`,
             scene,
         )
-        // Mix of purple and red
+        // Mix of purple and red - darker to avoid overly bright appearance
         const isPurple = index % 2 === 0
         if (isPurple) {
-            anomalyMaterial.emissiveColor = new Color3(0.7, 0.2, 0.8)
+            anomalyMaterial.emissiveColor = new Color3(0.4, 0.1, 0.5)
         } else {
-            anomalyMaterial.emissiveColor = new Color3(0.9, 0.1, 0.3)
+            anomalyMaterial.emissiveColor = new Color3(0.6, 0.05, 0.15)
         }
+        // Add some ambient color for better visibility
+        anomalyMaterial.ambientColor = new Color3(0.2, 0.1, 0.2)
         anomalyMaterial.specularColor = new Color3(0.9, 0.5, 0.8)
 
         anomaly.material = anomalyMaterial

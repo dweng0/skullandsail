@@ -185,6 +185,12 @@ Scenario: Captain's ship is rendered on sea map
 - Ship position updates in real time as the player navigates
 - Ship faces the direction it is sailing
 
+Scenario: Movement controls are displayed on the HUD
+- A control panel shows keyboard controls for ship movement (WASD or Arrow Keys)
+- HUD displays current position and direction
+- Control hints persist during gameplay
+- Movement speeds are shown for reference
+
 Scenario: Player can sail in eight directions with keyboard input
 - Arrow keys or WASD control movement (Up/Down/Left/Right + diagonals)
 - Ship moves continuously while a direction key is held

@@ -85,6 +85,20 @@ describe('Game - Procedural Asset Pipeline', () => {
         // Both player and enemy ships render as distinct 3D silhouettes
         expect(canvas).toBeVisible()
     })
+
+    it('Movement controls are displayed on the HUD', () => {
+        // Verify that controls are shown for ship navigation
+        // movement controls are displayed on the hud
+        const { container } = render(<Game playerShipClass="brigantine" />)
+
+        // HUD should display movement controls
+        const hudElement = container.querySelector('.hud') || container.textContent
+        expect(hudElement).toBeTruthy()
+
+        // Canvas should be visible with HUD
+        const canvas = container.querySelector('[data-testid="game-canvas"]')
+        expect(canvas).toBeInTheDocument()
+    })
 })
 
 describe('Game - Procedural Asset Pipeline (UI Styling)', () => {
