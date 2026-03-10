@@ -1,5 +1,15 @@
 import { useEffect, useRef } from 'react'
-import { Engine, Scene, Mesh, Vector3 } from 'babylonjs'
+import {
+    Engine,
+    Scene,
+    Mesh,
+    Vector3,
+    UniversalCamera,
+    HemisphericLight,
+    MeshBuilder,
+    StandardMaterial,
+    Color3,
+} from 'babylonjs'
 import './styles.css'
 
 export type ShipClass = 'sloop' | 'brigantine' | 'galleon'
@@ -24,16 +34,13 @@ export default function Game({
             const scene = new Scene(engine)
 
             // Set up camera for top-down view
-            const camera = new (require('babylonjs').UniversalCamera)(
-                'camera',
-                new Vector3(0, 5, 5),
-            )
+            const camera = new UniversalCamera('camera', new Vector3(0, 5, 5))
             camera.attachControl(canvasRef.current, true)
             camera.inertia = 0.7
             camera.angularSensibility = 1000
 
             // Set up lighting
-            const light = new (require('babylonjs').HemisphericLight)(
+            const light = new HemisphericLight(
                 'light',
                 new Vector3(0, 1, 0),
                 scene,
@@ -100,9 +107,6 @@ export default function Game({
 }
 
 function createOcean(scene: Scene): Mesh {
-    const BabylonJS = require('babylonjs')
-    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
-
     // Create a large plane for the ocean
     const ocean = MeshBuilder.CreateGround(
         'ocean',
@@ -113,7 +117,7 @@ function createOcean(scene: Scene): Mesh {
 
     // Create animated water material
     const waterMaterial = new StandardMaterial('waterMaterial', scene)
-    waterMaterial.diffuse = new Color3(0.1, 0.5, 0.8)
+    waterMaterial.emissiveColor = new Color3(0.1, 0.5, 0.8)
     waterMaterial.specularColor = new Color3(0.8, 0.8, 1.0)
     waterMaterial.specularPower = 64
 
@@ -131,9 +135,6 @@ function createOcean(scene: Scene): Mesh {
 }
 
 function createIslands(scene: Scene): void {
-    const BabylonJS = require('babylonjs')
-    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
-
     // Create a few procedural islands on the map
     const islandPositions = [
         { x: -8, z: -8 },
@@ -163,10 +164,10 @@ function createIslands(scene: Scene): void {
         )
         if (index % 2 === 0) {
             // Sandy color
-            islandMaterial.diffuse = new Color3(0.9, 0.85, 0.6)
+            islandMaterial.emissiveColor = new Color3(0.9, 0.85, 0.6)
         } else {
             // Green color
-            islandMaterial.diffuse = new Color3(0.4, 0.6, 0.3)
+            islandMaterial.emissiveColor = new Color3(0.4, 0.6, 0.3)
         }
         islandMaterial.specularColor = new Color3(0.2, 0.2, 0.2)
 
@@ -175,9 +176,6 @@ function createIslands(scene: Scene): void {
 }
 
 function createTowns(scene: Scene): void {
-    const BabylonJS = require('babylonjs')
-    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
-
     // Create town beacon markers
     const townPositions = [
         { x: -8, z: -8 },
@@ -200,16 +198,16 @@ function createTowns(scene: Scene): void {
             `beacon_${index}_material`,
             scene,
         )
-        beaconMaterial.diffuse = new Color3(1.0, 0.85, 0.2)
+        beaconMaterial.emissiveColor = new Color3(1.0, 0.85, 0.2)
         beaconMaterial.specularColor = new Color3(1.0, 1.0, 0.5)
         beaconMaterial.specularPower = 128
 
         beacon.material = beaconMaterial
 
-        // Create cone top for beacon
-        const coneTop = MeshBuilder.CreateCone(
-            `town_cone_${index}`,
-            { height: 0.8, diameter: 0.6 },
+        // Create sphere top for beacon
+        const coneTop = MeshBuilder.CreateSphere(
+            `town_top_${index}`,
+            { segments: 8, diameter: 0.6 },
             scene,
         )
         coneTop.position.x = pos.x
@@ -221,9 +219,6 @@ function createTowns(scene: Scene): void {
 }
 
 function createAnomalies(scene: Scene): void {
-    const BabylonJS = require('babylonjs')
-    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
-
     // Create anomaly swirl markers
     const anomalyPositions = [
         { x: 5, z: -5 },
@@ -250,9 +245,9 @@ function createAnomalies(scene: Scene): void {
         // Mix of purple and red
         const isPurple = index % 2 === 0
         if (isPurple) {
-            anomalyMaterial.diffuse = new Color3(0.7, 0.2, 0.8)
+            anomalyMaterial.emissiveColor = new Color3(0.7, 0.2, 0.8)
         } else {
-            anomalyMaterial.diffuse = new Color3(0.9, 0.1, 0.3)
+            anomalyMaterial.emissiveColor = new Color3(0.9, 0.1, 0.3)
         }
         anomalyMaterial.specularColor = new Color3(0.9, 0.5, 0.8)
 
@@ -267,14 +262,11 @@ function createAnomalies(scene: Scene): void {
 }
 
 function createBattleScene(scene: Scene, playerShipClass: ShipClass): void {
-    const BabylonJS = require('babylonjs')
-    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
-
     // Create battle background
     const background = MeshBuilder.CreatePlane('battle_bg', { size: 30 }, scene)
     background.position.z = -5
     const bgMaterial = new StandardMaterial('bg_material', scene)
-    bgMaterial.diffuse = new Color3(0.2, 0.3, 0.4)
+    bgMaterial.emissiveColor = new Color3(0.2, 0.3, 0.4)
     background.material = bgMaterial
 
     // Place player ship on left side
@@ -295,9 +287,6 @@ function createShip(
     shipClass: ShipClass,
     position: Vector3,
 ): Mesh {
-    const BabylonJS = require('babylonjs')
-    const { MeshBuilder, StandardMaterial, Color3 } = BabylonJS
-
     const ship = MeshBuilder.CreateBox('ship', { size: 0.1 }, scene)
     ship.position = position
 
@@ -330,7 +319,7 @@ function createShip(
 
     // Apply material with distinct color
     const material = new StandardMaterial(`ship_${shipClass}_material`, scene)
-    material.diffuse = specs.color
+    material.emissiveColor = specs.color
     material.specularColor = new Color3(0.2, 0.2, 0.2)
     ship.material = material
 
