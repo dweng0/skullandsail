@@ -185,6 +185,13 @@ Scenario: Captain's ship is rendered on sea map
 - Ship position updates in real time as the player navigates
 - Ship faces the direction it is sailing
 
+Scenario: Camera follows ship from behind
+- Camera position tracks the ship with a fixed offset behind it
+- Camera height is fixed above the sea level for top-down perspective
+- Camera rotation matches ship heading so player always looks "forward"
+- Camera smoothly follows ship movement without lag
+- Player always sees what's ahead of their ship
+
 Scenario: Movement controls are displayed on the HUD
 - A control panel shows keyboard controls for ship movement (WASD or Arrow Keys)
 - HUD displays current position and direction

@@ -43,11 +43,15 @@ export default function Game({
             const engine = new Engine(canvasRef.current, true)
             const scene = new Scene(engine)
 
-            // Set up camera for top-down view
+            // Set up camera for follow ship view (behind the ship)
             const camera = new UniversalCamera('camera', new Vector3(0, 5, 5))
             camera.attachControl(canvasRef.current, true)
             camera.inertia = 0.7
             camera.angularSensibility = 1000
+
+            // Camera follows ship with offset
+            const cameraDistance = 8 // Distance behind the ship
+            const cameraHeight = 6 // Height above sea level
 
             // Set up lighting
             const light = new HemisphericLight(
@@ -114,7 +118,7 @@ export default function Game({
             }
             const config = shipConfig[playerShipClass]
 
-            // Movement loop with realistic ship physics
+            // Movement loop with realistic ship physics and camera tracking
             scene.registerBeforeRender(() => {
                 const physics = shipPhysicsRef.current
 
@@ -180,6 +184,18 @@ export default function Game({
                     shipMeshRef.current.position.z = physics.z
                     shipMeshRef.current.rotation.y = physics.angle
                 }
+
+                // Update camera to follow ship from behind
+                // Camera offset is opposite to ship heading (behind the ship)
+                const cameraOffsetX = -Math.sin(physics.angle) * cameraDistance
+                const cameraOffsetZ = -Math.cos(physics.angle) * cameraDistance
+
+                camera.position.x = physics.x + cameraOffsetX
+                camera.position.z = physics.z + cameraOffsetZ
+                camera.position.y = cameraHeight
+
+                // Look at ship position
+                camera.setTarget(new Vector3(physics.x, 0, physics.z))
 
                 // Update React state for HUD display
                 setShipPosition({ x: physics.x, z: physics.z })

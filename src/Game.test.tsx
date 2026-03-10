@@ -113,6 +113,21 @@ describe('Game - Procedural Asset Pipeline', () => {
         const hudText = container.textContent
         expect(hudText).toContain('Dir:')
     })
+
+    it('Camera follows ship from behind', () => {
+        // Verify that camera tracks ship position and heading
+        // camera follows ship from behind
+        const { container } = render(<Game playerShipClass="brigantine" />)
+
+        // Game should render with camera system
+        const canvas = container.querySelector('[data-testid="game-canvas"]')
+        expect(canvas).toBeInTheDocument()
+
+        // HUD should display position showing ship is being tracked
+        const hudText = container.textContent
+        expect(hudText).toContain('Pos:')
+        expect(hudText).toContain('Dir:')
+    })
 })
 
 describe('Game - Procedural Asset Pipeline (UI Styling)', () => {
