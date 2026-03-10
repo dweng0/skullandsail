@@ -191,6 +191,15 @@ Scenario: Movement controls are displayed on the HUD
 - Control hints persist during gameplay
 - Movement speeds are shown for reference
 
+Scenario: Ship uses realistic physics for movement and steering
+- W key accelerates the ship forward
+- S key decelerates/reverses the ship
+- A key steers the ship left (rotates hull)
+- D key steers the ship right (rotates hull)
+- Ship momentum carries it forward even when W is released
+- Ship rotates to face the direction it's moving
+- Ship visual (hull mesh) rotates to match movement direction
+
 Scenario: Player can sail in eight directions with keyboard input
 - Arrow keys or WASD control movement (Up/Down/Left/Right + diagonals)
 - Ship moves continuously while a direction key is held

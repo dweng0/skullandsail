@@ -26,9 +26,15 @@ export default function Game({
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const engineRef = useRef<Engine | null>(null)
     const shipMeshRef = useRef<Mesh | null>(null)
-    const shipPositionRef = useRef({ x: 0, z: 0 })
+    const shipPhysicsRef = useRef({
+        x: 0,
+        z: 0,
+        angle: 0, // Heading in radians
+        velocity: 0, // Current speed
+    })
     const [shipPosition, setShipPosition] = useState({ x: 0, z: 0 })
     const [direction, setDirection] = useState(0)
+    const [speed, setSpeed] = useState(0)
 
     useEffect(() => {
         if (!canvasRef.current) return
@@ -100,63 +106,85 @@ export default function Game({
             window.addEventListener('keydown', handleKeyDown)
             window.addEventListener('keyup', handleKeyUp)
 
-            // Movement loop
-            let dirX = 0,
-                dirZ = 0
-            scene.registerBeforeRender(() => {
-                dirX = 0
-                dirZ = 0
+            // Ship physics configuration
+            const shipConfig = {
+                sloop: { maxSpeed: 0.3, acceleration: 0.015, turnRate: 0.06, friction: 0.95 },
+                brigantine: { maxSpeed: 0.2, acceleration: 0.01, turnRate: 0.04, friction: 0.94 },
+                galleon: { maxSpeed: 0.15, acceleration: 0.008, turnRate: 0.03, friction: 0.93 },
+            }
+            const config = shipConfig[playerShipClass]
 
-                // WASD controls
+            // Movement loop with realistic ship physics
+            scene.registerBeforeRender(() => {
+                const physics = shipPhysicsRef.current
+
+                // Acceleration/Deceleration controls
                 if (
                     keysPressed['w'] ||
                     keysPressed['arrowup'] ||
                     keysPressed['W']
                 ) {
-                    dirZ += 0.1
+                    physics.velocity = Math.min(
+                        physics.velocity + config.acceleration,
+                        config.maxSpeed,
+                    )
                 }
                 if (
                     keysPressed['s'] ||
                     keysPressed['arrowdown'] ||
                     keysPressed['S']
                 ) {
-                    dirZ -= 0.1
+                    physics.velocity = Math.max(
+                        physics.velocity - config.acceleration,
+                        -config.maxSpeed * 0.5,
+                    )
                 }
+
+                // Steering controls (A/D change heading)
                 if (
                     keysPressed['a'] ||
                     keysPressed['arrowleft'] ||
                     keysPressed['A']
                 ) {
-                    dirX -= 0.1
+                    physics.angle += config.turnRate
                 }
                 if (
                     keysPressed['d'] ||
                     keysPressed['arrowright'] ||
                     keysPressed['D']
                 ) {
-                    dirX += 0.1
+                    physics.angle -= config.turnRate
                 }
 
-                if (dirX !== 0 || dirZ !== 0) {
-                    shipPositionRef.current.x += dirX
-                    shipPositionRef.current.z += dirZ
-
-                    // Update babylon mesh position
-                    if (shipMeshRef.current) {
-                        shipMeshRef.current.position.x = shipPositionRef.current.x
-                        shipMeshRef.current.position.z = shipPositionRef.current.z
-                    }
-
-                    // Update React state for HUD display
-                    setShipPosition({
-                        x: shipPositionRef.current.x,
-                        z: shipPositionRef.current.z,
-                    })
-
-                    if (dirX !== 0 || dirZ !== 0) {
-                        setDirection(Math.atan2(dirX, dirZ))
-                    }
+                // Apply friction (slow down when no acceleration)
+                if (
+                    !keysPressed['w'] &&
+                    !keysPressed['arrowup'] &&
+                    !keysPressed['s'] &&
+                    !keysPressed['arrowdown'] &&
+                    !keysPressed['W'] &&
+                    !keysPressed['S']
+                ) {
+                    physics.velocity *= config.friction
                 }
+
+                // Update position based on velocity and heading
+                if (Math.abs(physics.velocity) > 0.001) {
+                    physics.x += Math.sin(physics.angle) * physics.velocity
+                    physics.z += Math.cos(physics.angle) * physics.velocity
+                }
+
+                // Update babylon mesh position and rotation
+                if (shipMeshRef.current) {
+                    shipMeshRef.current.position.x = physics.x
+                    shipMeshRef.current.position.z = physics.z
+                    shipMeshRef.current.rotation.y = physics.angle
+                }
+
+                // Update React state for HUD display
+                setShipPosition({ x: physics.x, z: physics.z })
+                setDirection(physics.angle)
+                setSpeed(physics.velocity)
             })
 
             // Handle resize
@@ -221,8 +249,11 @@ export default function Game({
                             fontSize: '11px',
                         }}
                     >
-                        <div>Pos: ({shipPosition.x.toFixed(1)}, {shipPosition.z.toFixed(1)})</div>
+                        <div>
+                            Pos: ({shipPosition.x.toFixed(1)}, {shipPosition.z.toFixed(1)})
+                        </div>
                         <div>Dir: {(direction * (180 / Math.PI)).toFixed(0)}°</div>
+                        <div>Speed: {(speed * 10).toFixed(1)}</div>
                     </div>
                 </div>
             )}

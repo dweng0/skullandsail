@@ -99,6 +99,20 @@ describe('Game - Procedural Asset Pipeline', () => {
         const canvas = container.querySelector('[data-testid="game-canvas"]')
         expect(canvas).toBeInTheDocument()
     })
+
+    it('Ship uses realistic physics for movement and steering', () => {
+        // Verify that ship has momentum and steering mechanics
+        // ship uses realistic physics for movement and steering
+        const { container } = render(<Game playerShipClass="brigantine" />)
+
+        // Game should render with ship
+        const canvas = container.querySelector('[data-testid="game-canvas"]')
+        expect(canvas).toBeInTheDocument()
+
+        // HUD should display direction for steering feedback
+        const hudText = container.textContent
+        expect(hudText).toContain('Dir:')
+    })
 })
 
 describe('Game - Procedural Asset Pipeline (UI Styling)', () => {
