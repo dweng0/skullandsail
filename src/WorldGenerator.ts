@@ -24,11 +24,13 @@ export interface Town extends Position {
     id: string
     name: string
     biome?: string
+    difficulty?: number
 }
 
 export interface Anomaly extends Position {
     id: string
     biome?: string
+    difficulty?: number
 }
 
 export interface NamedLocation extends Position {
@@ -124,17 +126,27 @@ export default class WorldGenerator {
             })
         }
 
-        // Generate towns on islands with biome-based names
+        // Generate towns on islands with biome-based names and difficulty scaling
         const townCount = Math.min(5, Math.floor(islands.length * 0.3))
         for (let i = 0; i < townCount; i++) {
             const island = islands[Math.floor(this.rng() * islands.length)]
             const biome = island.biome || 'tropical'
+
+            // Calculate difficulty based on biome
+            let difficulty = 2
+            if (biome === 'volcanic') difficulty = 3
+            if (biome === 'arctic') difficulty = 4
+            if (biome === 'temperate') difficulty = 2
+            if (biome === 'tropical') difficulty = 1
+            if (biome === 'swamp') difficulty = 2
+
             towns.push({
                 id: `town_${i}`,
                 name: this.generateTownName(biome),
                 x: island.x,
                 y: island.y,
                 biome,
+                difficulty,
             })
 
             namedLocations.push({
@@ -144,16 +156,27 @@ export default class WorldGenerator {
             })
         }
 
-        // Generate anomalies with biome assignment
+        // Generate anomalies with biome assignment and difficulty scaling
         const anomalyCount = Math.floor(width * height * 0.08)
         for (let i = 0; i < anomalyCount; i++) {
             const x = Math.floor(this.rng() * width)
             const y = Math.floor(this.rng() * height)
+            const biome = this.getBiomeAt(x, y)
+
+            // Calculate difficulty based on biome
+            let difficulty = 2
+            if (biome === 'volcanic') difficulty = 3
+            if (biome === 'arctic') difficulty = 4
+            if (biome === 'temperate') difficulty = 2
+            if (biome === 'tropical') difficulty = 1
+            if (biome === 'swamp') difficulty = 2
+
             anomalies.push({
                 id: `anomaly_${i}`,
                 x,
                 y,
-                biome: this.getBiomeAt(x, y),
+                biome,
+                difficulty,
             })
 
             namedLocations.push({
