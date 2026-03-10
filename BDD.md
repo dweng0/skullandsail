@@ -165,36 +165,69 @@ Scenario: Ship name is displayed on HUD during gameplay
 - Name is visible during world map navigation
 - Name appears in battle interface and port screens
 
-Feature: World Generation
+Feature: World Generation & Map Manifest
 
-Each new game creates a unique procedurally generated world from a random seed.
+The game uses a deterministic seed and biome system with an LLM-aware world manifest.
 
-Scenario: Each new game generates unique sea map from random seed
-- Game randomly generates a 32x32 (or configurable) grid of sea tiles
-- Each tile is either water, island, or empty ocean
-- A 64-bit random seed determines all world generation
+Scenario: Game loads with fixed deterministic seed
+- Game uses a fixed, non-random seed (e.g., Collatz conjecture seed or similar)
+- All players receive the same procedurally generated world
+- Seed is encoded in the map manifest and shipped with the game
+- Ensures consistent experience across all playthroughs
+
+Scenario: Map manifest includes world metadata
+- Manifest is a JSON object containing:
+  - seed (fixed value)
+  - biome_map (2D grid of biome types)
+  - poi_list (islands, towns, anomalies with coords and types)
+  - climate (overall world climate: tropical, temperate, arctic)
+  - danger_level (baseline encounter difficulty: low, medium, high)
+  - world_name (e.g., "The Shattered Isles")
+  - distinctive_features (e.g., "volcanic archipelago", "frozen wastes")
+- Manifest is human-readable and can be cached/inspected
+
+Scenario: Biome generation assigns terrain types to regions
+- World is divided into biome zones: tropical, temperate, volcanic, tundra, swamp
+- Each biome has distinct visual style and encounter types
+- Islands inherit biome characteristics (jungle island vs. ice island)
+- Towns and anomalies fit their biome (tropical port vs. ice fortress)
+
+Scenario: Biome affects encounter difficulty and theme
+- Tropical biome: easier encounters, pirate-themed (merchant ships, corsairs)
+- Volcanic biome: medium encounters, fire-themed (lava anomalies, fire ships)
+- Tundra biome: harder encounters, ice-themed (ghost ships, frozen threats)
+- Swamp biome: medium encounters, cursed-themed (undead, cursed crews)
+- Encounters scale to biome danger level
 
 Scenario: Sea map contains islands, towns, and anomalies
-- Islands are scattered across the map based on seed
+- Islands are scattered across the map according to fixed seed
 - Towns are placed on some islands (stable, seed-dependent)
 - Anomalies are non-island locations with LLM-generated encounters
 - All three element types are visible on the rendered map
+- POI distribution matches biome regions
 
 Scenario: Towns and anomalies are stable per seed
 - Given the same seed, the same islands, towns, and anomalies appear at the same coordinates
-- The world is deterministic: seed fully defines it
+- The world is fully deterministic: seed defines all generation
+- No randomness between playthroughs (same world every time)
 
-Scenario: LLM is consulted to place named points of interest
-- After base world generation, the LLM is called with the map layout
-- The LLM suggests 3-5 named locations (e.g., "Tortuga Bay", "Dead Man's Cove")
-- These names are placed at key island/town positions
-- Names are stored with the world state
+Scenario: LLM is consulted to name points of interest
+- After world generation, LLM reads the map manifest
+- LLM is prompted: "Name these towns based on the biome/climate" with POI coords and biome info
+- LLM suggests thematic names (e.g., "Scorched Port" in volcanic biome)
+- Names are cached in the manifest for future loads
+
+Scenario: World manifest is loaded on game start
+- On app launch, the fixed map manifest is loaded from game data
+- Manifest is parsed and world is generated from it
+- All players receive identical POI locations and biome distribution
+- Manifest is stored with player save file for game resumption
 
 Scenario: World state is saved to localStorage for resumption
-- After world generation, all world data (islands, towns, anomalies, names, seed) is serialized
-- Data is stored in browser localStorage with a session key
+- After world generation, player state (position, inventory, stats) is saved
+- Save includes reference to world manifest (no duplication)
 - Closing and reopening the game reloads the exact same world
-- Player can resume from last position
+- Player can resume from last position with world fully restored
 
 Feature: World Map Navigation
 
@@ -543,21 +576,407 @@ Scenario: Each ship class has distinct visual and gameplay feel
 - Stat modifiers create distinct gameplay niches
 - Adding ship = 1 config entry, no scattered hardcoded values
 
+Feature: Narrative Display UI
+
+All LLM-generated narrative text is displayed visually to the player.
+
+Scenario: Narrative text displays in a styled panel
+- When LLM generates narrative, text appears in a panel overlay
+- Panel has dark background with gold/parchment text styling
+- Panel is positioned at bottom or center of screen
+- Text is readable and matches game UI theme
+
+Scenario: Player can dismiss narrative text
+- A "Close" button or click-outside dismisses the narrative panel
+- Pressing ESC closes the panel
+- Closing does not interrupt gameplay
+- Player can re-read narrative later in journal log
+
+Scenario: Narrative appears with smooth animations
+- Panel slides in from bottom/side when triggered
+- Text fades in or typewriter-scrolls for readability
+- Panel slides out when dismissed
+- Animation speed is configurable (affects pacing)
+
+Scenario: Narrative includes speaker/context label
+- Narrative panel shows who is speaking (e.g., "Game Master", "Town Crier", "NPC Name")
+- Context label appears above or integrated with text
+- Helps player understand the source of narrative
+
 Feature: Points of Interest Interaction
 
-Players can interact with islands, towns, and anomalies on the map.
+Players can interact with islands, towns, and anomalies on the map. Full visual and mechanical integration with narrative.
+
+Scenario: Player can hover over POI names to see info
+- Hovering mouse over a town/island/anomaly shows a tooltip
+- Tooltip displays location name and type (Town, Island, Anomaly)
+- Tooltip also shows distance and any relevant stats
+- Tooltip fades when mouse leaves POI
 
 Scenario: Player can interact with points of interest
-- Pressing 'E' when near a POI triggers an interaction
+- Pressing 'E' when near a POI (within 2-tile radius) triggers interaction
 - Different POI types (town, island, anomaly) have different effects
-- Interaction prompts appear on screen near POI
-- Game responds appropriately (enter port, battle trigger, etc.)
+- Interaction prompts appear on screen near POI (e.g., "[E] Enter Town", "[E] Explore Island")
+- Game responds appropriately (enter port, show description, trigger battle, etc.)
+- Pressing 'E' away from POI does nothing
 
 Scenario: Island visitation shows location description
-- Visiting an island shows an LLM-generated description
-- Description provides context about the location
-- Player can choose to stay or continue sailing
+- Visiting an island shows an LLM-generated description in narrative panel
+- Description provides context about the location (history, resources, danger level)
+- Player sees 2-3 sentence description with atmospheric details
+- Player can choose to "Loot", "Stay", or "Continue Sailing" via buttons
 - Visiting is tracked in game state
+
+Scenario: Town names are generated once and cached
+- On first world generation, LLM generates unique names for all towns
+- Town names are stored in world state (name, coords, type)
+- Names persist across save/load cycles
+- LLM is NOT called again for same town in same run
+- Town names are deterministic per seed (same world = same names)
+
+Scenario: POI names display on world map
+- Each POI's name is visible on the map (small text near marker)
+- Town names appear in gold/yellow color
+- Island names appear in green/brown color
+- Anomaly names appear in purple/red color
+- Names scale with zoom level (visible when zoomed in)
+
+Scenario: Player can see interaction radius around POI
+- A subtle circle or glow effect shows interaction range (2-tile radius)
+- Visual effect only appears when player is within 4-tile distance
+- Helps player know when 'E' is available
+- Effect is semi-transparent to not clutter screen
+
+Scenario: Anomaly encounters include narrative lead-in
+- Approaching anomaly shows narrative prompt before battle
+- LLM generates 1-2 sentence description of the threat
+- Example: "A ghostly ship emerges from the fog..."
+- Narrative appears for 3 seconds or until player presses 'E' to engage
+
+Feature: Location Data Persistence
+
+All generated location data (names, descriptions, NPC details) is saved and restored with game state.
+
+Scenario: World generation includes location metadata
+- For each POI, store: name, coordinates, type, description, NPC details
+- Metadata is generated on first world creation
+- All metadata is serialized with world save
+- Loading a world restores all location data exactly
+
+Scenario: Save file includes POI metadata
+- Game save includes entire POI list with names and coords
+- Save file format includes location history (visited, looted, etc.)
+- File size increase is minimal (metadata is lightweight)
+- Save can be inspected/debugged to verify POI data
+
+Scenario: NPC dialogue is generated once per location
+- Tavern NPCs have procedurally generated backstories
+- NPC names and dialogue are cached with location
+- Same NPC appears with same dialogue on revisit
+- Multiple NPCs per tavern have different personalities
+
+Feature: NPC System
+
+NPCs populate towns and taverns, generated by LLM and persisted with world state.
+
+Scenario: NPCs are generated during town creation
+- When world generates, LLM creates 3-5 NPCs per town
+- Each NPC has: name, role, personality, background, quest hook
+- NPC data is stored with town data in manifest
+- NPCs appear in tavern with consistent details
+
+Scenario: NPC names are thematic to world setting
+- LLM generates pirate-themed NPC names
+- Examples: "Captain Blackhook", "Rosie the Rigger", "Old Man Teach"
+- Names reflect NPC's role (sailor, merchant, innkeeper, quest-giver)
+- Names are cached (same NPC on revisit)
+
+Scenario: NPCs have distinct personalities and dialogue
+- Each NPC has a personality tag: gruff, cheerful, mysterious, cautious
+- NPC dialogue reflects personality (tone, word choice, topics)
+- LLM generates 2-3 unique dialogue lines per NPC per topic
+- Personality affects which quests they offer
+
+Scenario: NPCs remember player reputation
+- Track player actions: quests completed, enemies defeated, gold spent
+- NPC dialogue changes based on reputation
+- Example: "Word travels fast - I heard you bested the Kraken!"
+- Reputation unlocks new dialogue and exclusive quests
+
+Scenario: Quest-giving NPCs are flagged as patrons
+- Some NPCs are marked as quest-givers (patrons)
+- They appear prominently in tavern UI
+- Hovering over patron NPCs shows "Has Quest" indicator
+- Patrons generate quests tied to the overarching storyline
+
+Scenario: NPCs have background stories generated by LLM
+- Each NPC has a 1-2 paragraph backstory (LLM-generated)
+- Backstory influences what quests they offer
+- Example: Merchant lost cargo might offer delivery quest
+- Backstory is shown when player selects "Learn More" on NPC
+
+Feature: LLM-Driven Quest Generation
+
+Quests are dynamically generated by LLM, tied to NPCs and storyline.
+
+Scenario: LLM generates quests from NPC hooks
+- When player talks to quest-giver NPC, LLM generates a quest
+- LLM receives: NPC backstory, world manifest, player level, storyline context
+- LLM outputs: quest title, objective, reward, success narrative, failure narrative
+- Quest is cached and shown to player
+
+Scenario: Quests are narrative-driven with context
+- Quest title is thematic and story-relevant
+- Objective describes the actual goal (not just "defeat X enemies")
+- Example: "Rescue Merchant's Daughter from Pirates" instead of "Defeat 5 enemies"
+- Quest destination is a real POI on the map
+
+Scenario: Quest completion triggers LLM narrative continuation
+- When player completes quest objective, LLM generates follow-up narrative
+- Narrative describes consequence of player action
+- Example: "The merchant thanks you profusely, offering rare upgrades"
+- Narrative appears in narrative panel before returning to world
+
+Scenario: Failed quests have alternative outcomes
+- If player dies before completing quest, LLM generates failure narrative
+- Failure narrative reflects what happened
+- Example: "The merchant never heard from you again... RIP"
+- Failed quests can sometimes be reoffered or replaced
+
+Scenario: Quest rewards are scaled to player level
+- LLM-aware of player level when generating quests
+- Rewards (XP, gold) scale appropriately
+- High-level quests offer more XP/gold
+- Difficulty scaling is reflected in quest description
+
+Scenario: Active quest log shows quest-giver NPC
+- Quest log lists: quest title, objective, quest-giver NPC name, reward
+- Clicking on quest-giver name highlights their location in town
+- Player can return to NPC to get more info or abandon quest
+- Quest log shows progress toward objective
+
+Feature: World Manifest & POI Metadata
+
+Structured world data that includes all POI details, biomes, and NPC info.
+
+Scenario: World manifest defines all POI locations
+- Manifest includes POI array with: id, name, type, coords, biome, difficulty
+- Each town has associated NPCs in manifest
+- Each island has description seed for LLM generation
+- Anomalies have encounter type and difficulty
+
+Scenario: Biome affects NPC types and quests
+- Tropical biome: merchant NPCs, pirate quests, trade-focused
+- Volcanic biome: explorer NPCs, danger quests, treasure-hunting
+- Tundra biome: survivor NPCs, exploration quests, harsh-themed
+- NPC generation is biome-aware
+
+Scenario: World manifest persists across saves
+- Save file includes full world manifest
+- Loading game restores exact same world state
+- POI locations, NPC data, quest data all restored
+- No re-generation or LLM calls on load (uses cached data)
+
+Scenario: Manifest includes POI discovery tracking
+- Manifest tracks which POIs player has discovered
+- Manifest tracks which NPCs player has met
+- Manifest tracks completed quests per player
+- History enables narrative callbacks (NPC mentions past quests)
+
+Feature: Dynamic POI Interaction UI
+
+Visual and mechanical systems for interacting with POIs on the world map.
+
+Scenario: E key triggers interaction when near POI
+- Game constantly checks player distance to nearby POIs
+- When distance < 2 tiles, display prompt: "[E] Interact with [POI Name]"
+- Pressing E calls POI interaction handler
+- Different POI types trigger different interactions
+
+Scenario: Hovering over POI shows tooltip info
+- Mouse hover over POI displays tooltip
+- Tooltip shows: POI name, type (Town/Island/Anomaly), distance
+- For towns: shows number of NPCs available
+- For islands: shows biome type and danger level
+- Tooltip fades after 2 seconds or on mouse move
+
+Scenario: POI names render on world map with zoom scaling
+- POI names appear as text labels near their markers
+- Text size scales with camera zoom level
+- Town names appear in gold color
+- Island names appear in green color
+- Anomaly names appear in red/purple color
+- Names are visible when zoomed in (< 8 units), fade when far
+
+Scenario: Interaction radius is visually indicated
+- Subtle glow or ring effect shows 2-tile interaction radius around POI
+- Effect only visible when player is 4 tiles away or closer
+- Effect fades as player moves away
+- Helps player understand when E is available
+
+Scenario: POI interaction handler routes to correct UI
+- Town interaction: transition to TownPortal component
+- Island interaction: show island description narrative panel
+- Anomaly interaction: auto-trigger battle encounter
+- Each returns player to world map on completion
+
+Feature: Narrative Display Panel
+
+Unified UI for displaying all LLM-generated narrative to the player.
+
+Scenario: Narrative panel appears when LLM generates text
+- Any LLM-generated narrative triggers panel
+- Panel slides in from bottom of screen
+- Panel includes: speaker label, narrative text, close button
+- Panel is semi-transparent with styled background (pirate theme)
+
+Scenario: Narrative text is readable with proper formatting
+- Text uses gold/parchment colors matching game theme
+- Font size is readable (14-16px)
+- Line height is comfortable (1.5-1.8)
+- Long text wraps properly in panel
+- Maximum visible height is ~40% of screen
+
+Scenario: Speaker label shows narrative source
+- Label shows who is narrating: "Game Master", "NPC: [Name]", "Tavern Keeper", etc.
+- Label appears above or integrated with text
+- Label helps player understand context of narrative
+- Multiple NPCs can speak with different labels
+
+Scenario: Player can dismiss narrative panel
+- Close button (X or similar) in top-right of panel
+- Clicking outside panel also dismisses it
+- Pressing ESC dismisses panel (if not conflicting with other keys)
+- Dismissing doesn't lose narrative (can view in journal)
+
+Scenario: Narrative panel supports multiple display modes
+- **Instant**: text appears all at once
+- **Typewriter**: text reveals character by character (1-2s per paragraph)
+- **Fade**: text fades in smoothly over 1-2 seconds
+- Player can configure speed in settings
+
+Scenario: Narrative is recorded in story journal
+- Every narrative generated is logged to story journal
+- Journal shows: timestamp, speaker, full narrative text
+- Player can open journal from HUD to review past narratives
+- Journal is saved with game state
+- Journal helps new players catch up on story context
+
+Feature: LLM Integration Hub
+
+Central system for calling LLM and caching responses.
+
+Scenario: LLM is called with full game context
+- LLM calls include: world manifest, player stats, completed quests, current storyline
+- Context helps LLM generate coherent, world-aware narrative
+- Context prevents LLM from suggesting impossible things
+- Context enables narrative callbacks to past events
+
+Scenario: LLM responses are cached to prevent redundant calls
+- NPC dialogue is generated once per location
+- Quest descriptions are cached after generation
+- Island descriptions are cached after first visit
+- Cache is stored with world manifest
+
+Scenario: LLM calls are queued to prevent spam
+- Multiple simultaneous requests are queued
+- Queue processes one request at a time
+- Prevents rate limiting and API errors
+- Players see loading indicator while waiting
+
+Scenario: LLM failures gracefully degrade
+- If LLM call fails, show generic fallback text
+- Fallback text is thematic but not personalized
+- Example fallback: "The tavern is busy tonight. Come back later."
+- Error doesn't crash game, allows continued play
+
+Feature: NPC Dialogue Trees
+
+Conversation system with NPCs in taverns.
+
+Scenario: Clicking NPC opens dialogue menu
+- Clicking on NPC in tavern opens dialogue UI
+- Menu shows NPC name and portrait/description
+- Shows dialogue options: "Greet", "Learn More", "Ask About Quests", "Leave"
+- Options are presented as clickable buttons
+
+Scenario: "Greet" option shows NPC's greeting dialogue
+- LLM-generated greeting reflects NPC personality
+- Greeting is unique each time (LLM generates new lines)
+- Example: "Ahoy, matey! Looking for work?" (gruff personality)
+- Greeting can lead to other dialogue options
+
+Scenario: "Learn More" shows NPC backstory
+- Displays NPC's generated backstory (1-2 paragraphs)
+- Backstory explains NPC's role and motivation
+- Backstory context helps player understand quests
+- Player can return to menu after reading
+
+Scenario: "Ask About Quests" shows available quests
+- Shows list of quests this NPC can offer
+- Each quest shows title and reward
+- Clicking quest shows full description (objective, destination, reward)
+- Player can accept or decline quest
+- Accepting adds quest to active log
+
+Scenario: Dialogue is personalized based on player history
+- If player completed NPC's previous quest, greeting changes
+- NPC acknowledges past interactions
+- Example: "Welcome back, hero! I have another job for you..."
+- Dialogue reflects player reputation with that NPC
+
+Feature: Battle Encounter Narrative
+
+LLM narrates battle encounters with atmospheric descriptions.
+
+Scenario: Approaching anomaly shows encounter narrative
+- 3-5 seconds before auto-triggering battle, show narrative panel
+- LLM generates 1-2 sentence description of threat
+- Example: "A ghostly ship emerges from the fog, tattered sails snapping in the wind!"
+- Narrative sets mood and tension
+
+Scenario: Battle outcome includes victory/defeat narrative
+- After battle ends, display outcome narrative
+- Victory: LLM describes how player defeated enemy
+- Defeat: LLM describes how player was defeated
+- Narrative appears in narrative panel
+- Reward screen shows after narrative dismissal
+
+Scenario: Enemy encounters are themed to biome and storyline
+- LLM knows biome type when generating encounter
+- Encounter type matches biome (tropical=pirates, volcanic=fire creatures)
+- Encounter difficulty matches player level
+- Encounter description ties into overarching storyline
+
+Feature: Storyline Progression Tracking
+
+System for tracking narrative arc and major plot milestones.
+
+Scenario: Story arc has progression states
+- Beginning: intro quests, learning the world
+- Middle: major questline, increased stakes
+- Late: climactic encounters, story choices matter
+- Ending: final confrontation or resolution
+- Current state determines available quests
+
+Scenario: Major quests trigger story progression
+- Completing major quests advances story arc
+- Arc progression unlocks new areas/quests
+- Narrative calls back to previous major quests
+- Final arc state triggers endgame content
+
+Scenario: Player choices affect story branches
+- Some major quests have 2-3 choice options
+- Example: "Save the merchant or steal their treasure?"
+- Choice is recorded in game state
+- NPC dialogue later references player choice
+- Different choice paths lead to different endings
+
+Scenario: Story milestones generate commemorative narratives
+- Reaching new story arc stage generates narrative
+- Example: "Your reputation spreads across the seas..."
+- Milestone narrative summarizes progress so far
+- Narrative appears prominently in narrative panel and journal
 
 Feature: Enhanced Camera Controls
 
@@ -667,3 +1086,55 @@ Scenario: Session persistence and save/load
 - Can resume interrupted session within 24 hours
 - Progress includes: player positions, treasure found, quests completed
 - Save includes all players' data or single player data (can branch)
+
+Feature: LLM Game Master Narrative
+
+Continuous D&D-style storytelling where the LLM Game Master narrates the world, responds to player choices, and drives narrative progression.
+
+Scenario: LLM maintains narrative context across session
+- Game state includes: overarching storyline, story arc progress, major events encountered
+- Narrative context is saved with game state
+- On load, LLM continues story with full awareness of prior events
+- Context includes: completed quests, discovered locations, defeated enemies, NPC interactions
+
+Scenario: Story beat appears at major progression milestones
+- When player levels up: LLM generates a 1-2 paragraph narrative beat
+- When player reaches new area: LLM describes the place and hints at dangers
+- When player completes major quest: LLM narrates consequence (world changes)
+- Narrative reflects current story arc and player progress
+
+Scenario: LLM generates random world events during exploration
+- While sailing, LLM can generate 20-30% chance of random encounter
+- Examples: "A merchant vessel signals for aid", "Strange lights on the horizon"
+- Player can choose to investigate or ignore (affects story)
+- Events are thematic to current story arc and player level
+
+Scenario: Player choices create branching narrative consequences
+- Major encounters offer 2-3 choice options (e.g., "Attack or Negotiate?")
+- Player's choice is recorded in game state
+- LLM generates follow-up narrative based on choice
+- Consequences persist: NPCs remember how player treated them
+
+Scenario: NPC reactions change based on player history
+- NPCs in taverns reference prior player actions
+- Example: "I heard you defeated the Kraken! Buy you a drink?"
+- NPC dialogue is generated with awareness of player's quest log
+- Relationship values track NPC disposition toward player
+
+Scenario: LLM adjusts narrative tension based on player power level
+- Early game: story emphasizes learning and exploration
+- Mid game: narrative introduces higher stakes and moral choices
+- Late game: LLM builds toward climactic story arc conclusion
+- Difficulty scaling recommendations communicated through narrative
+
+Scenario: Major story conclusion generates epilogue
+- Reaching max level or completing final quest triggers ending
+- LLM generates 3-5 paragraph narrative epilogue
+- Epilogue reflects player choices throughout the run
+- Examples of endings vary based on: alignment choices, defeated enemies, quests completed
+
+Scenario: Narrative journal logs major story beats
+- A story log/journal in game state records all major narrative moments
+- Player can review past story beats in a log UI
+- Log helps players understand the narrative arc
+- Useful for continued playthroughs (remembering story context)
