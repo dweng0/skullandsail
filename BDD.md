@@ -542,3 +542,42 @@ Scenario: Each ship class has distinct visual and gameplay feel
 - Physics values can be tuned per ship for unique handling
 - Stat modifiers create distinct gameplay niches
 - Adding ship = 1 config entry, no scattered hardcoded values
+
+Feature: Points of Interest Interaction
+
+Players can interact with islands, towns, and anomalies on the map.
+
+Scenario: Player can interact with points of interest
+- Pressing 'E' when near a POI triggers an interaction
+- Different POI types (town, island, anomaly) have different effects
+- Interaction prompts appear on screen near POI
+- Game responds appropriately (enter port, battle trigger, etc.)
+
+Scenario: Island visitation shows location description
+- Visiting an island shows an LLM-generated description
+- Description provides context about the location
+- Player can choose to stay or continue sailing
+- Visiting is tracked in game state
+
+Feature: Enhanced Camera Controls
+
+Improved camera system with zoom and pan controls.
+
+Scenario: Player can scroll to zoom camera in and out
+- Mouse scroll wheel changes camera distance from ship
+- Zooming in moves camera closer to ship
+- Zooming out moves camera further away
+- Minimum zoom distance: 2 units behind ship
+- Maximum zoom distance: 15 units behind ship
+
+Scenario: Player can right-click to pan camera
+- Right-click and drag rotates camera around ship
+- Camera maintains height while panning
+- Pan movement is smooth and follows mouse position
+- Release right-click to stop panning
+
+Scenario: Camera slowly returns to follow mode after manual adjustment
+- After zooming or panning, camera gradually returns to default follow position
+- Return happens over 3 seconds
+- Player can interrupt by moving ship or panning again
+- Camera tracks ship position during return animation

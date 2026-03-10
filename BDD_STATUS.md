@@ -1,6 +1,6 @@
 # BDD Status
 
-Checked 68 scenario(s) across 14 test file(s).
+Checked 88 scenario(s) across 15 test file(s).
 
 
 ## Feature: Procedural Asset Pipeline
@@ -21,6 +21,10 @@ Checked 68 scenario(s) across 14 test file(s).
 - [x] User can enter Gemini API key and test connection
 - [x] If connection test fails, user sees error and can retry
 - [x] Once connected, LLM generates overarching storyline
+- [x] LLM configuration is persisted in localStorage
+- [x] Auto-connect with cached LLM configuration
+- [x] Pause menu appears when pressing Escape
+- [x] Settings menu allows clearing cached data
 
 ## Feature: Character & Ship Selection
 
@@ -44,6 +48,9 @@ Checked 68 scenario(s) across 14 test file(s).
 ## Feature: World Map Navigation
 
 - [x] Captain's ship is rendered on sea map
+- [x] Camera follows ship from behind
+- [x] Movement controls are displayed on the HUD
+- [x] Ship uses realistic physics for movement and steering
 - [x] Player can sail in eight directions with keyboard input
 - [x] Ship speed on map varies by ship class
 - [x] When ship enters town proximity, transition prompt appears
@@ -104,5 +111,43 @@ Checked 68 scenario(s) across 14 test file(s).
 - [x] Player can toggle TTS on/off in settings
 - [x] Each spoken line uses configurable voice and rate
 
+## Feature: Game Save/Load System
+
+- [x] Game state is saved to localStorage automatically
+- [x] Player can load a saved game
+- [x] Save file includes captain name and ship details
+
+## Feature: Main Menu Redesign
+
+- [x] Main menu shows game flow options
+- [ ] UNCOVERED: New Game prompts LLM setup if needed
+- [ ] UNCOVERED: Continue button only appears if save exists
+
+## Feature: Ship Modularity System
+
+- [ ] UNCOVERED: Ships are defined in a configurable system
+- [x] Each ship class has distinct visual and gameplay feel
+
+## Feature: Points of Interest Interaction
+
+- [ ] UNCOVERED: Player can interact with points of interest
+- [ ] UNCOVERED: Island visitation shows location description
+
+## Feature: Enhanced Camera Controls
+
+- [ ] UNCOVERED: Player can scroll to zoom camera in and out
+- [ ] UNCOVERED: Player can right-click to pan camera
+- [ ] UNCOVERED: Camera slowly returns to follow mode after manual adjustment
+
 ---
-**68/68 scenarios covered.**
+**80/88 scenarios covered.**
+
+8 scenario(s) need tests:
+- New Game prompts LLM setup if needed
+- Continue button only appears if save exists
+- Ships are defined in a configurable system
+- Player can interact with points of interest
+- Island visitation shows location description
+- Player can scroll to zoom camera in and out
+- Player can right-click to pan camera
+- Camera slowly returns to follow mode after manual adjustment

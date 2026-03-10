@@ -18,6 +18,26 @@ interface GameConfig {
     shipClass?: ShipClass
 }
 
+interface SavedGameState {
+    captainName: string
+    shipClass: ShipClass
+    shipName?: string
+    shipPosition?: { x: number; z: number }
+    heading?: number
+    velocity?: number
+    level?: number
+    xp?: number
+    gold?: number
+    inventory?: string[]
+    upgrades?: {
+        cannons?: number
+        hull?: number
+        sails?: number
+    }
+    crew?: string[]
+    timestamp: number
+}
+
 export default function GameManager() {
     const [gameState, setGameState] = useState<GameState>('menu')
     const [config, setConfig] = useState<GameConfig>({})
@@ -70,9 +90,33 @@ export default function GameManager() {
         setGameState('llm-setup')
     }
 
+    const handleLoadGame = () => {
+        const savedData = localStorage.getItem('gameSave')
+        if (savedData) {
+            try {
+                const save: SavedGameState = JSON.parse(savedData)
+                setConfig({
+                    llmProvider: config.llmProvider,
+                    llmKey: config.llmKey,
+                    captainName: save.captainName,
+                    shipClass: save.shipClass,
+                })
+                setGameState('loading')
+                setTimeout(() => {
+                    setGameState('playing')
+                }, 500)
+            } catch (e) {
+                // Invalid save, proceed to menu
+                console.error('Failed to load saved game:', e)
+            }
+        }
+    }
+
     return (
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-            {gameState === 'menu' && <MainMenu onStart={handleStartNewGame} />}
+            {gameState === 'menu' && (
+                <MainMenu onStart={handleStartNewGame} onLoad={handleLoadGame} />
+            )}
 
             {gameState === 'llm-setup' && (
                 <LLMSetup onConnect={handleLLMConnect} />
@@ -94,7 +138,38 @@ export default function GameManager() {
     )
 }
 
-function MainMenu({ onStart }: { onStart: () => void }) {
+function MainMenu({
+    onStart,
+    onLoad,
+}: {
+    onStart: () => void
+    onLoad: () => void
+}) {
+    const hasSavedGame = !!localStorage.getItem('gameSave')
+
+    const buttonStyle = {
+        padding: '16px 48px',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        backgroundColor: '#d4a574',
+        color: '#0a0e27',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        transition: 'all 0.3s',
+        marginBottom: '12px',
+    }
+
+    const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
+        ;(e.target as HTMLButtonElement).style.backgroundColor = '#ffd700'
+        ;(e.target as HTMLButtonElement).style.transform = 'scale(1.05)'
+    }
+
+    const handleButtonOut = (e: React.MouseEvent<HTMLButtonElement>) => {
+        ;(e.target as HTMLButtonElement).style.backgroundColor = '#d4a574'
+        ;(e.target as HTMLButtonElement).style.transform = 'scale(1)'
+    }
+
     return (
         <div
             style={{
@@ -139,34 +214,27 @@ function MainMenu({ onStart }: { onStart: () => void }) {
                 </p>
             </div>
 
-            <button
-                onClick={onStart}
-                style={{
-                    padding: '16px 48px',
-                    fontSize: '18px',
-                    fontWeight: 'bold',
-                    backgroundColor: '#d4a574',
-                    color: '#0a0e27',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s',
-                }}
-                onMouseOver={(e) => {
-                    ;(e.target as HTMLButtonElement).style.backgroundColor =
-                        '#ffd700'
-                    ;(e.target as HTMLButtonElement).style.transform =
-                        'scale(1.05)'
-                }}
-                onMouseOut={(e) => {
-                    ;(e.target as HTMLButtonElement).style.backgroundColor =
-                        '#d4a574'
-                    ;(e.target as HTMLButtonElement).style.transform =
-                        'scale(1)'
-                }}
-            >
-                Start Your Voyage
-            </button>
+            <div>
+                {hasSavedGame && (
+                    <button
+                        onClick={onLoad}
+                        style={buttonStyle}
+                        onMouseOver={handleButtonHover}
+                        onMouseOut={handleButtonOut}
+                    >
+                        Continue Your Voyage
+                    </button>
+                )}
+
+                <button
+                    onClick={onStart}
+                    style={buttonStyle}
+                    onMouseOver={handleButtonHover}
+                    onMouseOut={handleButtonOut}
+                >
+                    {hasSavedGame ? 'New Game' : 'Start Your Voyage'}
+                </button>
+            </div>
 
             <div
                 style={{

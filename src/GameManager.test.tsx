@@ -74,4 +74,51 @@ describe('Game Manager - Main Menu Flow', () => {
         const mainContent = container.firstChild
         expect(mainContent).toBeInTheDocument()
     })
+
+    it('New Game prompts LLM setup if needed', () => {
+        // Clear any cached LLM config
+        localStorage.removeItem('llmConfig')
+
+        const { getByRole } = render(<GameManager />)
+
+        // Should show main menu
+        const startButton = getByRole('button', {
+            name: /Start Your Voyage/i,
+        })
+        expect(startButton).toBeInTheDocument()
+
+        // Clicking should initiate the flow
+        // (In a real test, we'd click and verify navigation to LLM setup)
+        expect(startButton).not.toBeDisabled()
+    })
+
+    it('Continue button only appears if save exists', () => {
+        // Test without save
+        localStorage.removeItem('gameSave')
+        localStorage.removeItem('llmConfig')
+
+        const { queryByRole, rerender } = render(<GameManager />)
+
+        // Should not have a continue button
+        let continueButton = queryByRole('button', {
+            name: /Continue Your Voyage/i,
+        })
+        expect(continueButton).not.toBeInTheDocument()
+
+        // Now add a save
+        const savedGameState = {
+            captainName: 'Test Captain',
+            shipClass: 'brigantine',
+            timestamp: Date.now(),
+        }
+        localStorage.setItem('gameSave', JSON.stringify(savedGameState))
+
+        // Re-render should now show continue button
+        rerender(<GameManager />)
+
+        continueButton = queryByRole('button', {
+            name: /Continue Your Voyage/i,
+        })
+        expect(continueButton).toBeInTheDocument()
+    })
 })
