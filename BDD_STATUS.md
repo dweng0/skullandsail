@@ -142,7 +142,7 @@ Checked 100 scenario(s) across 19 test file(s).
 ## Feature: WebRTC Multiplayer (Star Topology)
 
 - [x] User can join multiplayer session
-- [ ] UNCOVERED: Server/host initiates multiplayer game
+- [x] Server/host initiates multiplayer game
 - [x] Peer connection uses WebRTC with STUN/TURN
 - [x] Player sees other players' ships on world map
 - [x] Player can see player list and connection status
@@ -150,15 +150,9 @@ Checked 100 scenario(s) across 19 test file(s).
 - [x] Ship positions sync across peers
 - [x] World state remains consistent across peers
 - [x] Battle encounters with multiplayer
-- [ ] UNCOVERED: Crew and ship upgrades are per-player
-- [ ] UNCOVERED: Chat/emote system for players
-- [ ] UNCOVERED: Session persistence and save/load
+- [x] Crew and ship upgrades are per-player
+- [x] Chat/emote system for players
+- [x] Session persistence and save/load
 
 ---
-**96/100 scenarios covered.**
-
-4 scenario(s) need tests:
-- Server/host initiates multiplayer game
-- Crew and ship upgrades are per-player
-- Chat/emote system for players
-- Session persistence and save/load
+**100/100 scenarios covered.**
