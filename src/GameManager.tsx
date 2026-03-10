@@ -42,18 +42,17 @@ export default function GameManager() {
     const [gameState, setGameState] = useState<GameState>('menu')
     const [config, setConfig] = useState<GameConfig>({})
 
-    // Auto-connect with cached LLM config on mount
+    // Load cached LLM config but start at menu
     useEffect(() => {
         const cachedLLMConfig = localStorage.getItem('llmConfig')
         if (cachedLLMConfig) {
             try {
                 const parsed = JSON.parse(cachedLLMConfig)
-                // Auto-connect with cached config
+                // Set config but stay at menu so player can choose New Game or Continue
                 setConfig({
                     llmProvider: parsed.provider,
                     llmKey: parsed.apiKey,
                 })
-                setGameState('character-setup')
             } catch (e) {
                 // Invalid cached config, proceed to setup
                 setGameState('menu')
