@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface LLMSetupProps {
     onConnect: (config: LLMConfig) => void
@@ -21,6 +21,22 @@ export default function LLMSetup({ onConnect }: LLMSetupProps) {
     const [error, setError] = useState('')
     const [testing, setTesting] = useState(false)
 
+    // Load saved config from localStorage on mount
+    useEffect(() => {
+        const saved = localStorage.getItem('llmConfig')
+        if (saved) {
+            try {
+                const config = JSON.parse(saved)
+                setProvider(config.provider)
+                setModel(config.model)
+                setEndpoint(config.endpoint || '')
+                setApiKey(config.apiKey)
+            } catch (e) {
+                // Invalid saved config, ignore
+            }
+        }
+    }, [])
+
     const handleTestConnection = async () => {
         setError('')
         setTesting(true)
@@ -40,12 +56,17 @@ export default function LLMSetup({ onConnect }: LLMSetupProps) {
             // Simulate successful connection test
             await new Promise((resolve) => setTimeout(resolve, 500))
 
-            onConnect({
+            const config = {
                 provider,
                 model,
                 endpoint: endpoint || undefined,
                 apiKey,
-            })
+            }
+
+            // Save config to localStorage
+            localStorage.setItem('llmConfig', JSON.stringify(config))
+
+            onConnect(config)
         } catch (err) {
             setError(
                 err instanceof Error ? err.message : 'Connection test failed',

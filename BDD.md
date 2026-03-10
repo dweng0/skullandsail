@@ -93,6 +93,12 @@ Scenario: Once connected, LLM generates overarching storyline
 - The storyline is stored in game state
 - This storyline provides context for later quest generation
 
+Scenario: LLM configuration is persisted in localStorage
+- After a successful connection, API config (provider, key, endpoint) is saved to browser localStorage
+- On app reload, saved config is loaded and displayed
+- User can edit and update saved config
+- Clearing localStorage removes stored config
+
 Feature: Character & Ship Selection
 
 Player creates a captain and chooses a starting ship class.

@@ -77,16 +77,25 @@ export default function Game({
                 engine.dispose()
             }
         } catch (error) {
+            console.error('Game initialization error:', error)
             // Silently handle initialization errors in test environments
         }
     }, [playerShipClass, showBattle])
 
     return (
-        <canvas
-            ref={canvasRef}
-            style={{ display: 'block', width: '100%', height: '100%' }}
-            data-testid="game-canvas"
-        />
+        <div style={{ width: '100%', height: '100%' }}>
+            <canvas
+                ref={canvasRef}
+                style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    margin: 0,
+                    padding: 0,
+                }}
+                data-testid="game-canvas"
+            />
+        </div>
     )
 }
 
