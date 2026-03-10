@@ -40,6 +40,22 @@ export default function Game({
     const [speed, setSpeed] = useState(0)
     const [isPaused, setIsPaused] = useState(false)
 
+    // Enhanced camera control state
+    const cameraStateRef = useRef({
+        distance: 8,
+        panAngle: 0,
+        defaultDistance: 8,
+        defaultPanAngle: 0,
+        isReturning: false,
+        returnStartTime: 0,
+        returnDuration: 3000, // 3 seconds
+        minDistance: 2,
+        maxDistance: 15,
+        panActive: false,
+        lastMouseX: 0,
+        lastMouseY: 0,
+    })
+
     useEffect(() => {
         if (!canvasRef.current) return
 
@@ -53,8 +69,7 @@ export default function Game({
             camera.inertia = 0.7
             camera.angularSensibility = 1000
 
-            // Camera follows ship with offset
-            const cameraDistance = 8 // Distance behind the ship
+            // Camera height above sea level
             const cameraHeight = 6 // Height above sea level
 
             // Set up lighting
@@ -116,8 +131,70 @@ export default function Game({
                 keysPressed[e.code.toLowerCase()] = false
             }
 
+            // Mouse event handlers for camera controls
+            const handleMouseWheel = (e: WheelEvent) => {
+                const state = cameraStateRef.current
+                if (!showBattle) {
+                    e.preventDefault()
+                    // Scroll up = zoom in (decrease distance)
+                    const zoomDelta = e.deltaY > 0 ? 0.5 : -0.5
+                    state.distance = Math.max(
+                        state.minDistance,
+                        Math.min(state.maxDistance, state.distance + zoomDelta),
+                    )
+                    // Mark that user has adjusted camera
+                    if (state.distance !== state.defaultDistance) {
+                        state.isReturning = false
+                    }
+                }
+            }
+
+            const handleMouseDown = (e: MouseEvent) => {
+                const state = cameraStateRef.current
+                // Right-click (button 2) to pan
+                if (e.button === 2 && !showBattle) {
+                    state.panActive = true
+                    state.lastMouseX = e.clientX
+                    state.lastMouseY = e.clientY
+                }
+            }
+
+            const handleMouseMove = (e: MouseEvent) => {
+                const state = cameraStateRef.current
+                if (state.panActive) {
+                    const deltaX = e.clientX - state.lastMouseX
+                    const panSensitivity = 0.005
+                    state.panAngle += deltaX * panSensitivity
+                    state.lastMouseX = e.clientX
+                    state.lastMouseY = e.clientY
+                    // Mark that user has adjusted camera
+                    if (state.panAngle !== state.defaultPanAngle) {
+                        state.isReturning = false
+                    }
+                }
+            }
+
+            const handleMouseUp = () => {
+                const state = cameraStateRef.current
+                state.panActive = false
+                // Start auto-return animation
+                if (
+                    state.distance !== state.defaultDistance ||
+                    state.panAngle !== state.defaultPanAngle
+                ) {
+                    state.isReturning = true
+                    state.returnStartTime = Date.now()
+                }
+            }
+
             window.addEventListener('keydown', handleKeyDown)
             window.addEventListener('keyup', handleKeyUp)
+            canvasRef.current.addEventListener('wheel', handleMouseWheel, {
+                passive: false,
+            })
+            window.addEventListener('mousedown', handleMouseDown)
+            window.addEventListener('mousemove', handleMouseMove)
+            window.addEventListener('mouseup', handleMouseUp)
 
             // Ship physics configuration
             const shipConfig = {
@@ -194,10 +271,33 @@ export default function Game({
                     shipMeshRef.current.rotation.y = physics.angle
                 }
 
-                // Update camera to follow ship from behind
-                // Camera offset is opposite to ship heading (behind the ship)
-                const cameraOffsetX = -Math.sin(physics.angle) * cameraDistance
-                const cameraOffsetZ = -Math.cos(physics.angle) * cameraDistance
+                // Update camera to follow ship from behind with zoom and pan
+                const state = cameraStateRef.current
+
+                // Handle auto-return animation
+                if (state.isReturning) {
+                    const elapsed = Date.now() - state.returnStartTime
+                    const progress = Math.min(elapsed / state.returnDuration, 1)
+
+                    // Lerp back to default values
+                    state.distance =
+                        state.distance +
+                        (state.defaultDistance - state.distance) * progress
+                    state.panAngle =
+                        state.panAngle +
+                        (state.defaultPanAngle - state.panAngle) * progress
+
+                    if (progress === 1) {
+                        state.isReturning = false
+                        state.distance = state.defaultDistance
+                        state.panAngle = state.defaultPanAngle
+                    }
+                }
+
+                // Calculate camera offset with zoom and pan
+                const shipHeading = physics.angle + state.panAngle
+                const cameraOffsetX = -Math.sin(shipHeading) * state.distance
+                const cameraOffsetZ = -Math.cos(shipHeading) * state.distance
 
                 camera.position.x = physics.x + cameraOffsetX
                 camera.position.z = physics.z + cameraOffsetZ
@@ -220,6 +320,12 @@ export default function Game({
                 window.removeEventListener('resize', handleResize)
                 window.removeEventListener('keydown', handleKeyDown)
                 window.removeEventListener('keyup', handleKeyUp)
+                if (canvasRef.current) {
+                    canvasRef.current.removeEventListener('wheel', handleMouseWheel)
+                }
+                window.removeEventListener('mousedown', handleMouseDown)
+                window.removeEventListener('mousemove', handleMouseMove)
+                window.removeEventListener('mouseup', handleMouseUp)
                 engine.dispose()
             }
         } catch (error) {
