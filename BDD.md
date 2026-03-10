@@ -99,6 +99,26 @@ Scenario: LLM configuration is persisted in localStorage
 - User can edit and update saved config
 - Clearing localStorage removes stored config
 
+Scenario: Auto-connect with cached LLM configuration
+- On app load, if LLM config exists in localStorage, automatically establish connection
+- Skip LLM setup form if config is already cached
+- Proceed directly to character selection or main menu
+- User can override with Settings menu → Clear Cache
+
+Scenario: Pause menu appears when pressing Escape
+- Pressing ESC during gameplay opens a pause menu overlay
+- Menu shows "Resume", "Settings", "Quit to Menu" options
+- Game is paused while menu is open
+- Pressing ESC again or clicking "Resume" closes menu and resumes play
+- Menu can be closed without losing game state
+
+Scenario: Settings menu allows clearing cached data
+- A Settings option in pause menu opens settings panel
+- "Clear Cache" button removes all cached LLM config and game saves
+- Confirmation dialog prevents accidental data loss
+- After clearing, user must re-enter LLM credentials
+- Other settings can be added here in future (audio, graphics, etc.)
+
 Feature: Character & Ship Selection
 
 Player creates a captain and chooses a starting ship class.

@@ -10,6 +10,7 @@ import {
     StandardMaterial,
     Color3,
 } from 'babylonjs'
+import PauseMenu from './PauseMenu'
 import './styles.css'
 
 export type ShipClass = 'sloop' | 'brigantine' | 'galleon'
@@ -17,11 +18,13 @@ export type ShipClass = 'sloop' | 'brigantine' | 'galleon'
 interface GameProps {
     playerShipClass?: ShipClass
     showBattle?: boolean
+    onQuitToMenu?: () => void
 }
 
 export default function Game({
     playerShipClass = 'brigantine',
     showBattle = false,
+    onQuitToMenu,
 }: GameProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const engineRef = useRef<Engine | null>(null)
@@ -35,6 +38,7 @@ export default function Game({
     const [shipPosition, setShipPosition] = useState({ x: 0, z: 0 })
     const [direction, setDirection] = useState(0)
     const [speed, setSpeed] = useState(0)
+    const [isPaused, setIsPaused] = useState(false)
 
     useEffect(() => {
         if (!canvasRef.current) return
@@ -100,6 +104,11 @@ export default function Game({
             const handleKeyDown = (e: KeyboardEvent) => {
                 keysPressed[e.key.toLowerCase()] = true
                 keysPressed[e.code.toLowerCase()] = true
+
+                // ESC key opens pause menu
+                if (e.key === 'Escape' && !showBattle) {
+                    setIsPaused((prev) => !prev)
+                }
             }
 
             const handleKeyUp = (e: KeyboardEvent) => {
@@ -272,6 +281,15 @@ export default function Game({
                         <div>Speed: {(speed * 10).toFixed(1)}</div>
                     </div>
                 </div>
+            )}
+            {isPaused && (
+                <PauseMenu
+                    onResume={() => setIsPaused(false)}
+                    onQuit={() => {
+                        setIsPaused(false)
+                        onQuitToMenu?.()
+                    }}
+                />
             )}
         </div>
     )

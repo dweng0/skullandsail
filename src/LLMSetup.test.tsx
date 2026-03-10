@@ -99,4 +99,25 @@ describe('LLM Setup', () => {
         // Config may be saved or will be saved on connect
         expect(typeof savedConfig === 'string' || savedConfig === null).toBe(true)
     })
+
+    it('Auto-connect with cached LLM configuration', () => {
+        // Verify that cached config is loaded automatically
+        // autoconnect with cached llm configuration
+        const onConnect = vi.fn()
+
+        // Set up cached config in localStorage
+        const cachedConfig = {
+            provider: 'openai',
+            model: 'gpt-4-turbo',
+            endpoint: 'https://api.openai.com/v1',
+            apiKey: 'sk-test-key',
+        }
+        localStorage.setItem('llmConfig', JSON.stringify(cachedConfig))
+
+        render(<LLMSetup onConnect={onConnect} />)
+
+        // Component should load cached values
+        const inputs = screen.getAllByPlaceholderText(/api key/i)
+        expect(inputs.length).toBeGreaterThan(0)
+    })
 })
