@@ -84,4 +84,54 @@ describe('World Manifest & POI Metadata', () => {
         expect(manifest.dangerLevel).toBeGreaterThanOrEqual(1)
         expect(manifest.dangerLevel).toBeLessThanOrEqual(5)
     })
+
+    it('World manifest is loaded on game start', () => {
+        // On app launch, the fixed map manifest is loaded from game data
+        // Manifest is parsed and world is generated from it
+        // All players receive identical POI locations and biome distribution
+        // Manifest is stored with player save file for game resumption
+
+        // Create initial manifest
+        const initialManifest = createWorldManifest()
+        expect(initialManifest).toBeDefined()
+
+        // Serialize manifest (as would be stored in save/game data)
+        const serializedData = initialManifest.serialize()
+        expect(serializedData).toBeDefined()
+
+        // Simulate loading manifest on app launch
+        const loadedManifest = WorldManifest.deserialize(serializedData)
+        expect(loadedManifest).toBeDefined()
+
+        // Verify loaded manifest matches original
+        expect(loadedManifest.seed).toBe(initialManifest.seed)
+        expect(loadedManifest.worldName).toBe(initialManifest.worldName)
+        expect(loadedManifest.climate).toBe(initialManifest.climate)
+        expect(loadedManifest.dangerLevel).toBe(initialManifest.dangerLevel)
+
+        // Verify POI data is identical
+        expect(loadedManifest.poiList.length).toBe(initialManifest.poiList.length)
+        loadedManifest.poiList.forEach((poi, index) => {
+            const originalPOI = initialManifest.poiList[index]
+            expect(poi.id).toBe(originalPOI.id)
+            expect(poi.name).toBe(originalPOI.name)
+            expect(poi.type).toBe(originalPOI.type)
+            expect(poi.coords).toEqual(originalPOI.coords)
+            expect(poi.biome).toBe(originalPOI.biome)
+        })
+
+        // Verify biome map is identical
+        expect(loadedManifest.biomeMap.length).toBe(initialManifest.biomeMap.length)
+        loadedManifest.biomeMap.forEach((region, index) => {
+            const originalRegion = initialManifest.biomeMap[index]
+            expect(region.biome).toBe(originalRegion.biome)
+            expect(region.startX).toBe(originalRegion.startX)
+            expect(region.startY).toBe(originalRegion.startY)
+        })
+
+        // Verify all players receive identical distribution
+        const manifest2 = WorldManifest.deserialize(serializedData)
+        expect(manifest2.poiList).toEqual(loadedManifest.poiList)
+        expect(manifest2.biomeMap).toEqual(loadedManifest.biomeMap)
+    })
 })

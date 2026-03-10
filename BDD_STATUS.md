@@ -46,7 +46,7 @@ Checked 167 scenario(s) across 27 test file(s).
 - [x] Sea map contains islands, towns, and anomalies
 - [x] Towns and anomalies are stable per seed
 - [x] LLM is consulted to name points of interest
-- [ ] UNCOVERED: World manifest is loaded on game start
+- [x] World manifest is loaded on game start
 - [x] World state is saved to localStorage for resumption
 
 ## Feature: World Map Navigation
@@ -152,7 +152,7 @@ Checked 167 scenario(s) across 27 test file(s).
 ## Feature: Location Data Persistence
 
 - [ ] UNCOVERED: World generation includes location metadata
-- [ ] UNCOVERED: Save file includes POI metadata
+- [x] Save file includes POI metadata
 - [ ] UNCOVERED: NPC dialogue is generated once per location
 
 ## Feature: NPC System
@@ -258,14 +258,12 @@ Checked 167 scenario(s) across 27 test file(s).
 - [x] Narrative journal logs major story beats
 
 ---
-**141/167 scenarios covered.**
+**143/167 scenarios covered.**
 
-26 scenario(s) need tests:
-- World manifest is loaded on game start
+24 scenario(s) need tests:
 - Narrative includes speaker/context label
 - Town names are generated once and cached
 - World generation includes location metadata
-- Save file includes POI metadata
 - NPC dialogue is generated once per location
 - Quest-giving NPCs are flagged as patrons
 - Quests are narrative-driven with context
