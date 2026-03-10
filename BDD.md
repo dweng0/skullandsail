@@ -581,3 +581,89 @@ Scenario: Camera slowly returns to follow mode after manual adjustment
 - Return happens over 3 seconds
 - Player can interrupt by moving ship or panning again
 - Camera tracks ship position during return animation
+
+Feature: WebRTC Multiplayer (Star Topology)
+
+Players can connect to up to 3 other players using WebRTC with a free NAT/ICE solution.
+
+Scenario: User can join multiplayer session
+- A "Join Multiplayer" button appears on the main menu
+- User can enter a session code to connect
+- Connection uses free WebRTC NAT/ICE (STUN/TURN via public service like Google's)
+- Session code is 6-8 alphanumeric characters
+- User is assigned a unique player ID (1-4)
+- Connection status is displayed while connecting
+
+Scenario: Server/host initiates multiplayer game
+- One player acts as host and generates a session code
+- Host clicks "Start Multiplayer Game"
+- Other players join using the session code
+- Max 4 players total (host + 3 guests)
+- Game starts when host confirms all players are ready
+
+Scenario: Peer connection uses WebRTC with STUN/TURN
+- Uses free public STUN server (e.g., Google's stun:stun.l.google.com:19302)
+- Falls back to TURN relay if direct connection fails
+- Connection is peer-to-peer when possible
+- Data channel used for real-time ship position/state updates
+- Connection quality/latency is monitored
+
+Scenario: Player sees other players' ships on world map
+- Other players' ships render as distinct silhouettes on the same world map
+- Ship color/emblem indicates which player (1=blue, 2=red, 3=green, 4=yellow)
+- Ship positions update in real-time (60 updates/second max)
+- Player name/captain appears above each ship
+- Ships are culled when far away to reduce bandwidth
+
+Scenario: Player can see player list and connection status
+- A player panel shows all connected players
+- Each player shows: name, ship class, level, connection status
+- Connection status: "Connected" (green), "Connecting" (yellow), "Disconnected" (red)
+- Ping latency shown for each peer
+- Host is clearly marked in the list
+
+Scenario: Disconnect and reconnect logic
+- If a player disconnects, their ship fades/disappears
+- Player has 30 seconds to reconnect before being removed from game
+- Reconnecting player's ship reappears with last known position
+- Other players receive disconnect/reconnect notifications
+- If host disconnects, control passes to next player
+
+Scenario: Ship positions sync across peers
+- Ship position updates broadcast every 100ms
+- Updates include: position (x, z), heading (angle), velocity
+- Latency compensation: predict ship position based on heading/velocity
+- Smooth interpolation between position updates
+- Jitter buffer handles out-of-order packets
+
+Scenario: World state remains consistent across peers
+- Island locations, towns, anomalies are the same for all players
+- World seed is synchronized at connection time
+- All players see the same procedurally generated world
+- World doesn't change while players are connected
+
+Scenario: Battle encounters with multiplayer
+- When any player triggers an encounter, a vote system activates
+- Other players see "Battle Incoming" notification with 5-second timer
+- Players vote yes/no to engage (majority decides)
+- If engaged, all players teleport to battle scene together
+- Turn order includes all players (turn-based multi-player ATB)
+
+Scenario: Crew and ship upgrades are per-player
+- Each player has their own: level, XP, gold, inventory, upgrades
+- Trading between players: Player A can drop item, Player B picks it up
+- Gold can be split between players (crew hire, ship upgrades are individual)
+- Kills/victories are credited to individual players
+
+Scenario: Chat/emote system for players
+- Quick emote wheel (8 emotes): waves, laughs, danger signal, treasure found
+- Emotes display above ship and in player list
+- In-game text chat (max 100 players, global)
+- Chat messages persist in memory (not saved)
+- Ping-based latency awareness: high-latency players get marker
+
+Scenario: Session persistence and save/load
+- Multiplayer progress saves to localStorage with session code
+- Can resume interrupted session within 24 hours
+- Progress includes: player positions, treasure found, quests completed
+- Save includes all players' data or single player data (can branch)
