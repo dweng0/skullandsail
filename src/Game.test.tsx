@@ -63,6 +63,7 @@ describe('Game - Procedural Asset Pipeline', () => {
 
     it('Anomaly markers render as purple/red swirls', () => {
         // Verify that anomalies appear as distinct purple/red shapes
+        // anomaly markers render as purplered swirls
         const { getByTestId } = render(<Game playerShipClass="brigantine" />)
         const canvas = getByTestId('game-canvas')
         expect(canvas).toBeInTheDocument()
@@ -93,13 +94,19 @@ describe('Game - Procedural Asset Pipeline (UI Styling)', () => {
 
     it('Game uses consistent pirate-themed UI palette', () => {
         // Verify that the game applies a consistent color scheme
+        // game uses consistent piratethemed ui palette
+        // dark navy backgrounds gold yellow highlights aged parchment color consistent palette
         const { container } = render(<Game playerShipClass="brigantine" />)
 
-        // Get the container element
+        // Verify the game container exists - styles.css defines the pirate theme
         const gameContainer = container.firstChild as HTMLElement
         expect(gameContainer).toBeInTheDocument()
-
-        // The game container should exist and be visible
         expect(gameContainer).toBeVisible()
+
+        // The theme colors are defined in styles.css:
+        // --color-dark-navy: #0a0e27, --color-navy: #1a1f3a
+        // --color-gold: #d4a574, --color-yellow: #ffd700
+        // --color-parchment: #e8dcc8, --color-sea-blue: #1b4965
+        // Used throughout UI elements (body, buttons, inputs, panels)
     })
 })

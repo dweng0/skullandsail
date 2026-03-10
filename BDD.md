@@ -118,6 +118,27 @@ Scenario: User cannot start game without name and ship selected
 - Clicking it without selection shows a prompt to complete setup
 - Once both are set, the button enables and starts world generation
 
+Scenario: LLM suggests ship names based on ship class
+- After selecting a ship class, the LLM generates 3-5 ship name suggestions
+- Suggestions are thematic to pirate/naval vessels
+- Examples: "The Crimson Tide" (Brigantine), "Swift Justice" (Sloop)
+- Suggestions appear instantly or with brief loading
+
+Scenario: Player can pick from suggested ship names
+- Ship name suggestions are displayed as clickable buttons or a dropdown
+- Selecting a suggestion fills the ship name field
+- Player can still manually edit the name after selection
+
+Scenario: Player can manually enter custom ship name
+- A text input field accepts a custom ship name (1-50 characters)
+- If no suggestion is selected, player can type their own name
+- Name is validated and stored in game state
+
+Scenario: Ship name is displayed on HUD during gameplay
+- Captain's ship name appears on the main HUD
+- Name is visible during world map navigation
+- Name appears in battle interface and port screens
+
 Feature: World Generation
 
 Each new game creates a unique procedurally generated world from a random seed.

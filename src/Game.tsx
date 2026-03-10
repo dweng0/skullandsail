@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Engine, Scene, Mesh, Vector3 } from 'babylonjs'
+import './styles.css'
 
 export type ShipClass = 'sloop' | 'brigantine' | 'galleon'
 
