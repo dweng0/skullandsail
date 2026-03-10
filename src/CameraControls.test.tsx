@@ -28,7 +28,7 @@ describe('Enhanced Camera Controls', () => {
     })
 
     it('Player can right-click to pan camera', () => {
-        // Test pan camera with right-click and drag
+        // Test pan camera with rightclick and drag (rightclick to pan)
         const cameraState = {
             panActive: false,
             panStartX: 0,
