@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react'
 import Game from './Game'
 import LLMSetup from './LLMSetup'
 import CharacterSetup from './CharacterSetup'
+import MultiplayerSetup from './MultiplayerSetup'
 import type { ShipClass } from './Game'
+import type MultiplayerManager from './MultiplayerManager'
 
 type GameState =
     | 'menu'
     | 'llm-setup'
     | 'character-setup'
+    | 'multiplayer-setup'
     | 'loading'
     | 'playing'
 
@@ -16,6 +19,7 @@ interface GameConfig {
     llmKey?: string
     captainName?: string
     shipClass?: ShipClass
+    multiplayerManager?: MultiplayerManager
 }
 
 interface SavedGameState {
@@ -89,6 +93,26 @@ export default function GameManager() {
         setGameState('llm-setup')
     }
 
+    const handleMultiplayerSetup = () => {
+        setGameState('multiplayer-setup')
+    }
+
+    const handleMultiplayerSessionCreated = (manager: MultiplayerManager) => {
+        setConfig({
+            ...config,
+            multiplayerManager: manager,
+        })
+        setGameState('character-setup')
+    }
+
+    const handleMultiplayerSessionJoined = (manager: MultiplayerManager, _sessionCode: string) => {
+        setConfig({
+            ...config,
+            multiplayerManager: manager,
+        })
+        setGameState('character-setup')
+    }
+
     const handleLoadGame = () => {
         const savedData = localStorage.getItem('gameSave')
         if (savedData) {
@@ -114,11 +138,22 @@ export default function GameManager() {
     return (
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
             {gameState === 'menu' && (
-                <MainMenu onStart={handleStartNewGame} onLoad={handleLoadGame} />
+                <MainMenu
+                    onStart={handleStartNewGame}
+                    onLoad={handleLoadGame}
+                    onMultiplayer={handleMultiplayerSetup}
+                />
             )}
 
             {gameState === 'llm-setup' && (
                 <LLMSetup onConnect={handleLLMConnect} />
+            )}
+
+            {gameState === 'multiplayer-setup' && (
+                <MultiplayerSetup
+                    onSessionCreated={handleMultiplayerSessionCreated}
+                    onSessionJoined={handleMultiplayerSessionJoined}
+                />
             )}
 
             {gameState === 'character-setup' && (
@@ -131,7 +166,10 @@ export default function GameManager() {
             {gameState === 'loading' && <LoadingScreen />}
 
             {gameState === 'playing' && (
-                <Game playerShipClass={config.shipClass || 'brigantine'} />
+                <Game
+                    playerShipClass={config.shipClass || 'brigantine'}
+                    multiplayerManager={config.multiplayerManager}
+                />
             )}
         </div>
     )
@@ -140,9 +178,11 @@ export default function GameManager() {
 function MainMenu({
     onStart,
     onLoad,
+    onMultiplayer,
 }: {
     onStart: () => void
     onLoad: () => void
+    onMultiplayer: () => void
 }) {
     const hasSavedGame = !!localStorage.getItem('gameSave')
 
@@ -232,6 +272,15 @@ function MainMenu({
                     onMouseOut={handleButtonOut}
                 >
                     {hasSavedGame ? 'New Game' : 'Start Your Voyage'}
+                </button>
+
+                <button
+                    onClick={onMultiplayer}
+                    style={buttonStyle}
+                    onMouseOver={handleButtonHover}
+                    onMouseOut={handleButtonOut}
+                >
+                    🌐 Join Multiplayer
                 </button>
             </div>
 

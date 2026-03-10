@@ -11,6 +11,9 @@ import {
     Color3,
 } from 'babylonjs'
 import PauseMenu from './PauseMenu'
+import PlayerList from './PlayerList'
+import MultiplayerChat from './MultiplayerChat'
+import type MultiplayerManager from './MultiplayerManager'
 import './styles.css'
 
 export type ShipClass = 'sloop' | 'brigantine' | 'galleon'
@@ -19,12 +22,14 @@ interface GameProps {
     playerShipClass?: ShipClass
     showBattle?: boolean
     onQuitToMenu?: () => void
+    multiplayerManager?: MultiplayerManager
 }
 
 export default function Game({
     playerShipClass = 'brigantine',
     showBattle = false,
     onQuitToMenu,
+    multiplayerManager,
 }: GameProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const engineRef = useRef<Engine | null>(null)
@@ -39,6 +44,8 @@ export default function Game({
     const [direction, setDirection] = useState(0)
     const [speed, setSpeed] = useState(0)
     const [isPaused, setIsPaused] = useState(false)
+    const [remotePlayersState, setRemotePlayersState] = useState<any[]>([])
+    const [chatOpen, setChatOpen] = useState(false)
 
     // Enhanced camera control state
     const cameraStateRef = useRef({
@@ -55,6 +62,15 @@ export default function Game({
         lastMouseX: 0,
         lastMouseY: 0,
     })
+
+    // Listen for remote player position updates
+    useEffect(() => {
+        if (multiplayerManager) {
+            multiplayerManager.onPositionUpdate((players) => {
+                setRemotePlayersState(players)
+            })
+        }
+    }, [multiplayerManager])
 
     useEffect(() => {
         if (!canvasRef.current) return
@@ -347,6 +363,21 @@ export default function Game({
                 }}
                 data-testid="game-canvas"
             />
+            {multiplayerManager && (
+                <>
+                    <PlayerList
+                        players={remotePlayersState}
+                        localPlayerId={multiplayerManager.getPlayerId()}
+                        isHost={multiplayerManager.getSessionConfig()?.isHost || false}
+                    />
+                    <MultiplayerChat
+                        manager={multiplayerManager}
+                        isOpen={chatOpen}
+                        onToggle={() => setChatOpen(!chatOpen)}
+                    />
+                </>
+            )}
+
             {!showBattle && (
                 <div
                     className="hud"
