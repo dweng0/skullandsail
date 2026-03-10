@@ -25,6 +25,8 @@ export default function Game({
 }: GameProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const engineRef = useRef<Engine | null>(null)
+    const shipMeshRef = useRef<Mesh | null>(null)
+    const shipPositionRef = useRef({ x: 0, z: 0 })
     const [shipPosition, setShipPosition] = useState({ x: 0, z: 0 })
     const [direction, setDirection] = useState(0)
 
@@ -67,7 +69,12 @@ export default function Game({
                 createAnomalies(scene)
 
                 // Create player ship
-                createShip(scene, playerShipClass, new Vector3(0, 0, 0))
+                const playerShip = createShip(
+                    scene,
+                    playerShipClass,
+                    new Vector3(0, 0, 0),
+                )
+                shipMeshRef.current = playerShip
             }
 
             engineRef.current = engine
@@ -131,10 +138,21 @@ export default function Game({
                 }
 
                 if (dirX !== 0 || dirZ !== 0) {
-                    setShipPosition((prev) => ({
-                        x: prev.x + dirX,
-                        z: prev.z + dirZ,
-                    }))
+                    shipPositionRef.current.x += dirX
+                    shipPositionRef.current.z += dirZ
+
+                    // Update babylon mesh position
+                    if (shipMeshRef.current) {
+                        shipMeshRef.current.position.x = shipPositionRef.current.x
+                        shipMeshRef.current.position.z = shipPositionRef.current.z
+                    }
+
+                    // Update React state for HUD display
+                    setShipPosition({
+                        x: shipPositionRef.current.x,
+                        z: shipPositionRef.current.z,
+                    })
+
                     if (dirX !== 0 || dirZ !== 0) {
                         setDirection(Math.atan2(dirX, dirZ))
                     }
@@ -395,27 +413,28 @@ function createShip(
     shipClass: ShipClass,
     position: Vector3,
 ): Mesh {
-    const ship = MeshBuilder.CreateBox('ship', { size: 0.1 }, scene)
+    // Create a larger box for the ship hull
+    const ship = MeshBuilder.CreateBox('ship', { size: 1 }, scene)
     ship.position = position
 
     // Define ship dimensions and colors based on class
     const shipSpecs = {
         sloop: {
-            width: 0.3,
-            length: 0.6,
-            height: 0.2,
+            width: 0.8,
+            length: 1.2,
+            height: 0.6,
             color: new Color3(0.8, 0.7, 0.6),
         },
         brigantine: {
-            width: 0.6,
-            length: 0.8,
-            height: 0.25,
+            width: 1.2,
+            length: 1.6,
+            height: 0.8,
             color: new Color3(0.7, 0.6, 0.5),
         },
         galleon: {
-            width: 0.9,
-            length: 1.0,
-            height: 0.3,
+            width: 1.6,
+            length: 2.0,
+            height: 1.0,
             color: new Color3(0.6, 0.5, 0.4),
         },
     }
