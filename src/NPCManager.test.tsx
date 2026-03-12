@@ -1,105 +1,105 @@
-import { describe, it, expect, beforeEach } from 'vitest'
-import NPCManager from './NPCManager'
+import { describe, it, expect, beforeEach } from "vitest";
+import NPCManager from "./NPCManager";
 
-describe('NPC System', () => {
-    let npcManager: NPCManager
+describe("NPC System", () => {
+  let npcManager: NPCManager;
 
-    beforeEach(() => {
-        npcManager = new NPCManager()
-    })
+  beforeEach(() => {
+    npcManager = new NPCManager();
+  });
 
-    it('NPCs are generated during town creation', () => {
-        const townId = 'town_1'
-        const npcCount = npcManager.generateNPCsForTown(townId, 'tropical')
+  it("NPCs are generated during town creation", () => {
+    const townId = "town_1";
+    const npcCount = npcManager.generateNPCsForTown(townId, "tropical");
 
-        expect(npcCount).toBeGreaterThan(0)
-        expect(npcCount).toBeLessThanOrEqual(5)
+    expect(npcCount).toBeGreaterThan(0);
+    expect(npcCount).toBeLessThanOrEqual(5);
 
-        const npcs = npcManager.getNPCsForTown(townId)
-        expect(npcs.length).toBe(npcCount)
-    })
+    const npcs = npcManager.getNPCsForTown(townId);
+    expect(npcs.length).toBe(npcCount);
+  });
 
-    it('NPC names are thematic to world setting', () => {
-        const townId = 'town_2'
-        npcManager.generateNPCsForTown(townId, 'pirate')
+  it("NPC names are thematic to world setting", () => {
+    const townId = "town_2";
+    npcManager.generateNPCsForTown(townId, "pirate");
 
-        const npcs = npcManager.getNPCsForTown(townId)
-        npcs.forEach((npc) => {
-            expect(npc.name).toBeDefined()
-            expect(npc.name.length).toBeGreaterThan(0)
-            expect(npc.role).toBeDefined() // sailor, merchant, innkeeper, quest-giver
-        })
-    })
+    const npcs = npcManager.getNPCsForTown(townId);
+    npcs.forEach((npc) => {
+      expect(npc.name).toBeDefined();
+      expect(npc.name.length).toBeGreaterThan(0);
+      expect(npc.role).toBeDefined(); // sailor, merchant, innkeeper, quest-giver
+    });
+  });
 
-    it('NPCs have distinct personalities and dialogue', () => {
-        const townId = 'town_3'
-        npcManager.generateNPCsForTown(townId, 'tropical')
+  it("NPCs have distinct personalities and dialogue", () => {
+    const townId = "town_3";
+    npcManager.generateNPCsForTown(townId, "tropical");
 
-        const npcs = npcManager.getNPCsForTown(townId)
-        npcs.forEach((npc) => {
-            expect(['gruff', 'cheerful', 'mysterious', 'cautious']).toContain(
-                npc.personality,
-            )
-            expect(npc.dialogue).toBeDefined()
-            expect(npc.dialogue.length).toBeGreaterThan(0)
-        })
-    })
+    const npcs = npcManager.getNPCsForTown(townId);
+    npcs.forEach((npc) => {
+      expect(["gruff", "cheerful", "mysterious", "cautious"]).toContain(
+        npc.personality,
+      );
+      expect(npc.dialogue).toBeDefined();
+      expect(npc.dialogue.length).toBeGreaterThan(0);
+    });
+  });
 
-    it('NPCs remember player reputation', () => {
-        const townId = 'town_4'
-        const npcId =
-            npcManager.generateNPCsForTown(townId, 'tropical') > 0 ? 0 : -1
+  it("NPCs remember player reputation", () => {
+    const townId = "town_4";
+    const npcId =
+      npcManager.generateNPCsForTown(townId, "tropical") > 0 ? 0 : -1;
 
-        if (npcId >= 0) {
-            const npcs = npcManager.getNPCsForTown(townId)
-            const npc = npcs[0]
+    if (npcId >= 0) {
+      const npcs = npcManager.getNPCsForTown(townId);
+      const npc = npcs[0];
 
-            // Initial reputation should be neutral
-            expect(npc.reputation).toBeDefined()
-            expect(npc.reputation).toBeGreaterThanOrEqual(-100)
-            expect(npc.reputation).toBeLessThanOrEqual(100)
+      // Initial reputation should be neutral
+      expect(npc.reputation).toBeDefined();
+      expect(npc.reputation).toBeGreaterThanOrEqual(-100);
+      expect(npc.reputation).toBeLessThanOrEqual(100);
 
-            // Update reputation
-            npcManager.updateNPCReputation(townId, npc.id, 50)
-            const updatedNPC = npcManager.getNPCById(townId, npc.id)
-            expect(updatedNPC?.reputation).toBeGreaterThan(0)
-        }
-    })
+      // Update reputation
+      npcManager.updateNPCReputation(townId, npc.id, 50);
+      const updatedNPC = npcManager.getNPCById(townId, npc.id);
+      expect(updatedNPC?.reputation).toBeGreaterThan(0);
+    }
+  });
 
-    it('Quest-giving NPCs are flagged as patrons', () => {
-        // Generate enough towns to ensure at least one quest-giver exists
-        let foundQuestGiver = false
-        let townIndex = 5
+  it("Quest-giving NPCs are flagged as patrons", () => {
+    // Generate enough towns to ensure at least one quest-giver exists
+    let foundQuestGiver = false;
+    let townIndex = 5;
 
-        // Try up to 10 towns to find at least one quest-giver (statistically guaranteed)
-        for (let i = 0; i < 10 && !foundQuestGiver; i++) {
-            const townId = `town_${townIndex + i}`
-            npcManager.generateNPCsForTown(townId, 'tropical')
+    // Try up to 10 towns to find at least one quest-giver (statistically guaranteed)
+    for (let i = 0; i < 10 && !foundQuestGiver; i++) {
+      const townId = `town_${townIndex + i}`;
+      npcManager.generateNPCsForTown(townId, "tropical");
 
-            const npcs = npcManager.getNPCsForTown(townId)
-            const patrons = npcs.filter((npc) => npc.isQuestGiver)
+      const npcs = npcManager.getNPCsForTown(townId);
+      const patrons = npcs.filter((npc) => npc.isQuestGiver);
 
-            if (patrons.length > 0) {
-                foundQuestGiver = true
-                patrons.forEach((patron) => {
-                    expect(patron.isQuestGiver).toBe(true)
-                    expect(patron.availableQuests).toBeDefined()
-                    expect(patron.availableQuests.length).toBeGreaterThanOrEqual(0)
-                })
-            }
-        }
+      if (patrons.length > 0) {
+        foundQuestGiver = true;
+        patrons.forEach((patron) => {
+          expect(patron.isQuestGiver).toBe(true);
+          expect(patron.availableQuests).toBeDefined();
+          expect(patron.availableQuests.length).toBeGreaterThanOrEqual(0);
+        });
+      }
+    }
 
-        expect(foundQuestGiver).toBe(true)
-    })
+    expect(foundQuestGiver).toBe(true);
+  });
 
-    it('NPCs have background stories generated by LLM', () => {
-        const townId = 'town_6'
-        npcManager.generateNPCsForTown(townId, 'tropical')
+  it("NPCs have background stories generated by LLM", () => {
+    const townId = "town_6";
+    npcManager.generateNPCsForTown(townId, "tropical");
 
-        const npcs = npcManager.getNPCsForTown(townId)
-        npcs.forEach((npc) => {
-            expect(npc.backstory).toBeDefined()
-            expect(npc.backstory.length).toBeGreaterThan(0)
-        })
-    })
-})
+    const npcs = npcManager.getNPCsForTown(townId);
+    npcs.forEach((npc) => {
+      expect(npc.backstory).toBeDefined();
+      expect(npc.backstory.length).toBeGreaterThan(0);
+    });
+  });
+});

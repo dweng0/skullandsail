@@ -1,697 +1,697 @@
 /* Pirate-themed UI Palette */
 
 :root {
-    --color-dark-navy: #0a0e27;
-    --color-navy: #1a1f3a;
-    --color-gold: #d4a574;
-    --color-yellow: #ffd700;
-    --color-parchment: #e8dcc8;
-    --color-sea-blue: #1b4965;
+  --color-dark-navy: #0a0e27;
+  --color-navy: #1a1f3a;
+  --color-gold: #d4a574;
+  --color-yellow: #ffd700;
+  --color-parchment: #e8dcc8;
+  --color-sea-blue: #1b4965;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Georgia', serif;
-    background-color: var(--color-dark-navy);
-    color: var(--color-parchment);
+  margin: 0;
+  padding: 0;
+  font-family: "Georgia", serif;
+  background-color: var(--color-dark-navy);
+  color: var(--color-parchment);
 }
 
 #root {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Game container styling */
 .game-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--color-navy);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-navy);
 }
 
 canvas {
-    flex: 1;
-    display: block;
+  flex: 1;
+  display: block;
 }
 
 /* UI elements */
 .hud {
-    background-color: rgba(10, 14, 39, 0.9);
-    border-top: 2px solid var(--color-gold);
-    padding: 8px 16px;
-    color: var(--color-parchment);
+  background-color: rgba(10, 14, 39, 0.9);
+  border-top: 2px solid var(--color-gold);
+  padding: 8px 16px;
+  color: var(--color-parchment);
 }
 
 .ui-panel {
-    background-color: rgba(26, 31, 58, 0.95);
-    border: 2px solid var(--color-gold);
-    padding: 12px;
-    margin: 8px;
-    border-radius: 4px;
+  background-color: rgba(26, 31, 58, 0.95);
+  border: 2px solid var(--color-gold);
+  padding: 12px;
+  margin: 8px;
+  border-radius: 4px;
 }
 
 .ui-title {
-    color: var(--color-yellow);
-    font-weight: bold;
-    text-shadow: 0 0 4px rgba(212, 165, 116, 0.5);
+  color: var(--color-yellow);
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(212, 165, 116, 0.5);
 }
 
 .ui-highlight {
-    color: var(--color-gold);
+  color: var(--color-gold);
 }
 
 button {
-    background-color: var(--color-navy);
-    color: var(--color-gold);
-    border: 2px solid var(--color-gold);
-    padding: 8px 16px;
-    cursor: pointer;
-    font-family: 'Georgia', serif;
-    font-size: 14px;
-    transition: all 0.2s;
+  background-color: var(--color-navy);
+  color: var(--color-gold);
+  border: 2px solid var(--color-gold);
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: "Georgia", serif;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
 button:hover {
-    background-color: var(--color-gold);
-    color: var(--color-dark-navy);
+  background-color: var(--color-gold);
+  color: var(--color-dark-navy);
 }
 
 button:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 input,
 select,
 textarea {
-    background-color: var(--color-dark-navy);
-    color: var(--color-parchment);
-    border: 1px solid var(--color-gold);
-    padding: 6px 10px;
-    font-family: 'Georgia', serif;
-    font-size: 14px;
+  background-color: var(--color-dark-navy);
+  color: var(--color-parchment);
+  border: 1px solid var(--color-gold);
+  padding: 6px 10px;
+  font-family: "Georgia", serif;
+  font-size: 14px;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-    outline: none;
-    border-color: var(--color-yellow);
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  outline: none;
+  border-color: var(--color-yellow);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
 /* Multiplayer Setup */
 .multiplayer-setup {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(
-        135deg,
-        var(--color-navy) 0%,
-        var(--color-sea-blue) 100%
-    );
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-navy) 0%,
+    var(--color-sea-blue) 100%
+  );
 }
 
 .multiplayer-container {
-    background-color: var(--color-navy);
-    border: 3px solid var(--color-gold);
-    border-radius: 12px;
-    padding: 40px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  background-color: var(--color-navy);
+  border: 3px solid var(--color-gold);
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .multiplayer-menu,
 .multiplayer-host,
 .multiplayer-join {
-    text-align: center;
+  text-align: center;
 }
 
 .multiplayer-menu h2,
 .multiplayer-host h2,
 .multiplayer-join h2 {
-    color: var(--color-gold);
-    margin-bottom: 10px;
-    font-size: 28px;
+  color: var(--color-gold);
+  margin-bottom: 10px;
+  font-size: 28px;
 }
 
 .multiplayer-menu p,
 .multiplayer-host p,
 .multiplayer-join p {
-    color: var(--color-parchment);
-    margin-bottom: 30px;
-    font-size: 14px;
+  color: var(--color-parchment);
+  margin-bottom: 30px;
+  font-size: 14px;
 }
 
 .multiplayer-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .session-code-input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    background-color: var(--color-dark-navy);
-    border: 2px solid var(--color-gold);
-    color: var(--color-parchment);
-    text-align: center;
-    font-size: 16px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  background-color: var(--color-dark-navy);
+  border: 2px solid var(--color-gold);
+  color: var(--color-parchment);
+  text-align: center;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* Player List */
 .player-list {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(10, 14, 39, 0.95);
-    border: 2px solid var(--color-gold);
-    border-radius: 8px;
-    padding: 12px;
-    max-width: 280px;
-    z-index: 100;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(10, 14, 39, 0.95);
+  border: 2px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 280px;
+  z-index: 100;
 }
 
 .player-list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--color-gold);
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-gold);
+  margin-bottom: 10px;
 }
 
 .player-list-header h3 {
-    color: var(--color-gold);
-    margin: 0;
-    font-size: 16px;
+  color: var(--color-gold);
+  margin: 0;
+  font-size: 16px;
 }
 
 .player-count {
-    background-color: var(--color-gold);
-    color: var(--color-dark-navy);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
+  background-color: var(--color-gold);
+  color: var(--color-dark-navy);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .player-list-container {
-    max-height: 400px;
-    overflow-y: auto;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .player-item {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    margin-bottom: 8px;
-    background-color: rgba(26, 31, 58, 0.8);
-    border-radius: 6px;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: rgba(26, 31, 58, 0.8);
+  border-radius: 6px;
+  gap: 10px;
 }
 
 .player-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .player-info {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .player-name {
-    font-size: 13px;
-    color: var(--color-gold);
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 13px;
+  color: var(--color-gold);
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .player-meta {
-    font-size: 11px;
-    color: #999;
-    display: flex;
-    gap: 8px;
-    white-space: nowrap;
+  font-size: 11px;
+  color: #999;
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .ship-class {
-    color: var(--color-parchment);
+  color: var(--color-parchment);
 }
 
 .level {
-    color: #d4a574;
+  color: #d4a574;
 }
 
 .host-badge {
-    background-color: var(--color-gold);
-    color: var(--color-dark-navy);
-    padding: 1px 6px;
-    border-radius: 3px;
-    font-size: 10px;
-    font-weight: bold;
+  background-color: var(--color-gold);
+  color: var(--color-dark-navy);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
 }
 
 .player-status {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
 }
 
 .status-indicator {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .status-text {
-    color: var(--color-parchment);
+  color: var(--color-parchment);
 }
 
 .ping {
-    color: #999;
-    font-size: 10px;
+  color: #999;
+  font-size: 10px;
 }
 
 /* Chat */
 .multiplayer-chat {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 101;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 101;
 }
 
 .chat-toggle-btn {
-    background-color: var(--color-gold);
-    color: var(--color-dark-navy);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 24px;
-    position: relative;
-    box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
-    transition: transform 0.2s;
+  background-color: var(--color-gold);
+  color: var(--color-dark-navy);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 24px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+  transition: transform 0.2s;
 }
 
 .chat-toggle-btn:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .message-count {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #ef4444;
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ef4444;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .chat-panel {
-    position: absolute;
-    bottom: 70px;
-    right: 0;
-    background-color: rgba(10, 14, 39, 0.98);
-    border: 2px solid var(--color-gold);
-    border-radius: 8px;
-    width: 320px;
-    max-height: 400px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background-color: rgba(10, 14, 39, 0.98);
+  border: 2px solid var(--color-gold);
+  border-radius: 8px;
+  width: 320px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid var(--color-gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid var(--color-gold);
 }
 
 .chat-header h3 {
-    color: var(--color-gold);
-    margin: 0;
-    font-size: 16px;
+  color: var(--color-gold);
+  margin: 0;
+  font-size: 16px;
 }
 
 .close-btn {
-    background: none;
-    border: none;
-    color: var(--color-gold);
-    font-size: 20px;
-    cursor: pointer;
-    padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-gold);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
 }
 
 .chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .no-messages {
-    color: #999;
-    font-size: 12px;
-    text-align: center;
-    padding: 20px 10px;
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px 10px;
 }
 
 .chat-message {
-    background-color: rgba(26, 31, 58, 0.8);
-    padding: 8px;
-    border-radius: 6px;
-    font-size: 12px;
+  background-color: rgba(26, 31, 58, 0.8);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 12px;
 }
 
 .chat-message.local {
-    background-color: rgba(74, 222, 128, 0.1);
+  background-color: rgba(74, 222, 128, 0.1);
 }
 
 .timestamp {
-    color: #999;
-    font-size: 10px;
-    margin-right: 8px;
+  color: #999;
+  font-size: 10px;
+  margin-right: 8px;
 }
 
 .player-id {
-    color: var(--color-gold);
-    font-weight: bold;
+  color: var(--color-gold);
+  font-weight: bold;
 }
 
 .message-text {
-    color: var(--color-parchment);
-    margin-left: 8px;
+  color: var(--color-parchment);
+  margin-left: 8px;
 }
 
 .chat-input-area {
-    padding: 10px;
-    border-top: 1px solid var(--color-gold);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--color-gold);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .emote-section {
-    position: relative;
+  position: relative;
 }
 
 .emote-toggle {
-    background-color: transparent;
-    border: 1px solid var(--color-gold);
-    color: var(--color-gold);
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: transparent;
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .emote-wheel {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-    background-color: var(--color-navy);
-    border: 2px solid var(--color-gold);
-    border-radius: 8px;
-    padding: 8px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    z-index: 102;
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  background-color: var(--color-navy);
+  border: 2px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  z-index: 102;
 }
 
 .emote-btn {
-    background-color: transparent;
-    border: 1px solid var(--color-gold);
-    color: var(--color-parchment);
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.2s;
+  background-color: transparent;
+  border: 1px solid var(--color-gold);
+  color: var(--color-parchment);
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.2s;
 }
 
 .emote-btn:hover {
-    background-color: rgba(212, 165, 116, 0.2);
+  background-color: rgba(212, 165, 116, 0.2);
 }
 
 .chat-input {
-    background-color: var(--color-dark-navy);
-    border: 1px solid var(--color-gold);
-    color: var(--color-parchment);
-    padding: 8px;
-    border-radius: 4px;
-    font-family: 'Georgia', serif;
-    font-size: 12px;
-    resize: none;
-    height: 50px;
+  background-color: var(--color-dark-navy);
+  border: 1px solid var(--color-gold);
+  color: var(--color-parchment);
+  padding: 8px;
+  border-radius: 4px;
+  font-family: "Georgia", serif;
+  font-size: 12px;
+  resize: none;
+  height: 50px;
 }
 
 .send-btn {
-    background-color: var(--color-gold);
-    color: var(--color-dark-navy);
-    border: none;
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 12px;
+  background-color: var(--color-gold);
+  color: var(--color-dark-navy);
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .send-btn:hover:not(:disabled) {
-    background-color: var(--color-yellow);
+  background-color: var(--color-yellow);
 }
 
 .send-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Multiplayer Battle */
 .multiplayer-battle-inactive {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 90;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 90;
 }
 
 .multiplayer-battle-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
 }
 
 .battle-vote-container {
-    background: linear-gradient(
-        135deg,
-        var(--color-navy) 0%,
-        var(--color-sea-blue) 100%
-    );
-    border: 3px solid #ef4444;
-    border-radius: 12px;
-    padding: 40px;
-    max-width: 500px;
-    width: 90%;
-    box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
-    text-align: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-navy) 0%,
+    var(--color-sea-blue) 100%
+  );
+  border: 3px solid #ef4444;
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+  text-align: center;
 }
 
 .battle-header {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .battle-header h2 {
-    color: #ef4444;
-    font-size: 32px;
-    margin: 0 0 10px 0;
-    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+  font-size: 32px;
+  margin: 0 0 10px 0;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
 .battle-header p {
-    color: var(--color-parchment);
-    font-size: 14px;
-    margin: 0;
+  color: var(--color-parchment);
+  font-size: 14px;
+  margin: 0;
 }
 
 .battle-countdown {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .timer {
-    font-size: 48px;
-    color: var(--color-yellow);
-    font-weight: bold;
-    margin-bottom: 10px;
-    animation: pulse 1s infinite;
+  font-size: 48px;
+  color: var(--color-yellow);
+  font-weight: bold;
+  margin-bottom: 10px;
+  animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
-    0%,
-    100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .battle-countdown p {
-    color: var(--color-parchment);
-    font-size: 14px;
-    margin: 0;
+  color: var(--color-parchment);
+  font-size: 14px;
+  margin: 0;
 }
 
 .vote-display {
-    background: rgba(10, 14, 39, 0.6);
-    border: 2px solid var(--color-gold);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px;
+  background: rgba(10, 14, 39, 0.6);
+  border: 2px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
 }
 
 .vote-stats {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
 }
 
 .stat {
-    text-align: center;
+  text-align: center;
 }
 
 .stat .label {
-    display: block;
-    color: var(--color-parchment);
-    font-size: 12px;
-    margin-bottom: 5px;
+  display: block;
+  color: var(--color-parchment);
+  font-size: 12px;
+  margin-bottom: 5px;
 }
 
 .stat .value {
-    display: block;
-    color: var(--color-gold);
-    font-size: 24px;
-    font-weight: bold;
+  display: block;
+  color: var(--color-gold);
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .vote-progress {
-    text-align: center;
+  text-align: center;
 }
 
 .progress-bar {
-    width: 100%;
-    height: 20px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--color-gold);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 8px;
+  width: 100%;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--color-gold);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
 }
 
 .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
-    transition: width 0.3s ease;
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
+  transition: width 0.3s ease;
 }
 
 .progress-label {
-    color: var(--color-parchment);
-    font-size: 12px;
-    margin: 0;
+  color: var(--color-parchment);
+  font-size: 12px;
+  margin: 0;
 }
 
 .vote-buttons {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 0;
+  display: flex;
+  gap: 15px;
+  margin-bottom: 0;
 }
 
 .btn-success {
-    background-color: #4ade80;
-    color: #0a0e27;
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: #4ade80;
+  color: #0a0e27;
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .btn-success:hover {
-    background-color: #22c55e;
+  background-color: #22c55e;
 }
 
 .btn-danger {
-    background-color: #ef4444;
-    color: white;
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: #ef4444;
+  color: white;
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .btn-danger:hover {
-    background-color: #dc2626;
+  background-color: #dc2626;
 }
 
 .vote-confirmation {
-    background: rgba(26, 31, 58, 0.8);
-    border: 2px solid var(--color-gold);
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
+  background: rgba(26, 31, 58, 0.8);
+  border: 2px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
 }
 
 .vote-confirmation p {
-    color: var(--color-parchment);
-    margin: 8px 0;
-    font-size: 14px;
+  color: var(--color-parchment);
+  margin: 8px 0;
+  font-size: 14px;
 }
 
 .vote-confirmation .waiting {
-    color: var(--color-gold);
-    animation: pulse 1s infinite;
-    font-weight: bold;
+  color: var(--color-gold);
+  animation: pulse 1s infinite;
+  font-weight: bold;
 }
