@@ -1,6 +1,6 @@
 # Journal
 
-## Day 3 — 16:28 — Narrative Engine Integration
+## Day 4 — 00:36 — Narrative Engine Integration
 
 Covered all remaining tests for the Narrative Display Panel, Points of Interest Interaction, and NPC Dialogue Trees features. The `Narrative includes speaker/context label` scenario is now fully implemented with a passing test. All scenarios related to narrative display, POI interaction, and NPC dialogue are now green.
 
