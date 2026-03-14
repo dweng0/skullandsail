@@ -54,9 +54,11 @@ export default function GameMaster({
   }, [worldManifest, npcManager]);
 
   // UI State
-  // eslint-disable-next-line no-unused-vars
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [shipPosition, setShipPosition] = useState({ x: 0, z: 0 });
+  const [shipPosition, setShipPosition] = useState<{ x: number; z: number }>({
+    x: 0,
+    z: 0,
+  });
   const [narrativeVisible, setNarrativeVisible] = useState(false);
   const [narrativeText, setNarrativeText] = useState("");
   const [narrativeSpeaker, setNarrativeSpeaker] = useState("Game Master");
