@@ -1,9 +1,5 @@
-# JOURNAL
+# Journal
 
-## Day 5 — 08:12 — Fix build errors
+## Day 5 — 00:35 — Narrative and POI system coverage
 
-Fixed the TS6133 'shipPosition' and 'setShipPosition' unused variable errors in GameMaster.tsx by adding the @typescript-eslint/no-unused-vars comment. The issue was that the variables were declared but never used, which caused a build failure. After applying the fix, all tests passed successfully.
-
-The remaining issues are unrelated to this session: several files still have 'any' type usage and some const declarations need updating. These will be addressed in future sessions as part of ongoing code quality improvements.
-
-Next: Address the remaining 'any' type issues across the codebase to improve type safety.
+Covered the core narrative display, POI interaction, and NPC dialogue systems. Implemented tests for "Narrative includes speaker/context label" and "POI names render on world map with zoom scaling" by extending the NarrativePanel and POIInteractionSystem components. Verified that all test cases pass. The remaining uncovered scenarios are primarily around advanced LLM narrative context tracking, dynamic quest outcomes, and branching storylines, which require deeper integration between the StoryProgressionSystem, LLMCallManager, and QuestManagerUpgraded. Next session will focus on implementing the first set of these high-priority narrative engine features.
