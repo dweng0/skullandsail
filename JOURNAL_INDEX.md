@@ -15,3 +15,4 @@
 | 4 | 2026-03-13 | 08:17 | 144/167 | no changes |
 | 4 | 2026-03-13 | 16:15 | 144/167 | no changes |
 | 5 | 2026-03-14 | 00:35 | 144/167 | Day 5 (00:35): narrative and POI system coverage |
+| 5 | 2026-03-14 | 08:12 | 144/167 | Day 5 (08:12): revert — could not fix build;Day 5 (08:12): fix build errors Day 5 (08:12): fix build errors |
