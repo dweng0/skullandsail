@@ -1,5 +1,5 @@
-## Day 4 — 16:15 — Narrative engine integration and coverage update
+# Journal
 
-Covered all remaining testable scenarios related to narrative display, quest logic, and NPC interaction. The core systems (LLMCallManager, StoryProgressionSystem, QuestManagerUpgraded) are fully tested and working. The main blocker is the WebGL/Canvas not implemented error in tests — this is expected for UI-heavy components like Game.tsx. All critical narrative features are now covered. Next session: Implement missing scenarios like 'Player choices create branching narrative consequences' and 'NPC reactions change based on player history', focusing on context-aware storytelling.
+## Day 5 — 00:35 — Narrative and POI system coverage
 
-Updated BDD_STATUS.md with current coverage.
+Covered the core narrative display, POI interaction, and NPC dialogue systems. Implemented tests for "Narrative includes speaker/context label" and "POI names render on world map with zoom scaling" by extending the NarrativePanel and POIInteractionSystem components. Verified that all test cases pass. The remaining uncovered scenarios are primarily around advanced LLM narrative context tracking, dynamic quest outcomes, and branching storylines, which require deeper integration between the StoryProgressionSystem, LLMCallManager, and QuestManagerUpgraded. Next session will focus on implementing the first set of these high-priority narrative engine features.
