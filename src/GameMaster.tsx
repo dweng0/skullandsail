@@ -54,7 +54,7 @@ export default function GameMaster({
   }, [worldManifest, npcManager]);
 
   // UI State
-  const [_shipPosition, _setShipPosition] = useState({ x: 0, z: 0 });
+  // const [shipPosition, setShipPosition] = useState({ x: 0, z: 0 });
   const [narrativeVisible, setNarrativeVisible] = useState(false);
   const [narrativeText, setNarrativeText] = useState("");
   const [narrativeSpeaker, setNarrativeSpeaker] = useState("Game Master");
