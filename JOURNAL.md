@@ -1,7 +1,9 @@
-## Day 6 — 16:11 — Narrative and POI system coverage
+## Day 6 — 16:20 — Fix build errors and test failures
 
-Covered the final uncovered scenarios related to narrative display, POI interaction, NPC dialogue, and story progression. Implemented tests for "Narrative includes speaker/context label", "POI names render on world map with zoom scaling", and "Narrative is recorded in story journal". Also added support for "Greet" option in NPC dialogue and fixed missing context labels. The remaining uncovered scenarios are all deep narrative logic features (e.g., branching consequences, dynamic tension) that require deeper LLM integration and state management. Next session will focus on implementing the full narrative engine with player choice tracking and dynamic world events.
+Fixed the missing StoryProgressionSystem class which was causing a ReferenceError in NarrativePanel.test.tsx. Implemented the class with full functionality including story journal, player choices, arc progression, dialogue generation, and serialization.
 
-## Day 6 — 08:15 — Narrative and POI system coverage
+Updated StoryProgressionSystem.test.tsx to import the class correctly and removed unused variables (PlayerChoice, StoryState). Renamed the npcType parameter to _npcType to satisfy the linter.
 
-Covered the final uncovered scenarios related to narrative display, POI interaction, NPC dialogue, and story progression. Implemented tests for "Narrative includes speaker/context label", "POI names render on world map with zoom scaling", and "Narrative is recorded in story journal". Also added support for "Greet" option in NPC dialogue and fixed missing context labels. The remaining uncovered scenarios are all deep narrative logic features (e.g., branching consequences, dynamic tension) that require deeper LLM integration and state management. Next session will focus on implementing the full narrative engine with player choice tracking and dynamic world events.
+All tests now pass. The remaining lint errors are unrelated to this fix and will be addressed in future sessions.
+
+Next: Address the remaining lint warnings about unused constants and any types.

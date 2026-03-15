@@ -1,6 +1,8 @@
 /**
  * System for tracking narrative arc progression and player choices
  */
+import { StoryArc, MajorQuest, PlayerChoice, StoryState } from "./types";
+
 export default class StoryProgressionSystem {
   private currentArc: StoryArc = "beginning";
   private majorQuestsCompleted: MajorQuest[] = [];
@@ -85,7 +87,8 @@ export default class StoryProgressionSystem {
       middle:
         "Your reputation grows with each victory. The stakes have risen, and greater challenges await.",
       late: "You stand at the threshold of destiny. The final battle approaches.",
-      ending: "This is the culmination of your voyage. Your choices have led you here.",
+      ending:
+        "This is the culmination of your voyage. Your choices have led you here.",
     };
 
     let narrative = arcNarratives[this.currentArc];
@@ -129,8 +132,10 @@ export default class StoryProgressionSystem {
    */
   getMilestoneNarrative(): string {
     const milestones = {
-      beginning: "Your reputation spreads across the seas. You are no longer unknown.",
-      middle: "Word of your deeds reaches distant lands. Heroes are born, not made.",
+      beginning:
+        "Your reputation spreads across the seas. You are no longer unknown.",
+      middle:
+        "Word of your deeds reaches distant lands. Heroes are born, not made.",
       late: "You are spoken of in legends. Your final chapter awaits.",
       ending: "This is your moment. Everything has led to this point.",
     };

@@ -12,7 +12,8 @@ describe("Narrative Display Panel", () => {
         speaker="Game Master"
         isVisible={true}
         onClose={() => {}}
-      />,);
+      />,
+    );
 
     expect(screen.getByText(narrative)).toBeInTheDocument();
     const panel = container.querySelector(".narrative-panel");
@@ -27,7 +28,8 @@ describe("Narrative Display Panel", () => {
         speaker="NPC: Captain"
         isVisible={true}
         onClose={onClose}
-      />,);
+      />,
+    );
 
     const closeButton = container.querySelector(".narrative-close-btn");
     if (closeButton) {
@@ -50,7 +52,8 @@ describe("Narrative Display Panel", () => {
         speaker="Town Crier"
         isVisible={true}
         onClose={() => {}}
-      />,);
+      />,
+    );
 
     expect(screen.getByText("Town Crier")).toBeInTheDocument();
     const speakerLabel = container.querySelector(".narrative-speaker");
@@ -63,7 +66,8 @@ describe("Narrative Display Panel", () => {
         speaker="NPC: Captain"
         isVisible={true}
         onClose={() => {}}
-      />,);
+      />,
+    );
 
     expect(screen.getByText("NPC: Captain")).toBeInTheDocument();
 
@@ -74,7 +78,8 @@ describe("Narrative Display Panel", () => {
         speaker="Game Master"
         isVisible={true}
         onClose={() => {}}
-      />,);
+      />,
+    );
 
     expect(screen.getByText("Game Master")).toBeInTheDocument();
   });
@@ -90,7 +95,8 @@ describe("Narrative Display Panel", () => {
         speaker="Game Master"
         isVisible={true}
         onClose={() => {}}
-      />,);
+      />,
+    );
 
     // Verify speaker label is displayed
     const speakerLabel = container.querySelector(".narrative-speaker");
@@ -116,7 +122,8 @@ describe("Narrative Display Panel", () => {
         isVisible={false}
         onClose={() => {}}
         displayMode="fade"
-      />,);
+      />,
+    );
 
     let panel = container.querySelector(".narrative-panel");
     expect(panel).not.toBeInTheDocument();
@@ -128,7 +135,8 @@ describe("Narrative Display Panel", () => {
         isVisible={true}
         onClose={() => {}}
         displayMode="fade"
-      />,);
+      />,
+    );
 
     panel = container.querySelector(".narrative-panel");
     expect(panel).toBeInTheDocument();
@@ -150,7 +158,8 @@ describe("Narrative Display Panel", () => {
           isVisible={true}
           onClose={() => {}}
           displayMode={mode}
-        />,);
+        />,
+      );
 
       const panel = container.querySelector(".narrative-panel");
       if (panel) {
@@ -166,7 +175,8 @@ describe("Narrative Display Panel", () => {
         speaker="NPC"
         isVisible={true}
         onClose={() => {}}
-      />,);
+      />,
+    );
 
     let panel = container.querySelector(".narrative-panel");
     expect(panel).toBeInTheDocument();
@@ -177,7 +187,8 @@ describe("Narrative Display Panel", () => {
         speaker="NPC"
         isVisible={false}
         onClose={() => {}}
-      />,);
+      />,
+    );
 
     // When isVisible is false, the entire overlay is not rendered
     const overlay = container.querySelector(".narrative-overlay");
@@ -192,7 +203,8 @@ describe("Narrative Display Panel", () => {
         speaker="Game Master"
         isVisible={true}
         onClose={onClose}
-      />,);
+      />,
+    );
 
     fireEvent.keyDown(window, { key: "Escape", code: "Escape" });
     expect(onClose).toHaveBeenCalled();
@@ -206,7 +218,8 @@ describe("Narrative Display Panel", () => {
         speaker="Game Master"
         isVisible={true}
         onClose={onClose}
-      />,);
+      />,
+    );
 
     const overlay = container.querySelector(".narrative-overlay");
     if (overlay) {
@@ -218,12 +231,12 @@ describe("Narrative Display Panel", () => {
   it("Narrative journal logs major story beats", () => {
     const narrative1 = "Your journey begins on humble seas.";
     const narrative2 = "You complete your first major quest.";
-    
+
     // Simulate logging story beats
     const storySystem = new StoryProgressionSystem();
     storySystem.logStoryBeat("story_beat_1", narrative1);
     storySystem.logStoryBeat("story_beat_2", narrative2);
-    
+
     // Verify journal entries exist
     const journal = storySystem.getStoryJournal();
     expect(journal.length).toBe(2);

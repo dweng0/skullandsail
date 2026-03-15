@@ -135,7 +135,7 @@ export default function GameMaster({
       setNarrativeSpeaker("Game Master");
       setNarrativeMode("fade");
       setNarrativeVisible(true);
-      
+
       // Log story beat
       storySystem.logStoryBeat(`quest_accepted_${quest.id}`, narrative);
     }
