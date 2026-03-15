@@ -1,8 +1,27 @@
+export type StoryArc = "beginning" | "middle" | "late" | "ending";
+
+export interface PlayerChoice {
+  eventId: string;
+  choice: string;
+}
+
+export interface MajorQuest {
+  questId: string;
+  title: string;
+  playerLevel: number;
+}
+
+export interface StoryState {
+  currentArc: StoryArc;
+  majorQuestsCompleted: MajorQuest[];
+  playerChoices: PlayerChoice[];
+  journalBeat: string[];
+  unlockedAreas: string[];
+}
+
 /**
  * System for tracking narrative arc progression and player choices
  */
-import { StoryArc, MajorQuest, PlayerChoice, StoryState } from "./types";
-
 export default class StoryProgressionSystem {
   private currentArc: StoryArc = "beginning";
   private majorQuestsCompleted: MajorQuest[] = [];
