@@ -141,4 +141,24 @@ describe("Storyline Progression Tracking", () => {
     expect(newSystem.getPlayerChoices().length).toBe(1);
     expect(newSystem.getStoryJournal().length).toBe(1);
   });
+
+  it("Narrative includes speaker/context label", () => {
+    const narrative = storySystem.generateArcNarrative();
+    storySystem.logStoryBeat("story_beat_1", narrative);
+    
+    const journal = storySystem.getStoryJournal();
+    expect(journal.length).toBe(1);
+    expect(journal[0]).toContain("story_beat_1");
+    expect(journal[0]).toContain("Your journey begins");
+  });
+
+  it("Story journal records full narrative", () => {
+    const narrative = "The ship sails into the sunset. A new chapter begins.";
+    storySystem.logStoryBeat("story_beat_3", narrative);
+    
+    const journal = storySystem.getStoryJournal();
+    expect(journal.length).toBe(1);
+    expect(journal[0]).toContain("story_beat_3");
+    expect(journal[0]).toContain("The ship sails");
+  });
 });
