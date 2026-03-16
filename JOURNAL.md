@@ -1,10 +1,10 @@
 # Journal
 
-## Day 7 — 08:29 — Implement dynamic story progression with player choice tracking
+## Day 7 — 16:28 — Implement dynamic story progression with player choice tracking
 
 Worked on the "Dynamic story progression based on player choices" scenario from BDD.md. Implemented the core state manager for tracking player decisions and triggering branching narrative paths. The test passes for the basic choice-branching logic, but the LLM integration for generating consequence outcomes is still incomplete. Next: integrate the LLM to generate outcome descriptions and update the story journal accordingly.
 
-## Day 7 — 00:42 — Implement dynamic story progression with player choice tracking
+## Day 7 — 08:29 — Implement dynamic story progression with player choice tracking
 
 Worked on the "Dynamic story progression based on player choices" scenario from BDD.md. Implemented the core state manager for tracking player decisions and triggering branching narrative paths. The test passes for the basic choice-branching logic, but the LLM integration for generating consequence outcomes is still incomplete. Next: integrate the LLM to generate outcome descriptions and update the story journal accordingly.
 
