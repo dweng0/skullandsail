@@ -1,5 +1,9 @@
 # Journal
 
+## Day 7 — 00:42 — Implement dynamic story progression with player choice tracking
+
+Worked on the "Dynamic story progression based on player choices" scenario from BDD.md. Implemented the core state manager for tracking player decisions and triggering branching narrative paths. The test passes for the basic choice-branching logic, but the LLM integration for generating consequence outcomes is still incomplete. Next: integrate the LLM to generate outcome descriptions and update the story journal accordingly.
+
 ## Day 6 — 16:11 — Implement narrative journal and POI interaction features
 
 Worked on the "Record narrative in journal" and "POI interaction with context label" scenarios from BDD.md. The tests for both passed after fixing a missing context field in the narrative event payload. The POI name scaling logic was implemented using a viewport-based calculation. Next: implement dynamic story progression based on player choices, which has two uncovered scenarios.
