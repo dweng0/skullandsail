@@ -134,20 +134,20 @@ Checked 167 scenario(s) across 27 test file(s).
 
 ## Feature: Narrative Display UI
 
-- [x] Narrative text displays in a styled panel
+- [ ] UNCOVERED: Narrative text displays in a styled panel
 - [x] Player can dismiss narrative text
-- [x] Narrative appears with smooth animations
+- [ ] UNCOVERED: Narrative appears with smooth animations
 - [ ] UNCOVERED: Narrative includes speaker/context label
 
 ## Feature: Points of Interest Interaction
 
-- [x] Player can hover over POI names to see info
+- [ ] UNCOVERED: Player can hover over POI names to see info
 - [x] Player can interact with points of interest
 - [x] Island visitation shows location description
 - [ ] UNCOVERED: Town names are generated once and cached
-- [x] POI names display on world map
-- [x] Player can see interaction radius around POI
-- [x] Anomaly encounters include narrative lead-in
+- [ ] UNCOVERED: POI names display on world map
+- [ ] UNCOVERED: Player can see interaction radius around POI
+- [ ] UNCOVERED: Anomaly encounters include narrative lead-in
 
 ## Feature: Location Data Persistence
 
@@ -182,27 +182,27 @@ Checked 167 scenario(s) across 27 test file(s).
 
 ## Feature: Dynamic POI Interaction UI
 
-- [x] E key triggers interaction when near POI
-- [x] Hovering over POI shows tooltip info
-- [ ] UNCOVERED: POI names render on world map with zoom scaling
-- [x] Interaction radius is visually indicated
-- [ ] UNCOVERED: POI interaction handler routes to correct UI
+- [ ] UNCOVERED: E key triggers interaction when near POI
+- [ ] UNCOVERED: Hovering over POI shows tooltip info
+- [x] POI names render on world map with zoom scaling
+- [ ] UNCOVERED: Interaction radius is visually indicated
+- [x] POI interaction handler routes to correct UI
 
 ## Feature: Narrative Display Panel
 
 - [x] Narrative panel appears when LLM generates text
-- [ ] UNCOVERED: Narrative text is readable with proper formatting
-- [x] Speaker label shows narrative source
+- [x] Narrative text is readable with proper formatting
+- [ ] UNCOVERED: Speaker label shows narrative source
 - [x] Player can dismiss narrative panel
-- [x] Narrative panel supports multiple display modes
-- [ ] UNCOVERED: Narrative is recorded in story journal
+- [ ] UNCOVERED: Narrative panel supports multiple display modes
+- [x] Narrative is recorded in story journal
 
 ## Feature: LLM Integration Hub
 
-- [x] LLM is called with full game context
-- [x] LLM responses are cached to prevent redundant calls
-- [x] LLM calls are queued to prevent spam
-- [x] LLM failures gracefully degrade
+- [ ] UNCOVERED: LLM is called with full game context
+- [ ] UNCOVERED: LLM responses are cached to prevent redundant calls
+- [ ] UNCOVERED: LLM calls are queued to prevent spam
+- [ ] UNCOVERED: LLM failures gracefully degrade
 
 ## Feature: NPC Dialogue Trees
 
@@ -220,10 +220,10 @@ Checked 167 scenario(s) across 27 test file(s).
 
 ## Feature: Storyline Progression Tracking
 
-- [x] Story arc has progression states
+- [ ] UNCOVERED: Story arc has progression states
 - [x] Major quests trigger story progression
-- [x] Player choices affect story branches
-- [x] Story milestones generate commemorative narratives
+- [ ] UNCOVERED: Player choices affect story branches
+- [ ] UNCOVERED: Story milestones generate commemorative narratives
 
 ## Feature: Enhanced Camera Controls
 
@@ -248,39 +248,51 @@ Checked 167 scenario(s) across 27 test file(s).
 
 ## Feature: LLM Game Master Narrative
 
-- [ ] UNCOVERED: LLM maintains narrative context across session
+- [x] LLM maintains narrative context across session
 - [ ] UNCOVERED: Story beat appears at major progression milestones
 - [ ] UNCOVERED: LLM generates random world events during exploration
-- [ ] UNCOVERED: Player choices create branching narrative consequences
+- [x] Player choices create branching narrative consequences
 - [ ] UNCOVERED: NPC reactions change based on player history
-- [ ] UNCOVERED: LLM adjusts narrative tension based on player power level
+- [x] LLM adjusts narrative tension based on player power level
 - [ ] UNCOVERED: Major story conclusion generates epilogue
-- [x] Narrative journal logs major story beats
+- [ ] UNCOVERED: Narrative journal logs major story beats
 
 ---
-**144/167 scenarios covered.**
+**132/167 scenarios covered.**
 
-23 scenario(s) need tests:
+35 scenario(s) need tests:
+- Narrative text displays in a styled panel
+- Narrative appears with smooth animations
 - Narrative includes speaker/context label
+- Player can hover over POI names to see info
 - Town names are generated once and cached
+- POI names display on world map
+- Player can see interaction radius around POI
+- Anomaly encounters include narrative lead-in
 - World generation includes location metadata
 - NPC dialogue is generated once per location
 - Quest-giving NPCs are flagged as patrons
 - Quests are narrative-driven with context
 - Failed quests have alternative outcomes
-- POI names render on world map with zoom scaling
-- POI interaction handler routes to correct UI
-- Narrative text is readable with proper formatting
-- Narrative is recorded in story journal
+- E key triggers interaction when near POI
+- Hovering over POI shows tooltip info
+- Interaction radius is visually indicated
+- Speaker label shows narrative source
+- Narrative panel supports multiple display modes
+- LLM is called with full game context
+- LLM responses are cached to prevent redundant calls
+- LLM calls are queued to prevent spam
+- LLM failures gracefully degrade
 - "Greet" option shows NPC's greeting dialogue
 - Dialogue is personalized based on player history
 - Approaching anomaly shows encounter narrative
 - Battle outcome includes victory/defeat narrative
 - Enemy encounters are themed to biome and storyline
-- LLM maintains narrative context across session
+- Story arc has progression states
+- Player choices affect story branches
+- Story milestones generate commemorative narratives
 - Story beat appears at major progression milestones
 - LLM generates random world events during exploration
-- Player choices create branching narrative consequences
 - NPC reactions change based on player history
-- LLM adjusts narrative tension based on player power level
 - Major story conclusion generates epilogue
+- Narrative journal logs major story beats
