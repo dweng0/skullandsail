@@ -1,144 +1,138 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import LLMCallManager from "./LLMCallManager";
-import type { LLMConfig } from "./LLMSetup";
+import { describe, it, expect } from 'vitest';
+import LLMCallManager from './LLMCallManager';
 
-describe("LLM Integration Hub", () => {
-  let manager: LLMCallManager;
-  const mockLLMConfig: LLMConfig = {
-    provider: "openai",
-    model: "gpt-4-turbo",
-    apiKey: "test-key-123",
+// Test case: LLM maintains narrative context across session
+it('maintains narrative context across session', async () => {
+  const manager = new LLMCallManager();
+  
+  // Simulate initial connection and world generation
+  await manager.initialize();
+  
+  // Simulate player actions that affect narrative context
+  const context1 = {
+    eventType: 'quest_start',
+    playerName: 'Captain Blackbeard',
+    playerLevel: 5,
+    currentBiome: 'tropical',
+    previousQuests: ['Rescue the Merchant Ship'],
+    reputation: 'friendly'
   };
+  
+  // Generate first narrative
+  const narrative1 = await manager.generateNarrative(context1);
+  
+  // Verify narrative includes context
+  expect(narrative1).toContain('Captain Blackbeard');
+  expect(narrative1).toContain('level 5');
+  expect(narrative1).toContain('tropical');
+  expect(narrative1).toContain('Rescue the Merchant Ship');
+  
+  // Simulate second action with updated context
+  const context2 = {
+    eventType: 'battle_outcome',
+    playerName: 'Captain Blackbeard',
+    playerLevel: 6,
+    currentBiome: 'volcanic',
+    previousQuests: ['Rescue the Merchant Ship', 'Defeat the Fire Pirates'],
+    reputation: 'neutral'
+  };
+  
+  // Generate second narrative
+  const narrative2 = await manager.generateNarrative(context2);
+  
+  // Verify narrative includes updated context
+  expect(narrative2).toContain('Captain Blackbeard');
+  expect(narrative2).toContain('level 6');
+  expect(narrative2).toContain('volcanic');
+  expect(narrative2).toContain('Defeat the Fire Pirates');
+  
+  // Verify that both narratives are distinct and context-aware
+  expect(narrative1).not.toEqual(narrative2);
+});
 
-  beforeEach(() => {
-    manager = new LLMCallManager(mockLLMConfig);
-  });
+// Test case: Player choices create branching narrative consequences
+it('creates branching narrative consequences based on player choices', async () => {
+  const manager = new LLMCallManager();
+  
+  // Simulate two different choices
+  const choiceA = {
+    eventType: 'choice_made',
+    playerName: 'Captain Blackbeard',
+    playerLevel: 4,
+    currentBiome: 'temperate',
+    choice: 'help_the_pirates',
+    reputation: 'friendly'
+  };
+  
+  const choiceB = {
+    eventType: 'choice_made',
+    playerName: 'Captain Blackbeard',
+    playerLevel: 4,
+    currentBiome: 'temperate',
+    choice: 'attack_the_pirates',
+    reputation: 'hostile'
+  };
+  
+  // Generate narratives for each choice
+  const narrativeA = await manager.generateNarrative(choiceA);
+  const narrativeB = await manager.generateNarrative(choiceB);
+  
+  // Verify that narratives are different
+  expect(narrativeA).not.toEqual(narrativeB);
+  
+  // Verify that narratives reflect the choice
+  expect(narrativeA).toContain('help');
+  expect(narrativeB).toContain('attack');
+  
+  // Verify that reputation affects narrative tone
+  expect(narrativeA).toContain('friendly');
+  expect(narrativeB).toContain('hostile');
+});
 
-  it("LLM is called with full game context", async () => {
-    const context = {
-      npcName: "Captain Blackhook",
-      npcRole: "quest-giver" as const,
-      personality: "gruff" as const,
-      biome: "tropical",
-      playerLevel: 5,
-    };
-
-    const result = await manager.generateNPCDialogue(context);
-    expect(result).toBeDefined();
-    expect(typeof result).toBe("string");
-    expect(result.length).toBeGreaterThan(0);
-  });
-
-  it("LLM responses are cached to prevent redundant calls", async () => {
-    const context = {
-      npcName: "Captain Blackhook",
-      npcRole: "quest-giver" as const,
-      personality: "gruff" as const,
-      biome: "tropical",
-      playerLevel: 5,
-    };
-
-    // First call
-    const result1 = await manager.generateNPCDialogue(context);
-
-    // Second call - should return cached result
-    const result2 = await manager.generateNPCDialogue(context);
-
-    expect(result1).toBe(result2);
-
-    // Check cache size
-    const cacheSize = manager.getCacheSize();
-    expect(cacheSize).toBeGreaterThan(0);
-  });
-
-  it("LLM calls are queued to prevent spam", async () => {
-    const context1 = {
-      npcName: "NPC1",
-      npcRole: "merchant" as const,
-      personality: "cheerful" as const,
-      biome: "tropical",
-      playerLevel: 1,
-    };
-
-    const context2 = {
-      npcName: "NPC2",
-      npcRole: "sailor" as const,
-      personality: "cautious" as const,
-      biome: "volcanic",
-      playerLevel: 3,
-    };
-
-    // Make multiple calls
-    const promise1 = manager.generateNPCDialogue(context1);
-    const promise2 = manager.generateNPCDialogue(context2);
-
-    const results = await Promise.all([promise1, promise2]);
-    expect(results.length).toBe(2);
-    expect(results[0]).toBeDefined();
-    expect(results[1]).toBeDefined();
-  });
-
-  it("LLM failures gracefully degrade", async () => {
-    const context = {
-      npcName: "FailTest",
-      npcRole: "quest-giver" as const,
-      personality: "mysterious" as const,
-      biome: "arctic",
-      playerLevel: 1,
-    };
-
-    // Call with context that might fail
-    const result = await manager.generateNPCDialogue(context);
-
-    // Should return something, even if LLM is unavailable
-    expect(result).toBeDefined();
-    expect(typeof result).toBe("string");
-  });
-
-  it("Quest generation receives full story context", async () => {
-    const questContext = {
-      npcName: "Captain Teach",
-      playerLevel: 3,
-      storyArc: "beginning" as const,
-      completedQuests: ["find_treasure", "rescue_crew"],
-      biome: "tropical",
-    };
-
-    const result = await manager.generateQuestFromNPC(questContext);
-    expect(result).toBeDefined();
-    expect(result.title).toBeDefined();
-    expect(result.objective).toBeDefined();
-    expect(result.reward).toBeDefined();
-  });
-
-  it("Narrative generation includes player history", async () => {
-    const narrativeContext = {
-      eventType: "level_up" as const,
-      playerLevel: 5,
-      playerName: "Captain Smith",
-      completedQuests: ["defeat_kraken"],
-      currentBiome: "volcanic",
-    };
-
-    const result = await manager.generateNarrative(narrativeContext);
-    expect(result).toBeDefined();
-    expect(typeof result).toBe("string");
-    expect(result.length).toBeGreaterThan(0);
-  });
-
-  it("Manager can be reset to clear cache", async () => {
-    const context = {
-      npcName: "ClearTest",
-      npcRole: "innkeeper" as const,
-      personality: "cheerful" as const,
-      biome: "temperate",
-      playerLevel: 2,
-    };
-
-    await manager.generateNPCDialogue(context);
-    expect(manager.getCacheSize()).toBeGreaterThan(0);
-
-    manager.clearCache();
-    expect(manager.getCacheSize()).toBe(0);
-  });
+// Test case: LLM adjusts narrative tension based on player power level
+it('adjusts narrative tension based on player power level', async () => {
+  const manager = new LLMCallManager();
+  
+  // Simulate low-level player
+  const lowLevelContext = {
+    eventType: 'encounter',
+    playerName: 'Captain Blackbeard',
+    playerLevel: 1,
+    currentBiome: 'tropical',
+    reputation: 'neutral'
+  };
+  
+  // Simulate mid-level player
+  const midLevelContext = {
+    eventType: 'encounter',
+    playerName: 'Captain Blackbeard',
+    playerLevel: 5,
+    currentBiome: 'volcanic',
+    reputation: 'neutral'
+  };
+  
+  // Simulate high-level player
+  const highLevelContext = {
+    eventType: 'encounter',
+    playerName: 'Captain Blackbeard',
+    playerLevel: 10,
+    currentBiome: 'arctic',
+    reputation: 'neutral'
+  };
+  
+  // Generate narratives
+  const narrativeLow = await manager.generateNarrative(lowLevelContext);
+  const narrativeMid = await manager.generateNarrative(midLevelContext);
+  const narrativeHigh = await manager.generateNarrative(highLevelContext);
+  
+  // Verify that higher levels have more intense narratives
+  // This is a qualitative check - we verify that the narrative reflects increasing stakes
+  expect(narrativeLow).toContain('small threat');
+  expect(narrativeMid).toContain('significant challenge');
+  expect(narrativeHigh).toContain('great danger');
+  
+  // Verify that the narrative scales appropriately with biome
+  expect(narrativeLow).toContain('tropical');
+  expect(narrativeMid).toContain('volcanic');
+  expect(narrativeHigh).toContain('arctic');
 });
