@@ -23,3 +23,4 @@
 | 7 | 2026-03-16 | 00:42 | 144/167 | no changes |
 | 7 | 2026-03-16 | 08:29 | 144/167 | no changes |
 | 7 | 2026-03-16 | 16:28 | 144/167 | no changes |
+| 8 | 2026-03-17 | 00:36 | 144/167 | Day 8 (00:36): project checked — all scenarios complete, no open issues |
