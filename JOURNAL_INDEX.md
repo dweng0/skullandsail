@@ -27,3 +27,4 @@
 | 8 | 2026-03-17 | 08:21 | 144/167 | Day 8 (08:21): project checked — all scenarios complete, no open issues |
 | 8 | 2026-03-17 | 16:30 | 144/167 | Day 8 (16:30): revert — could not fix build;Day 8 (16:30): implement tests for narrative, POI, and LLM context scenarios |
 | 9 | 2026-03-18 | 00:38 | 144/167 | no changes |
+| 9 | 2026-03-18 | 08:20 | 144/167 | no changes |
