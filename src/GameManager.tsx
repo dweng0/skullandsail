@@ -3,7 +3,9 @@ import Game from "./Game";
 import LLMSetup from "./LLMSetup";
 import CharacterSetup from "./CharacterSetup";
 import MultiplayerSetup from "./MultiplayerSetup";
+import TownPortal from "./TownPortal";
 import type { ShipClass } from "./Game";
+import type { POIInteraction } from "./POIInteractionSystem";
 import type MultiplayerManager from "./MultiplayerManager";
 
 type GameState =
@@ -12,7 +14,9 @@ type GameState =
   | "character-setup"
   | "multiplayer-setup"
   | "loading"
-  | "playing";
+  | "playing"
+  | "town"
+  | "exploring";
 
 interface GameConfig {
   llmProvider?: string;
@@ -45,20 +49,19 @@ interface SavedGameState {
 export default function GameManager() {
   const [gameState, setGameState] = useState<GameState>("menu");
   const [config, setConfig] = useState<GameConfig>({});
+  const [currentTownName, setCurrentTownName] = useState<string>("");
+  const [explorationText, setExplorationText] = useState<string>("");
 
-  // Load cached LLM config but start at menu
   useEffect(() => {
     const cachedLLMConfig = localStorage.getItem("llmConfig");
     if (cachedLLMConfig) {
       try {
         const parsed = JSON.parse(cachedLLMConfig);
-        // Set config but stay at menu so player can choose New Game or Continue
         setConfig({
           llmProvider: parsed.provider,
           llmKey: parsed.apiKey,
         });
       } catch (e) {
-        // Invalid cached config, proceed to setup
         setGameState("menu");
       }
     }
@@ -80,7 +83,6 @@ export default function GameManager() {
       shipClass,
     });
     setGameState("loading");
-    // Simulate loading
     setTimeout(() => {
       setGameState("playing");
     }, 500);
@@ -129,11 +131,41 @@ export default function GameManager() {
           setGameState("playing");
         }, 500);
       } catch (e) {
-        // Invalid save, proceed to menu
         console.error("Failed to load saved game:", e);
       }
     }
   };
+
+  const handleInteract = (interaction: POIInteraction) => {
+    if (interaction.type === "town") {
+      setCurrentTownName(interaction.name);
+      setGameState("town");
+    } else if (interaction.type === "island") {
+      setExplorationText(
+        `You arrive at ${interaction.name}. The island is lush and mysterious. ` +
+        `Ancient ruins peek through the dense foliage, hinting at treasures long forgotten. ` +
+        `The sound of exotic birds fills the air as waves lap gently against the sandy shore.`
+      );
+      setGameState("exploring");
+    } else if (interaction.type === "anomaly") {
+      setExplorationText(
+        `You sail into ${interaction.name}. The waters churn with unnatural energy. ` +
+        `Your compass spins wildly and the crew grows uneasy. ` +
+        `Strange lights dance beneath the surface as an eerie silence falls over the ship...`
+      );
+      setGameState("exploring");
+    }
+  };
+
+  const handleLeaveTown = () => {
+    setGameState("playing");
+  };
+
+  const handleLeaveExploration = () => {
+    setGameState("playing");
+  };
+
+  const isInGame = gameState === "playing" || gameState === "town" || gameState === "exploring";
 
   return (
     <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
@@ -163,11 +195,82 @@ export default function GameManager() {
 
       {gameState === "loading" && <LoadingScreen />}
 
-      {gameState === "playing" && (
+      {isInGame && (
         <Game
           playerShipClass={config.shipClass || "brigantine"}
           multiplayerManager={config.multiplayerManager}
+          onQuitToMenu={() => setGameState("menu")}
+          onInteract={handleInteract}
         />
+      )}
+
+      {/* Town overlay */}
+      {gameState === "town" && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            zIndex: 100,
+          }}
+        >
+          <TownPortal townName={currentTownName} onLeave={handleLeaveTown} />
+        </div>
+      )}
+
+      {/* Exploration overlay */}
+      {gameState === "exploring" && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            zIndex: 100,
+          }}
+        >
+          <div
+            className="ui-panel"
+            style={{
+              maxWidth: "500px",
+              padding: "32px",
+              backgroundColor: "rgba(10, 14, 39, 0.95)",
+              border: "2px solid #d4a574",
+              borderRadius: "8px",
+              color: "#e8dcc8",
+            }}
+          >
+            <p style={{ fontSize: "16px", lineHeight: "1.8", marginBottom: "24px" }}>
+              {explorationText}
+            </p>
+            <button
+              onClick={handleLeaveExploration}
+              style={{
+                padding: "12px 32px",
+                fontSize: "16px",
+                fontWeight: "bold",
+                backgroundColor: "#d4a574",
+                color: "#0a0e27",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Return to Sea
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -229,7 +332,7 @@ function MainMenu({
           color: "#ffd700",
         }}
       >
-        ⚓ Skull & Sail ⚓
+        Skull & Sail
       </h1>
 
       <p
@@ -278,7 +381,7 @@ function MainMenu({
           onMouseOver={handleButtonHover}
           onMouseOut={handleButtonOut}
         >
-          🌐 Join Multiplayer
+          Join Multiplayer
         </button>
       </div>
 
@@ -292,8 +395,8 @@ function MainMenu({
           maxWidth: "400px",
         }}
       >
-        <p>⚠️ WebGL and modern browser required</p>
-        <p>🤖 Requires OpenAI-compatible, Claude, or Gemini API key</p>
+        <p>WebGL and modern browser required</p>
+        <p>Requires OpenAI-compatible, Claude, or Gemini API key</p>
       </div>
     </div>
   );
@@ -320,7 +423,7 @@ function LoadingScreen() {
           animation: "spin 2s linear infinite",
         }}
       >
-        ⚓
+        &nbsp;
       </div>
       <p style={{ fontSize: "18px", marginBottom: "12px" }}>
         Preparing your voyage...
