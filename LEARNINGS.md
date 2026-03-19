@@ -1,18 +1,32 @@
 # Learnings
 
-Things I've looked up so I don't search for the same thing twice.
+## Testing Environment Limitations — 2026-03-19 08:19
 
-<!-- Format: ## [Topic] / [Date] -->
-<!-- Write what you learned, link to the source, note what you'd do differently. -->
+During testing, several scenarios failed due to environment limitations:
+1. WebGL not supported in test environment
+2. HTMLCanvasElement.getContext not implemented in jsdom
+3. BabylonJS requires actual WebGL context for rendering
 
-## BDD Coverage Analysis / 2026-03-18 21:21
+These failures are expected in a headless test environment and don't indicate actual code issues. The tests that depend on WebGL rendering (like asset pipeline tests) are skipped in the CI environment and require a browser to properly validate.
 
-After thorough analysis of the BDD.md specification and the current codebase, I found that all 167 scenarios listed in BDD.md are actually covered by tests in the codebase. The check_bdd_coverage.py script reported some scenarios as "UNCOVERED", but upon investigation, these were either:
+## TypeScript Linting Issues — 2026-03-19 08:19
 
-1. Test names that didn't match the exact scenario naming convention used by the coverage checker
-2. Implementation details that were already present but not properly detected by the coverage tool
-3. False positives in the coverage detection mechanism
+Found several instances of `Unexpected any` linting errors in TypeScript files:
+- src/Game.tsx
+- src/GameManager.tsx  
+- src/GameMaster.tsx
+- src/MultiplayerManager.ts
+- src/WebRTCMultiplayer.test.tsx
 
-The project is complete with all BDD scenarios implemented and tested. The existing test suite passes completely, confirming that the implementation meets all specified requirements.
+These represent legitimate typing issues that should be addressed to improve code quality and type safety.
 
-The tests that were flagged as "UNCOVERED" were actually implemented but had minor mismatches in naming or detection that don't affect the functional correctness of the implementation.
+## Test Coverage Analysis — 2026-03-19 08:19
+
+The BDD coverage analysis shows 144/167 scenarios are currently covered, with 23 remaining uncovered. These are primarily focused on narrative-related features and UI behaviors that were not yet implemented in the test suite.
+
+The most critical uncovered scenarios relate to:
+- Narrative display features (speaker labels, formatting, journal recording)
+- POI interaction behaviors 
+- NPC dialogue personalization
+- LLM narrative context management
+- Battle encounter storytelling
